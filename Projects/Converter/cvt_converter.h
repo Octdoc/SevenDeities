@@ -12,9 +12,11 @@ namespace cvt
 		gfw::Camera m_camera;
 		std::shared_ptr<gfw::Renderer> m_renderer;
 
+		ModelManager m_modelManager;
+
 	private:
-		void Test();
 		void DropFileEvent(HDROP hDrop);
+		void LoadModel(const WCHAR* filename);
 
 	public:
 		virtual void Start() override;
