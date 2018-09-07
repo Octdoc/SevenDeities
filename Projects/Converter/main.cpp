@@ -9,7 +9,7 @@ int wmain()
 	{
 		window.Initialize();
 		window.setScene(&scene);
-		window.Run();
+		window.Run(false);
 	}
 	catch (hcs::Exception& e)
 	{

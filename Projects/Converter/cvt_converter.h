@@ -8,15 +8,17 @@ namespace cvt
 {
 	class Converter :public gfw::Scene
 	{
-		gfw::Controller m_controller;
 		gfw::Camera m_camera;
+		float m_camDistance;
 		std::shared_ptr<gfw::Renderer> m_renderer;
+		std::shared_ptr<gfw::Entity> m_entity;
 
 		ModelManager m_modelManager;
 
 	private:
 		void DropFileEvent(HDROP hDrop);
 		void LoadModel(const WCHAR* filename);
+		bool HandleCamera(MSG& msg);
 
 	public:
 		virtual void Start() override;

@@ -1,4 +1,5 @@
 #include "cvt_converter.h"
+#include <windowsx.h>
 
 #pragma comment(lib, "engine.lib")
 #pragma comment(lib, "assimp.lib")
@@ -29,7 +30,10 @@ namespace cvt
 			try
 			{
 				m_renderer->ClearEntities();
-				m_renderer->AddEntity(m_modelManager.CreateEntity(*m_graphics));
+				m_entity.reset();
+				m_entity = m_modelManager.CreateEntity(*m_graphics);
+				m_renderer->AddEntity(m_entity);
+				Render();
 			}
 			catch (hcs::Exception& e)
 			{
@@ -38,25 +42,68 @@ namespace cvt
 		}
 	}
 
+	bool Converter::HandleCamera(MSG& msg)
+	{
+		static int prevx = 0, prevy = 0;
+		float sensitivity = 0.008f;
+
+		switch (msg.message)
+		{
+		case WM_MOUSEWHEEL:
+			if (0 > GET_WHEEL_DELTA_WPARAM(msg.wParam))
+				m_camDistance *= 1.1f;
+			else
+				m_camDistance /= 1.1f;
+			m_camera.position = mth::float3x3::Rotation(m_camera.rotation)*mth::float3(0.0f, 0.0f, -m_camDistance);
+			return true;
+		case WM_MOUSEMOVE:
+			if (msg.wParam & (MK_LBUTTON | MK_RBUTTON))
+			{
+				int x = GET_X_LPARAM(msg.lParam) - prevx;
+				int y = GET_Y_LPARAM(msg.lParam) - prevy;
+
+				if (msg.wParam & MK_RBUTTON)
+				{
+					m_entity->position += mth::float3x3::Rotation(m_camera.rotation) * mth::float3(x*sensitivity*m_camDistance*0.1f, -y * sensitivity*m_camDistance*0.1f, 0.0f);
+				}
+				else if (msg.wParam & MK_LBUTTON)
+				{
+					m_camera.LookUp(-y * sensitivity);
+					m_camera.TurnRight(x*sensitivity);
+					m_camera.position = mth::float3x3::Rotation(m_camera.rotation) * mth::float3(0.0f, 0.0f, -m_camDistance);
+				}
+				prevx += x;
+				prevy += y;
+				return true;
+			}
+			prevx = GET_X_LPARAM(msg.lParam);
+			prevy = GET_Y_LPARAM(msg.lParam);
+			return false;
+		}
+		return false;
+	}
+
 	void Converter::Start()
 	{
 		ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
-		m_controller.setTarget(&m_camera);
 		m_camera.Init();
-		m_camera.position = { 0.0f, 4.0f, -10.0f };
+		m_camDistance = 10.0f;
+		m_camera.position.z = -m_camDistance;
 
 		DragAcceptFiles(m_window->getHWND(), true);
 
 		m_renderer = gfw::SimpleRenderer::Create(*m_graphics);
+		m_renderer->AddEntity(m_entity = gfw::Entity::Create(gfw::Model::Create(device, L"Media/monkey.omd"),
+			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
+		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 	}
 	void Converter::Quit()
 	{
 	}
 	void Converter::Update(double deltaTime, double totalTime)
 	{
-		m_controller.Update_FirstPersonMode_Fly(*m_input, (float)deltaTime);
 		m_input->ResetMouseDelta();
 	}
 	void Converter::Render()
@@ -65,6 +112,8 @@ namespace cvt
 	}
 	void Converter::MessageHandler(MSG& message)
 	{
+		if (HandleCamera(message))
+			Render();
 		switch (message.message)
 		{
 		case WM_DROPFILES:
