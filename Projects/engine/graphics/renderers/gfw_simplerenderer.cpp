@@ -1,0 +1,64 @@
+#include "gfw_simplerenderer.h"
+
+namespace gfw
+{
+	void SimpleRenderer::CreateRenderer(Graphics& graphics)
+	{
+		ID3D11Device* device = graphics.getDevice();
+		m_ambient = 0.5f;
+		m_vertexShader = gfw::VertexShader::Create(device, L"Shaders/vsSimple.cso", gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
+		m_pixelShader = gfw::PixelShader::Create(device, L"Shaders/psSimple.cso");
+		m_vsBuffer = gfw::CBuffer::Create(device, sizeof(mth::float4x4) * 2);
+		m_psBuffer = gfw::CBuffer::Create(device, sizeof(float) * 8);
+		m_sampler = gfw::SamplerState::Create(device, true);
+	}
+	SimpleRenderer::SimpleRenderer() :m_ambient(0.0f) {}
+	SimpleRenderer::SimpleRenderer(Graphics& graphics) : m_ambient(0.0f)
+	{
+		CreateRenderer(graphics);
+	}
+	std::shared_ptr<SimpleRenderer> SimpleRenderer::Create()
+	{
+		return std::make_shared<SimpleRenderer>();
+	}	
+	std::shared_ptr<SimpleRenderer> SimpleRenderer::Create(Graphics& graphics)
+	{
+		return std::make_shared<SimpleRenderer>(graphics);
+	}
+	void SimpleRenderer::Render(Graphics& graphics, Camera& camera)
+	{
+		ID3D11DeviceContext* deviceContext = graphics.getDeviceContext();
+		camera.Update();
+
+		graphics.RenderToScreen();
+
+		if (m_sky)
+			m_sky->Render(deviceContext, camera);
+
+		m_sampler->SetSamplerState(deviceContext);
+		m_vertexShader->SetShaderToRender(deviceContext);
+		m_pixelShader->SetShaderToRender(deviceContext);
+
+		mth::float4x4 matrixBuffer[2];
+		matrixBuffer[1] = camera.GetCameraMatrix();
+		gfw::VertexShader::SetCBuffer(deviceContext, *m_vsBuffer);
+
+		mth::float3 campos = camera.position;
+		float lightBuffer[8] = {
+			1.0f, 1.0f, 1.0f, 1.0f,
+			campos.x, campos.y, campos.z,
+			m_ambient
+		};
+		m_psBuffer->WriteBuffer(deviceContext, lightBuffer);
+		gfw::PixelShader::SetCBuffer(deviceContext, *m_psBuffer);
+
+		for (auto& e : m_entities)
+		{
+			matrixBuffer[0] = e->GetWorldMatrix();
+			m_vsBuffer->WriteBuffer(deviceContext, matrixBuffer);
+			e->Render(deviceContext);
+		}
+
+		graphics.Present();
+	}
+}

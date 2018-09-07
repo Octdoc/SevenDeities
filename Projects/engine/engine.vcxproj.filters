@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{bb01a0e2-fe0c-4096-b09b-67b6b7793da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\helpers">
+      <UniqueIdentifier>{e8afb5c4-05d7-40c7-9933-f45af07fa07f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\helpers">
+      <UniqueIdentifier>{1c2a6bdd-7292-40dd-9ced-352f312b9976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{20b71b3b-d784-4c1d-9d2d-43629f5d5a72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{69bf6a2c-5508-47f9-ba68-c90ecb615e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\resources">
+      <UniqueIdentifier>{285c6b26-1d34-466f-8f61-1ba80ed4cb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\resources">
+      <UniqueIdentifier>{79d87f1f-cd25-4974-9ec7-c40958dcfece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\entity">
+      <UniqueIdentifier>{09f73e7f-034b-4b65-9034-29ee42eb2946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\entity">
+      <UniqueIdentifier>{6144ce48-f50b-4b01-a50a-c4a53e908d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\renderers">
+      <UniqueIdentifier>{06c102c4-ac04-4b07-8261-9449afb3bc73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\renderer">
+      <UniqueIdentifier>{58962662-0496-4196-92dd-7202c5362982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\physics">
+      <UniqueIdentifier>{fbd7585a-849b-4f7a-92f0-dde298e08320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physics">
+      <UniqueIdentifier>{606ff13c-6fdb-4255-baed-341ee1a63ea6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="octdoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_helpers.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_exception.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\gfw_window.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\gfw_graphics.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_timer.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_input.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\mth_math.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\DDSTextureLoader.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfw_model.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfw_modelloader.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfw_resource.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfw_shader.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfw_texture.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\mth_position.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfw_camera.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfw_controller.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfw_entity.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfw_light.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfw_skydome.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_renderer.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_simplerenderer.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\pfw_boundingvolume.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\pfw_collider.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="helpers\hcs_helpers.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\hcs_exception.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\gfw_window.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\gfw_graphics.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\hcs_timer.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\hcs_input.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\mth_math.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\DDSTextureLoader.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfw_model.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfw_modelloader.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfw_shader.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfw_texture.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\mth_position.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfw_camera.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfw_controller.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfw_entity.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfw_light.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfw_skydome.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_renderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_simplerenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\pfw_boundingvolume.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\pfw_collider.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\vsSky.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psSky.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsSimple.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psSimple.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\psDepth.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\vsDepth.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\vsShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\psShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\psShadowCube.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
