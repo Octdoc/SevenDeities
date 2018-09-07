@@ -2,6 +2,7 @@ Texture2D textures[2];
 TextureCube shadowMap;
 SamplerState samplers[2];
 
+//NOT working
 
 cbuffer LightBuffer
 {

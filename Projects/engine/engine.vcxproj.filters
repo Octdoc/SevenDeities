@@ -214,19 +214,19 @@
     <FxCompile Include="Shaders\psSimple.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\psDepth.hlsl">
+    <FxCompile Include="Shaders\psDepth.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\vsDepth.hlsl">
+    <FxCompile Include="Shaders\psShadow.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\vsShadow.hlsl">
+    <FxCompile Include="Shaders\psShadowCube.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\psShadow.hlsl">
+    <FxCompile Include="Shaders\vsDepth.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\psShadowCube.hlsl">
+    <FxCompile Include="Shaders\vsShadow.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
