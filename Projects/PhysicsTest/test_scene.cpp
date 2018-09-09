@@ -1,4 +1,5 @@
 #include "test_scene.h"
+#include <iostream>
 
 #pragma comment(lib, "engine.lib")
 
@@ -61,6 +62,19 @@ namespace test
 	}
 	void Test_Scene::Update(double deltaTime, double totalTime)
 	{
+		static double prevTime = 0.0;
+		static double tTime = 0.0;
+		static UINT frameCount = 0;
+		tTime += deltaTime;
+		frameCount++;
+		if (tTime - prevTime > 1.0)
+		{
+			//std::wcout << L"Total Time: " << tTime << std::endl << L"Previous Time: " << prevTime << std::endl << std::endl;
+			SetWindowText(m_window->getHWND(), (std::wstring(L"Physics test, Fps: ") + std::to_wstring(frameCount)).c_str());
+			frameCount = 0;
+			prevTime = tTime;
+		}
+
 		m_controller.Update_FirstPersonMode_Fly(*m_input, (float)deltaTime);
 		m_input->ResetMouseDelta();
 

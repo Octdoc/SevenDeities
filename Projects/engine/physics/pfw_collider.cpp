@@ -1,4 +1,5 @@
 #include "pfw_collider.h"
+#include <iostream>
 
 namespace pfw
 {
@@ -288,9 +289,10 @@ namespace pfw
 
 			deltaTime = m_player->Update(collData, deltaTime, collision);
 
-			if (counter++ == 100)	//probably stuck looping forever, let it be (this is just a number, could be else)
+			if (counter++ == 5)	//probably stuck looping forever, let it be (this is just a number, could be else)
 			{
 				m_player->velocity = mth::float3();
+				std::wcout << L"Stuck" << std::endl;
 				return;
 			}
 		}

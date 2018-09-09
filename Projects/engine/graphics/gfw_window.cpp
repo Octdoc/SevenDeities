@@ -104,7 +104,6 @@ namespace gfw
 		m_timer.Update();
 		if (m_scene)
 		{
-			m_scene->Update(0.0, 0.0);
 			m_scene->Update(m_timer.GetTimeDelta(), m_timer.GetTimeTotal());
 			m_scene->Render();
 		}
