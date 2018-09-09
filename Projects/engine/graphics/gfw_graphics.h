@@ -26,6 +26,8 @@ namespace gfw
 
 	class Graphics
 	{
+		friend std::_Ref_count_obj<Graphics>;
+
 		bool m_vsync;
 		bool m_fullscreen;
 		int m_screenWidth;
@@ -49,6 +51,11 @@ namespace gfw
 		float m_clearColor[4];
 
 	private:
+		Graphics(HWND hwnd, GraphicsSettings& settings);
+		Graphics(Graphics&) = delete;
+		~Graphics();
+		void Initialize(HWND hwnd, GraphicsSettings& settings);
+
 		DXGI_RATIONAL InitializeAdapter();
 		IDXGIAdapter* GetAdapter();
 		void GetAdapterDescription(IDXGIAdapter* adapter);
@@ -73,14 +80,10 @@ namespace gfw
 		void FillBlendDesc(D3D11_BLEND_DESC& blendDesc);
 
 		void InitializeDirect3D(HWND hwnd, GraphicsSettings& settings);
-		void ShutdownDirect3D();
 
 	public:
-		Graphics();
-		~Graphics();
-		void Initialize(HWND hwnd, GraphicsSettings& settings);
-		void Shutdown();
-
+		static std::shared_ptr<Graphics> Create(HWND hwnd, GraphicsSettings& settings);
+		
 		void RenderToScreen();
 		void RenderToScreenSetTarget();
 		void RenderToSurface(ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView);

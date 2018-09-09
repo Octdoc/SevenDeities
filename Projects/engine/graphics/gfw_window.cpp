@@ -131,17 +131,19 @@ namespace gfw
 		if (m_scene)
 			m_scene->MessageHandler(msg);
 	}
-	Window::Window()
+	Window::Window() :m_hwnd(nullptr), m_hInstance(nullptr), m_scene(nullptr)
 	{
-		m_hwnd = NULL;
-		m_hInstance = NULL;
-		m_scene = NULL;
+		Initialize();
+	}
+	Window::Window(GraphicsSettings& settings) : m_hwnd(nullptr), m_hInstance(nullptr), m_scene(nullptr)
+	{
+		Initialize(settings);
 	}
 	void Window::Shutdown()
 	{
 		if (m_scene)
 			m_scene->Quit();
-		m_graphics.Shutdown();
+		m_graphics.reset();
 		ShutdownWindow();
 		UnregisterClass(m_windowName.c_str(), m_hInstance);
 		m_hInstance = NULL;
@@ -178,6 +180,14 @@ namespace gfw
 		m_scene->SetWindow(this);
 		m_scene->Start();
 	}
+	std::shared_ptr<Window> Window::Create()
+	{
+		return std::make_shared<Window>();
+	}
+	std::shared_ptr<Window> Window::Create(GraphicsSettings& settings)
+	{
+		return std::make_shared<Window>(settings);
+	}
 	void Window::Initialize()
 	{
 		GraphicsSettings settings;
@@ -186,7 +196,7 @@ namespace gfw
 	void Window::Initialize(GraphicsSettings& settings)
 	{
 		InitializeWindow(settings);
-		m_graphics.Initialize(m_hwnd, settings);
+		m_graphics = Graphics::Create(m_hwnd, settings);
 		m_input.Initialize();
 	}
 	void Window::InitializeWindow(GraphicsSettings& settings)
@@ -239,7 +249,7 @@ namespace gfw
 	}
 	Graphics& Window::getGraphics()
 	{
-		return m_graphics;
+		return *m_graphics;
 	}
 	hcs::Input& Window::getInput()
 	{

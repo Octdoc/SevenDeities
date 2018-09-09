@@ -10,6 +10,8 @@ namespace gfw
 
 	class Window
 	{
+		friend std::_Ref_count_obj<Window>;
+
 		RECT m_boundingBox;
 		bool m_fullscreen;
 		bool m_periodicUpdate;
@@ -21,11 +23,17 @@ namespace gfw
 		hcs::Timer m_timer;
 
 		hcs::Input m_input;
-		Graphics m_graphics;
+		std::shared_ptr<Graphics> m_graphics;
 
 		Scene *m_scene;
 
 	private:
+		Window();
+		Window(GraphicsSettings& settings);
+		Window(Window&) = delete;
+		void Initialize();
+		void Initialize(GraphicsSettings& settings);
+		
 		void FillWndClassEx(WNDCLASSEX& wc);
 		void FillDevModeSettings(DEVMODE& devMode, unsigned long width, unsigned long height);
 		void FillFullscreenBoundingBox(int width, int height);
@@ -40,10 +48,9 @@ namespace gfw
 		void ShutdownWindow();
 
 	public:
-		Window();
+		static std::shared_ptr<Window> Create();
+		static std::shared_ptr<Window> Create(GraphicsSettings& settings);
 
-		void Initialize();
-		void Initialize(GraphicsSettings& settings);
 		void Run(bool periodicUpdate = true);
 		void Shutdown();
 		void ShutdownDeleteScene();
