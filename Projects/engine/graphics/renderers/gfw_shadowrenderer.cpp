@@ -3,19 +3,19 @@
 
 namespace gfw
 {
-	void ShadowRenderer::RenderShadowMap(Graphics& graphics, Camera& camera)
+	void ShadowRenderer::RenderShadowMap(Graphics::P graphics, Camera& camera)
 	{
-		ID3D11DeviceContext* deviceContext = graphics.getDeviceContext();
+		ID3D11DeviceContext* deviceContext = graphics->getDeviceContext();
 		mth::float4x4 depthMatrixBuffer[2];
 		UINT shadowMapFaces = m_cubicShadowMap ? 6 : 1;
 
-		graphics.SetViewPort((float)m_shadowTexture->getWidth(), (float)m_shadowTexture->getHeight());
+		graphics->SetViewPort((float)m_shadowTexture->getWidth(), (float)m_shadowTexture->getHeight());
 		m_vsDepth->SetShaderToRender(deviceContext);
 		m_psDepth->SetShaderToRender(deviceContext);
-		VertexShader::SetCBuffer(deviceContext, *m_depthMatrixBuffer);
+		VertexShader::SetCBuffer(deviceContext, m_depthMatrixBuffer);
 		for (UINT i = 0; i < shadowMapFaces; i++)
 		{
-			graphics.RenderToSurface(m_shadowTexture->getRenderTargetView(i), m_shadowTexture->getDepthStencilView());
+			graphics->RenderToSurface(m_shadowTexture->getRenderTargetView(i), m_shadowTexture->getDepthStencilView());
 			depthMatrixBuffer[1] = m_light.GetLightMatrix(i);
 			for (auto& e : m_entities)
 			{
@@ -25,31 +25,31 @@ namespace gfw
 			}
 		}
 	}
-	void ShadowRenderer::RenderScene(Graphics& graphics, Camera& camera)
+	void ShadowRenderer::RenderScene(Graphics::P graphics, Camera& camera)
 	{
-		ID3D11DeviceContext* deviceContext = graphics.getDeviceContext();
+		ID3D11DeviceContext* deviceContext = graphics->getDeviceContext();
 		mth::float4x4 shadowMatrixBuffer[3];
 		float vsLightBuffer[4];
 		float psLightBuffer[12];
 
-		graphics.SetViewPort();
-		graphics.RenderToScreenSetTarget();
+		graphics->SetViewPort();
+		graphics->RenderToScreenSetTarget();
 		if (m_sky)
 			m_sky->Render(deviceContext, camera);
 
-		m_ssClamp->SetSamplerState(deviceContext, 0);
-		m_ssWrap->SetSamplerState(deviceContext, 1);
+		m_ssClamp->SetSamplerStateToRender(deviceContext, 0);
+		m_ssWrap->SetSamplerStateToRender(deviceContext, 1);
 		m_vsShadow->SetShaderToRender(deviceContext);
 		m_psShadow->SetShaderToRender(deviceContext);
 		shadowMatrixBuffer[1] = camera.GetCameraMatrix();
 		shadowMatrixBuffer[2] = m_light.GetLightMatrix();
-		VertexShader::SetCBuffer(deviceContext, *m_shadowMatrixBuffer, 0);
+		VertexShader::SetCBuffer(deviceContext, m_shadowMatrixBuffer, 0);
 		vsLightBuffer[0] = m_light.position.x;
 		vsLightBuffer[1] = m_light.position.y;
 		vsLightBuffer[2] = m_light.position.z;
 		vsLightBuffer[3] = 0.0f;
 		m_vsLightBuffer->WriteBuffer(deviceContext, vsLightBuffer);
-		VertexShader::SetCBuffer(deviceContext, *m_vsLightBuffer, 1);
+		VertexShader::SetCBuffer(deviceContext, m_vsLightBuffer, 1);
 		psLightBuffer[0] = 0.25f;
 		psLightBuffer[1] = 0.25f;
 		psLightBuffer[2] = 0.25f;
@@ -63,34 +63,34 @@ namespace gfw
 		psLightBuffer[10] = m_light.position.z;
 		psLightBuffer[11] = 0.5f;
 		m_psLightBuffer->WriteBuffer(deviceContext, psLightBuffer);
-		PixelShader::SetCBuffer(deviceContext, *m_psLightBuffer);
-		m_shadowTexture->SetTexture(deviceContext, 2);
+		PixelShader::SetCBuffer(deviceContext, m_psLightBuffer);
+		m_shadowTexture->SetTextureToRender(deviceContext, 2);
 		for (auto& e : m_entities)
 		{
 			shadowMatrixBuffer[0] = e->GetWorldMatrix();
 			m_shadowMatrixBuffer->WriteBuffer(deviceContext, shadowMatrixBuffer);
 			e->Render(deviceContext);
 		}
-		graphics.Present();
+		graphics->Present();
 	}
 
 	ShadowRenderer::ShadowRenderer() : m_cubicShadowMap(false) {}
-	ShadowRenderer::ShadowRenderer(Graphics& graphics) : m_cubicShadowMap(false)
+	ShadowRenderer::ShadowRenderer(Graphics::P graphics) : m_cubicShadowMap(false)
 	{
 		CreateRenderer(graphics);
 	}
-	ShadowRenderer::ShadowRenderer(Graphics & graphics, UINT shadowmapSize, bool cubicShadowMap)
+	ShadowRenderer::ShadowRenderer(Graphics::P graphics, UINT shadowmapSize, bool cubicShadowMap)
 	{
 		CreateRenderer(graphics, shadowmapSize, cubicShadowMap);
 	}
-	void ShadowRenderer::CreateRenderer(Graphics& graphics)
+	void ShadowRenderer::CreateRenderer(Graphics::P graphics)
 	{
 		CreateRenderer(graphics, 1024, false);
 	}
-	void ShadowRenderer::CreateRenderer(Graphics& graphics, UINT shadowmapSize, bool cubicShadowMap)
+	void ShadowRenderer::CreateRenderer(Graphics::P graphics, UINT shadowmapSize, bool cubicShadowMap)
 	{
-		ID3D11Device* device = graphics.getDevice();
-		ID3D11DeviceContext* deviceContext = graphics.getDeviceContext();
+		ID3D11Device* device = graphics->getDevice();
+		ID3D11DeviceContext* deviceContext = graphics->getDeviceContext();
 
 		m_cubicShadowMap = cubicShadowMap;
 		m_vsDepth = VertexShader::Create(device, L"Shaders/vsDepth.cso", SIL_POSITION | SIL_TEXCOORD | SIL_NORMAL | SIL_NORMALMAP);
@@ -117,19 +117,19 @@ namespace gfw
 		}
 		m_light.position = { -3.0f, 6.4f, -8.0f };
 	}
-	std::shared_ptr<ShadowRenderer> ShadowRenderer::Create()
+	ShadowRenderer::P ShadowRenderer::Create()
 	{
 		return std::make_shared<ShadowRenderer>();
 	}
-	std::shared_ptr<ShadowRenderer> ShadowRenderer::Create(Graphics& graphics)
+	ShadowRenderer::P ShadowRenderer::Create(Graphics::P graphics)
 	{
 		return std::make_shared<ShadowRenderer>(graphics);
 	}
-	std::shared_ptr<ShadowRenderer> ShadowRenderer::Create(Graphics& graphics, UINT shadowmapSize, bool cubicShadowMap)
+	ShadowRenderer::P ShadowRenderer::Create(Graphics::P graphics, UINT shadowmapSize, bool cubicShadowMap)
 	{
 		return std::make_shared<ShadowRenderer>(graphics, shadowmapSize, cubicShadowMap);
 	}
-	void ShadowRenderer::Render(Graphics& graphics, Camera& camera)
+	void ShadowRenderer::Render(Graphics::P graphics, Camera& camera)
 	{
 		m_light.Update();
 		camera.Update();

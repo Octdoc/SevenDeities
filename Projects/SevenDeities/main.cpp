@@ -2,18 +2,16 @@
 
 INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
 {
-	std::shared_ptr<gfw::Window> window;
-	sd::SD_Scene scene;
+	gfw::Window::P window;
 	try
 	{
 		window = gfw::Window::Create();
-		window->setScene(&scene);
+		window->setScene(sd::SD_Scene::Create());
 		window->Run();
 	}
 	catch (hcs::Exception& e)
 	{
 		e.ShowMessageBox();
 	}
-	window->Shutdown();
 	return 0;
 }

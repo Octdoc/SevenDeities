@@ -3,12 +3,11 @@
 //INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
 int wmain()
 {
-	std::shared_ptr<gfw::Window> window;
-	cvt::Converter scene;
+	gfw::Window::P window;
 	try
 	{
 		window = gfw::Window::Create();
-		window->setScene(&scene);
+		window->setScene(cvt::Converter::Create());
 		window->Run();
 	}
 	catch (hcs::Exception& e)

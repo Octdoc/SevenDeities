@@ -8,19 +8,23 @@ namespace gfw
 {
 	class Renderer
 	{
-	protected:
-		std::shared_ptr<SkyDome> m_sky;
+		SHARED_ONLY(Renderer);
 
-		std::vector<std::shared_ptr<Entity>> m_entities;
+	protected:
+		Renderer() = default;
+
+		SkyDome::P m_sky;
+
+		std::vector<Entity::P> m_entities;
 		
 	public:
-		void SetSky(std::shared_ptr<SkyDome> sky);
-		void AddEntity(std::shared_ptr<Entity> entity);
-		void RemoveEntity(std::shared_ptr<Entity> entity);
+		void SetSky(SkyDome::P sky);
+		void AddEntity(Entity::P entity);
+		void RemoveEntity(Entity::P entity);
 		void ClearEntities();
 		void RemoveSky();
 		void Clear();
 
-		virtual void Render(Graphics& graphics, Camera& camera) = 0;
+		virtual void Render(Graphics::P graphics, Camera& camera) = 0;
 	};
 }

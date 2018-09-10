@@ -6,8 +6,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	switch (msg)
 	{
 	case WM_DESTROY:
-	case WM_CLOSE:
-	case WM_QUIT:
 		PostQuitMessage(0);
 		break;
 	default:
@@ -127,7 +125,7 @@ namespace gfw
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-		m_input.HandleMessage(msg);
+		m_input->HandleMessage(msg);
 		if (m_scene)
 			m_scene->MessageHandler(msg);
 	}
@@ -139,54 +137,22 @@ namespace gfw
 	{
 		Initialize(settings);
 	}
-	void Window::Shutdown()
+	Window::~Window()
 	{
-		if (m_scene)
-			m_scene->Quit();
-		m_graphics.reset();
-		ShutdownWindow();
+		DestroyWindow(m_hwnd);
 		UnregisterClass(m_windowName.c_str(), m_hInstance);
-		m_hInstance = NULL;
-		m_scene = NULL;
 	}
-	void Window::ShutdownDeleteScene()
+	Window::P Window::Create()
 	{
-		DeleteScene();
-		Shutdown();
+		Window::P window = std::make_shared<Window>();
+		window->m_self = window;
+		return window;
 	}
-	void Window::setScene(Scene* scene)
+	Window::P Window::Create(GraphicsSettings& settings)
 	{
-		m_scene = scene;
-		m_scene->SetWindow(this);
-	}
-	Scene* Window::getScene()
-	{
-		return m_scene;
-	}
-	void Window::DeleteScene()
-	{
-		if (m_scene)
-		{
-			m_scene->Quit();
-			delete m_scene;
-		}
-	}
-	void Window::ChangeScene(Scene* scene, bool deletePrevious)
-	{
-		m_scene->Quit();
-		if (deletePrevious)
-			delete m_scene;
-		m_scene = scene;
-		m_scene->SetWindow(this);
-		m_scene->Start();
-	}
-	std::shared_ptr<Window> Window::Create()
-	{
-		return std::make_shared<Window>();
-	}
-	std::shared_ptr<Window> Window::Create(GraphicsSettings& settings)
-	{
-		return std::make_shared<Window>(settings);
+		Window::P window = std::make_shared<Window>(settings);
+		window->m_self = window;
+		return window;
 	}
 	void Window::Initialize()
 	{
@@ -197,7 +163,7 @@ namespace gfw
 	{
 		InitializeWindow(settings);
 		m_graphics = Graphics::Create(m_hwnd, settings);
-		m_input.Initialize();
+		m_input = hcs::Input::Create();
 	}
 	void Window::InitializeWindow(GraphicsSettings& settings)
 	{
@@ -226,14 +192,20 @@ namespace gfw
 		MSG msg;
 		msg.message = WM_NULL;
 		m_periodicUpdate = periodicUpdate;
-		if (m_scene)
-			m_scene->Start();
 		m_timer.Reset();
-		if (!m_periodicUpdate)
-			if (m_scene)
+		if (m_scene)
+		{
+			m_scene->Start();
+			if (!m_periodicUpdate)
 				m_scene->Render();
+		}
 		while (msg.message != WM_QUIT)
 			MessageLoop(msg);
+	}
+	void Window::setScene(Scene::P scene)
+	{
+		m_scene = scene;
+		m_scene->SetWindow(m_self.lock());
 	}
 	void Window::setPeriodicUpdate(bool update)
 	{
@@ -247,11 +219,11 @@ namespace gfw
 	{
 		return m_boundingBox.bottom - m_boundingBox.top;
 	}
-	Graphics& Window::getGraphics()
+	Graphics::P Window::getGraphics()
 	{
-		return *m_graphics;
+		return m_graphics;
 	}
-	hcs::Input& Window::getInput()
+	hcs::Input::P Window::getInput()
 	{
 		return m_input;
 	}
@@ -259,11 +231,11 @@ namespace gfw
 	{
 		return m_hwnd;
 	}
-
-	void Scene::SetWindow(Window* window)
+	
+	void Scene::SetWindow(Window::P window)
 	{
 		m_window = window;
-		m_graphics = &window->getGraphics();
-		m_input = &window->getInput();
+		m_graphics = window->getGraphics();
+		m_input = window->getInput();
 	}
 }

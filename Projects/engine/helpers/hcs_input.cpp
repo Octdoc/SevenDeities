@@ -16,6 +16,14 @@ namespace hcs
 		m_mouseX = m_prevMouseX = cursorpos.x;
 		m_mouseY = m_prevMouseY = cursorpos.y;
 	}
+	Input::Input()
+	{
+		Initialize();
+	}
+	Input::P Input::Create()
+	{
+		return std::make_shared<Input>();
+	}
 
 	void Input::HandleMessage(MSG& msg)
 	{

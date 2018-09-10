@@ -291,7 +291,7 @@ namespace gfw
 		m_deviceContext->RSSetState(m_rasterizerStateSolid);
 		SetPrimitiveTopology_Triangles();
 		m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-		SetViewPort(m_screenWidth, m_screenHeight);
+		SetViewPort((float)m_screenWidth, (float)m_screenHeight);
 		EnableAlphaBlending(settings.enableAlpha);
 		EnableZBuffer(settings.enableZBuffer);
 	}
@@ -304,7 +304,7 @@ namespace gfw
 	{
 		Initialize(hwnd, settings);
 	}
-	std::shared_ptr<Graphics> Graphics::Create(HWND hwnd, GraphicsSettings& settings)
+	Graphics::P Graphics::Create(HWND hwnd, GraphicsSettings& settings)
 	{
 		return std::make_shared<Graphics>(hwnd, settings);
 	}
@@ -370,17 +370,21 @@ namespace gfw
 	}
 	void Graphics::SetViewPort()
 	{
-		SetViewPort(m_screenWidth, m_screenHeight);
+		SetViewPort(0.0f, 0.0f, (float)m_screenWidth, (float)m_screenHeight);
 	}
 	void Graphics::SetViewPort(float width, float height)
 	{
+		SetViewPort(0.0f, 0.0f, width, height);
+	}
+	void Graphics::SetViewPort(float x, float y, float width, float height)
+	{
 		D3D11_VIEWPORT viewport;
+		viewport.TopLeftX = x;
+		viewport.TopLeftY = y;
 		viewport.Width = width;
 		viewport.Height = height;
 		viewport.MinDepth = 0.0f;
 		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = 0.0f;
-		viewport.TopLeftY = 0.0f;
 		m_deviceContext->RSSetViewports(1, &viewport);
 	}
 	void Graphics::EnableAlphaBlending(bool alpha)

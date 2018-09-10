@@ -2,9 +2,9 @@
 
 namespace gfw
 {
-	void SimpleRenderer::CreateRenderer(Graphics& graphics)
+	void SimpleRenderer::CreateRenderer(Graphics::P graphics)
 	{
-		ID3D11Device* device = graphics.getDevice();
+		ID3D11Device* device = graphics->getDevice();
 		m_ambient = 0.5f;
 		m_vertexShader = gfw::VertexShader::Create(device, L"Shaders/vsSimple.cso", gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
 		m_pixelShader = gfw::PixelShader::Create(device, L"Shaders/psSimple.cso");
@@ -13,35 +13,35 @@ namespace gfw
 		m_sampler = gfw::SamplerState::Create(device, true);
 	}
 	SimpleRenderer::SimpleRenderer() :m_ambient(0.0f) {}
-	SimpleRenderer::SimpleRenderer(Graphics& graphics) : m_ambient(0.0f)
+	SimpleRenderer::SimpleRenderer(Graphics::P graphics) : m_ambient(0.0f)
 	{
 		CreateRenderer(graphics);
 	}
-	std::shared_ptr<SimpleRenderer> SimpleRenderer::Create()
+	SimpleRenderer::P SimpleRenderer::Create()
 	{
 		return std::make_shared<SimpleRenderer>();
 	}	
-	std::shared_ptr<SimpleRenderer> SimpleRenderer::Create(Graphics& graphics)
+	SimpleRenderer::P SimpleRenderer::Create(Graphics::P graphics)
 	{
 		return std::make_shared<SimpleRenderer>(graphics);
 	}
-	void SimpleRenderer::Render(Graphics& graphics, Camera& camera)
+	void SimpleRenderer::Render(Graphics::P graphics, Camera& camera)
 	{
-		ID3D11DeviceContext* deviceContext = graphics.getDeviceContext();
+		ID3D11DeviceContext* deviceContext = graphics->getDeviceContext();
 		camera.Update();
 
-		graphics.RenderToScreen();
+		graphics->RenderToScreen();
 
 		if (m_sky)
 			m_sky->Render(deviceContext, camera);
 
-		m_sampler->SetSamplerState(deviceContext);
+		m_sampler->SetSamplerStateToRender(deviceContext);
 		m_vertexShader->SetShaderToRender(deviceContext);
 		m_pixelShader->SetShaderToRender(deviceContext);
 
 		mth::float4x4 matrixBuffer[2];
 		matrixBuffer[1] = camera.GetCameraMatrix();
-		gfw::VertexShader::SetCBuffer(deviceContext, *m_vsBuffer);
+		gfw::VertexShader::SetCBuffer(deviceContext, m_vsBuffer);
 
 		mth::float3 campos = camera.position;
 		float lightBuffer[8] = {
@@ -50,7 +50,7 @@ namespace gfw
 			m_ambient
 		};
 		m_psBuffer->WriteBuffer(deviceContext, lightBuffer);
-		gfw::PixelShader::SetCBuffer(deviceContext, *m_psBuffer);
+		gfw::PixelShader::SetCBuffer(deviceContext, m_psBuffer);
 
 		for (auto& e : m_entities)
 		{
@@ -59,6 +59,6 @@ namespace gfw
 			e->Render(deviceContext);
 		}
 
-		graphics.Present();
+		graphics->Present();
 	}
 }

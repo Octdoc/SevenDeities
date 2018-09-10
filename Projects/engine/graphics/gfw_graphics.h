@@ -26,7 +26,7 @@ namespace gfw
 
 	class Graphics
 	{
-		friend std::_Ref_count_obj<Graphics>;
+		SHARED_ONLY(Graphics);
 
 		bool m_vsync;
 		bool m_fullscreen;
@@ -52,7 +52,6 @@ namespace gfw
 
 	private:
 		Graphics(HWND hwnd, GraphicsSettings& settings);
-		Graphics(Graphics&) = delete;
 		~Graphics();
 		void Initialize(HWND hwnd, GraphicsSettings& settings);
 
@@ -82,7 +81,7 @@ namespace gfw
 		void InitializeDirect3D(HWND hwnd, GraphicsSettings& settings);
 
 	public:
-		static std::shared_ptr<Graphics> Create(HWND hwnd, GraphicsSettings& settings);
+		static Graphics::P Create(HWND hwnd, GraphicsSettings& settings);
 		
 		void RenderToScreen();
 		void RenderToScreenSetTarget();
@@ -92,6 +91,7 @@ namespace gfw
 		void setClearColor(float r, float g, float b, float a);
 		void SetViewPort();
 		void SetViewPort(float width, float height);
+		void SetViewPort(float x, float y, float width, float height);
 		void EnableAlphaBlending(bool alpha);
 		void EnableZBuffer(bool enable);
 		void SetPrimitiveTopology_Points();

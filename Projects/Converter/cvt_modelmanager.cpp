@@ -248,9 +248,9 @@ namespace cvt
 		m_normalmapNames.clear();
 	}
 
-	std::shared_ptr<gfw::Entity> ModelManager::CreateEntity(gfw::Graphics& graphics)
+	gfw::Entity::P ModelManager::CreateEntity(gfw::Graphics::P graphics)
 	{
-		ID3D11Device* device = graphics.getDevice();
+		ID3D11Device* device = graphics->getDevice();
 		UINT shaderInputType = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
 		
 		std::vector<std::shared_ptr<gfw::Texture>> textures, normalmaps;

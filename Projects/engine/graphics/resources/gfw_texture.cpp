@@ -7,7 +7,6 @@ namespace gfw
 
 #pragma region SamplerState
 
-	SamplerState::SamplerState() {}
 	SamplerState::SamplerState(ID3D11Device* device, bool interpolate, D3D11_TEXTURE_ADDRESS_MODE addressMode)
 	{
 		CreateSamplerState(device, interpolate, addressMode);
@@ -30,12 +29,7 @@ namespace gfw
 		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	}
 
-	std::shared_ptr<SamplerState> SamplerState::Create()
-	{
-		return std::make_shared<SamplerState>();
-	}
-
-	std::shared_ptr<SamplerState> SamplerState::Create(ID3D11Device* device, bool interpolate, D3D11_TEXTURE_ADDRESS_MODE addressMode)
+	SamplerState::P SamplerState::Create(ID3D11Device* device, bool interpolate, D3D11_TEXTURE_ADDRESS_MODE addressMode)
 	{
 		return std::make_shared<SamplerState>(device, interpolate, addressMode);
 	}
@@ -49,12 +43,7 @@ namespace gfw
 			throw hcs::Exception(L"Failed To Create Sampler State", result);
 	}
 
-	void SamplerState::Release()
-	{
-		m_sampler.Release();
-	}
-
-	void SamplerState::SetSamplerState(ID3D11DeviceContext* deviceContext, int index)
+	void SamplerState::SetSamplerStateToRender(ID3D11DeviceContext* deviceContext, int index)
 	{
 		deviceContext->PSSetSamplers(index, 1, &m_sampler);
 	}
@@ -108,22 +97,18 @@ namespace gfw
 		deviceContext->GenerateMips(m_shaderResourceView);
 	}
 
-	std::shared_ptr<Texture> Texture::Create()
+	Texture::P Texture::Create(ID3D11Device * device, const WCHAR * filename, bool cubic)
 	{
-		return std::make_shared<Texture>();
+		return std::make_shared<Texture>(device, filename, cubic);
 	}
-
-	std::shared_ptr<Texture> Texture::Create2D(ID3D11Device* device, const WCHAR* filename)
+	Texture::P Texture::Create2D(ID3D11Device* device, const WCHAR* filename)
 	{
 		return std::make_shared<Texture>(device, filename, false);
 	}
-
-	std::shared_ptr<Texture> Texture::CreateCube(ID3D11Device* device, const WCHAR* filename)
+	Texture::P Texture::CreateCube(ID3D11Device* device, const WCHAR* filename)
 	{
 		return std::make_shared<Texture>(device, filename, true);
 	}
-
-	Texture::Texture() : m_width(0), m_height(0) {}
 
 	Texture::Texture(ID3D11Device* device, const WCHAR* filename, bool cube) : m_width(0), m_height(0)
 	{
@@ -171,15 +156,7 @@ namespace gfw
 			throw hcs::Exception((std::wstring(L"Failed to load and create texture: ") + filename).c_str(), result);
 	}
 
-	void Texture::Release()
-	{
-		m_texture.Release();
-		m_shaderResourceView.Release();
-		m_width = 0;
-		m_height = 0;
-	}
-
-	void Texture::SetTexture(ID3D11DeviceContext* deviceContext, int index)
+	void Texture::SetTextureToRender(ID3D11DeviceContext* deviceContext, int index)
 	{
 		deviceContext->PSSetShaderResources(index, 1, &m_shaderResourceView);
 	}
@@ -198,7 +175,6 @@ namespace gfw
 
 #pragma region RenderTarget
 
-	RenderTarget::RenderTarget() {}
 	RenderTarget::RenderTarget(ID3D11Device* device, int width, int height, bool cube)
 	{
 		CreateRenderTarget(device, width, height, cube);
@@ -347,12 +323,7 @@ namespace gfw
 		}
 	}
 
-	std::shared_ptr<RenderTarget> RenderTarget::Create()
-	{
-		return std::make_shared<RenderTarget>();
-	}
-
-	std::shared_ptr<RenderTarget> RenderTarget::Create(ID3D11Device * device, int width, int height, bool cube)
+	RenderTarget::P RenderTarget::Create(ID3D11Device* device, int width, int height, bool cube)
 	{
 		return std::make_shared<RenderTarget>(device, width, height, cube);
 	}
@@ -368,15 +339,6 @@ namespace gfw
 		RenderTarget::CreateDepthBuffer(device);
 		RenderTarget::CreateDepthStencilView(device);
 		RenderTarget::CreateRenderTargetView(device);
-	}
-
-	void RenderTarget::Release()
-	{
-		Texture::Release();
-		m_depthBuffer.Release();
-		m_depthStencilView.Release();
-		for (int i = 0; i < 6; i++)
-			m_renderTargetViews[i].Release();
 	}
 
 	ID3D11RenderTargetView* RenderTarget::getRenderTargetView(UINT index)

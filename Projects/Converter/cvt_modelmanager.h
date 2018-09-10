@@ -48,7 +48,7 @@ namespace cvt
 		bool LoadModelData(const WCHAR* filename);
 		void Clear();
 
-		std::shared_ptr<gfw::Entity> CreateEntity(gfw::Graphics& graphics);
+		gfw::Entity::P CreateEntity(gfw::Graphics::P graphics);
 
 		void Export(UINT shaderInputLayout);
 	};

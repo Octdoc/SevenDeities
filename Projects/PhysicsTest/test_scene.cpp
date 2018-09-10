@@ -9,6 +9,11 @@ namespace test
 	{
 	}
 
+	Test_Scene::P Test_Scene::Create()
+	{
+		return std::make_shared<Test_Scene>();
+	}
+
 	void Test_Scene::Start()
 	{
 		Test();
@@ -19,8 +24,8 @@ namespace test
 		m_camera.Init();
 		m_camera.position = { 0.0f, 4.0f, -10.0f };
 
-		//m_renderer = gfw::SimpleRenderer::Create(*m_graphics);
-		m_renderer = gfw::ShadowRenderer::Create(*m_graphics);
+		//m_renderer = gfw::SimpleRenderer::Create(m_graphics);
+		m_renderer = gfw::ShadowRenderer::Create(m_graphics);
 
 		m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 
@@ -44,17 +49,20 @@ namespace test
 			gfw::Texture::Create2D(device, L"Media/red.png"),
 			normapmap);
 		m_renderer->AddEntity(m_gfxPlayer);
-		m_phyPlayer = std::make_shared<pfw::Player>();
+
+		m_physicsArea = pfw::CollisionArea::Create();
+
+		m_phyPlayer = pfw::Player::Create();
 		m_phyPlayer->position = { -2.0f, 1.5f, -3.0f };
 		m_phyPlayer->scale = { 0.35f, 0.9f, 0.35f };
 		m_gfxPlayer->scale = { 0.35f, 0.9f, 0.35f };
-		m_physicsArea.setPlayer(m_phyPlayer);
+		m_physicsArea->setPlayer(m_phyPlayer);
 
 		gfw::ModelLoader monkeyHB;
 		monkeyHB.LoadModel(L"Media/monkey.omd");
-		m_physicsArea.AddCollider(pfw::Collider::Create(monkeyHB, mth::float3(0.0f, 2.0f, 0.0f)));
-		m_physicsArea.AddCollider(pfw::Collider::Create(floor));
-		m_physicsArea.gravity = 0.0f;
+		m_physicsArea->AddCollider(pfw::Collider::Create(monkeyHB, mth::float3(0.0f, 2.0f, 0.0f)));
+		m_physicsArea->AddCollider(pfw::Collider::Create(floor));
+		m_physicsArea->gravity = 0.0f;
 
 	}
 	void Test_Scene::Quit()
@@ -79,12 +87,12 @@ namespace test
 		m_input->ResetMouseDelta();
 
 		m_phyPlayer->Control_FreeMove(*m_input);
-		m_physicsArea.Update((float)deltaTime);
+		m_physicsArea->Update((float)deltaTime);
 		m_gfxPlayer->position = m_phyPlayer->position;
 	}
 	void Test_Scene::Render()
 	{
-		m_renderer->Render(*m_graphics, m_camera);
+		m_renderer->Render(m_graphics, m_camera);
 	}
 	void Test_Scene::MessageHandler(MSG& message)
 	{

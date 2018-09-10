@@ -19,7 +19,7 @@ namespace sd
 		m_camera.position = { 0.0f, 4.0f, -10.0f };
 
 		//m_renderer = gfw::SimpleRenderer::Create(*m_graphics);
-		m_renderer = gfw::ShadowRenderer::Create(*m_graphics);
+		m_renderer = gfw::ShadowRenderer::Create(m_graphics);
 
 		m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 
@@ -36,6 +36,10 @@ namespace sd
 			gfw::Texture::Create2D(device, L"Media/normal.png")));
 
 	}
+	SD_Scene::P SD_Scene::Create()
+	{
+		return std::make_shared<SD_Scene>();
+	}
 	void SD_Scene::Quit()
 	{
 	}
@@ -46,7 +50,7 @@ namespace sd
 	}
 	void SD_Scene::Render()
 	{
-		m_renderer->Render(*m_graphics, m_camera);
+		m_renderer->Render(m_graphics, m_camera);
 	}
 	void SD_Scene::MessageHandler(MSG& message)
 	{

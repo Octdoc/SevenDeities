@@ -62,7 +62,6 @@ namespace gfw
 		data.SysMemSlicePitch = 0;
 	}
 
-	Model::Model() :m_vertexCount(0), m_vertexSizeInBytes(0), m_indexCount(0) {}
 	Model::Model(ID3D11Device* device, const WCHAR* filename) : m_vertexCount(0), m_vertexSizeInBytes(0), m_indexCount(0)
 	{
 		LoadModel(device, filename);
@@ -75,20 +74,15 @@ namespace gfw
 	{
 		CreateModel(device, vertices, vertexCount, shaderInputLayout, indices, indexCount);
 	}
-	std::shared_ptr<Model> Model::Create()
-	{
-		return std::make_shared<Model>();
-	}
-	std::shared_ptr<Model> Model::Create(ID3D11Device* device, const WCHAR* filename)
+	Model::P Model::Create(ID3D11Device* device, const WCHAR* filename)
 	{
 		return std::make_shared<Model>(device, filename);
 	}
-	std::shared_ptr<Model> Model::Create(ID3D11Device* device, ModelLoader& modelLoader)
+	Model::P Model::Create(ID3D11Device* device, ModelLoader& modelLoader)
 	{
 		return std::make_shared<Model>(device, modelLoader);
 	}
-
-	std::shared_ptr<Model> Model::Create(ID3D11Device* device, void* vertices, UINT vertexCount, UINT shaderInputLayout, UINT* indices, UINT indexCount)
+	Model::P Model::Create(ID3D11Device* device, void* vertices, UINT vertexCount, UINT shaderInputLayout, UINT* indices, UINT indexCount)
 	{
 		return std::make_shared<Model>(device, vertices, vertexCount, shaderInputLayout, indices, indexCount);
 	}
@@ -110,17 +104,6 @@ namespace gfw
 		m_indexGroupSizes.push_back(indexCount);
 		CreateVertexBuffer(device, vertices, vertexCount, shaderInputLayout);
 		CreateIndexBuffer(device, indices, indexCount);
-	}
-
-	void Model::Release()
-	{
-		m_vertexBuffer.Release();
-		m_indexBuffer.Release();
-		m_vertexCount = 0;
-		m_indexCount = 0;
-		m_vertexSizeInBytes = 0;
-		m_indexGroupStarts.clear();
-		m_indexGroupSizes.clear();
 	}
 
 	UINT Model::getIndexGroupCount()

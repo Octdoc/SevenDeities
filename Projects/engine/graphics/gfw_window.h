@@ -10,7 +10,9 @@ namespace gfw
 
 	class Window
 	{
-		friend std::_Ref_count_obj<Window>;
+		SHARED_ONLY(Window);
+
+		Window::W m_self;
 
 		RECT m_boundingBox;
 		bool m_fullscreen;
@@ -22,15 +24,14 @@ namespace gfw
 
 		hcs::Timer m_timer;
 
-		hcs::Input m_input;
-		std::shared_ptr<Graphics> m_graphics;
+		hcs::Input::P m_input;
+		Graphics::P m_graphics;
 
-		Scene *m_scene;
+		std::shared_ptr<Scene> m_scene;
 
 	private:
 		Window();
 		Window(GraphicsSettings& settings);
-		Window(Window&) = delete;
 		void Initialize();
 		void Initialize(GraphicsSettings& settings);
 		
@@ -48,36 +49,37 @@ namespace gfw
 		void ShutdownWindow();
 
 	public:
-		static std::shared_ptr<Window> Create();
-		static std::shared_ptr<Window> Create(GraphicsSettings& settings);
+		~Window();
+
+		static Window::P Create();
+		static Window::P Create(GraphicsSettings& settings);
 
 		void Run(bool periodicUpdate = true);
-		void Shutdown();
-		void ShutdownDeleteScene();
 
-		void ChangeScene(Scene* scene, bool deletePrevious);
-		void setScene(Scene* scene);
-		Scene* getScene();
-		void DeleteScene();
+		void setScene(std::shared_ptr<Scene> scene);
+		std::shared_ptr<Scene> getScene();
 
 		void setPeriodicUpdate(bool update);
 
 		int GetWindowWidth();
 		int GetWindowHeight();
-		Graphics& getGraphics();
-		hcs::Input& getInput();
+		Graphics::P getGraphics();
+		hcs::Input::P getInput();
 		HWND getHWND();
 	};
 
 	class Scene
 	{
+		SHARED_ONLY(Scene);
+
 	protected:
-		Window* m_window;
-		Graphics* m_graphics;
-		hcs::Input* m_input;
+		Scene() = default;
+		Window::P m_window;
+		Graphics::P m_graphics;
+		hcs::Input::P m_input;
 
 	public:
-		void SetWindow(Window* window);
+		void SetWindow(Window::P window);
 
 		virtual void Start() = 0;
 		virtual void Quit() = 0;
