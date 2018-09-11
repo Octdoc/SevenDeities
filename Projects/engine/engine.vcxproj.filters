@@ -52,6 +52,12 @@
     <Filter Include="Source Files\physics">
       <UniqueIdentifier>{606ff13c-6fdb-4255-baed-341ee1a63ea6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\form">
+      <UniqueIdentifier>{69be7739-983c-4453-a8ae-1da50c0320c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\form">
+      <UniqueIdentifier>{eb63c4c9-bfed-4cc9-aab6-629ee7d687b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="octdoc.h">
@@ -129,6 +135,9 @@
     <ClInclude Include="physics\pfw_collider.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
+    <ClInclude Include="form\form_button.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="helpers\hcs_helpers.cpp">
@@ -199,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="physics\pfw_collider.cpp">
       <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_button.cpp">
+      <Filter>Source Files\form</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

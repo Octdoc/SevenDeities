@@ -3,8 +3,6 @@
 namespace gfw
 {
 
-	//!! makes members after it private !!
-#define SHARED_ONLY(TYPE) public:using P = std::shared_ptr<TYPE>;using W = std::weak_ptr<TYPE>;private:friend std::_Ref_count_obj<TYPE>;TYPE(TYPE&) = delete;
 
 	template <typename T>
 	class AutoReleasePtr

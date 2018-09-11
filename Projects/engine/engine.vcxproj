@@ -191,6 +191,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="form\form_button.h" />
     <ClInclude Include="graphics\entity\gfw_camera.h" />
     <ClInclude Include="graphics\entity\gfw_controller.h" />
     <ClInclude Include="graphics\entity\gfw_entity.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="physics\pfw_collider.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="form\form_button.cpp" />
     <ClCompile Include="graphics\entity\gfw_camera.cpp" />
     <ClCompile Include="graphics\entity\gfw_controller.cpp" />
     <ClCompile Include="graphics\entity\gfw_entity.cpp" />
