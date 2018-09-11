@@ -26,6 +26,8 @@ namespace gfw
 
 	class Graphics
 	{
+		SHARED_ONLY(Graphics);
+
 		bool m_vsync;
 		bool m_fullscreen;
 		int m_screenWidth;
@@ -49,6 +51,10 @@ namespace gfw
 		float m_clearColor[4];
 
 	private:
+		Graphics(HWND hwnd, GraphicsSettings& settings);
+		~Graphics();
+		void Initialize(HWND hwnd, GraphicsSettings& settings);
+
 		DXGI_RATIONAL InitializeAdapter();
 		IDXGIAdapter* GetAdapter();
 		void GetAdapterDescription(IDXGIAdapter* adapter);
@@ -73,14 +79,10 @@ namespace gfw
 		void FillBlendDesc(D3D11_BLEND_DESC& blendDesc);
 
 		void InitializeDirect3D(HWND hwnd, GraphicsSettings& settings);
-		void ShutdownDirect3D();
 
 	public:
-		Graphics();
-		~Graphics();
-		void Initialize(HWND hwnd, GraphicsSettings& settings);
-		void Shutdown();
-
+		static Graphics::P Create(HWND hwnd, GraphicsSettings& settings);
+		
 		void RenderToScreen();
 		void RenderToScreenSetTarget();
 		void RenderToSurface(ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView);
@@ -89,6 +91,7 @@ namespace gfw
 		void setClearColor(float r, float g, float b, float a);
 		void SetViewPort();
 		void SetViewPort(float width, float height);
+		void SetViewPort(float x, float y, float width, float height);
 		void EnableAlphaBlending(bool alpha);
 		void EnableZBuffer(bool enable);
 		void SetPrimitiveTopology_Points();

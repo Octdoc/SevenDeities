@@ -1,4 +1,5 @@
 #include "pfw_collider.h"
+#include <iostream>
 
 namespace pfw
 {
@@ -106,7 +107,6 @@ namespace pfw
 		return collision;
 	}
 
-	Collider::Collider() {}
 	Collider::Collider(gfw::ModelLoader& modelLoader)
 	{
 		CreateCollider(modelLoader);
@@ -115,15 +115,11 @@ namespace pfw
 	{
 		CreateCollider(modelLoader);
 	}
-	std::shared_ptr<Collider> Collider::Create()
-	{
-		return std::make_shared<Collider>();
-	}
-	std::shared_ptr<Collider> Collider::Create(gfw::ModelLoader& modelLoader)
+	Collider::P Collider::Create(gfw::ModelLoader& modelLoader)
 	{
 		return std::make_shared<Collider>(modelLoader);
 	}
-	std::shared_ptr<Collider> Collider::Create(gfw::ModelLoader& modelLoader, mth::float3 position)
+	Collider::P Collider::Create(gfw::ModelLoader& modelLoader, mth::float3 position)
 	{
 		return std::make_shared<Collider>(modelLoader, position);
 	}
@@ -172,6 +168,10 @@ namespace pfw
 #pragma region Player
 
 	Player::Player() :speed(5), canJump(false), jumpStrength(5.0f) {}
+	Player::P Player::Create()
+	{
+		return std::make_shared<Player>();
+	}
 	BV_AABB* Player::GetBoundingBox(float deltaTime)
 	{
 		m_boundingBox.position = position + velocity * deltaTime - scale;
@@ -247,15 +247,19 @@ namespace pfw
 #pragma region CollisionArea
 
 	CollisionArea::CollisionArea() :m_player(NULL), gravity(9.81f) {}
-	void CollisionArea::setPlayer(std::shared_ptr<Player> player)
+	CollisionArea::P CollisionArea::Create()
+	{
+		return std::make_shared<CollisionArea>();
+	}
+	void CollisionArea::setPlayer(Player::P player)
 	{
 		m_player = player;
 	}
-	void CollisionArea::AddCollider(std::shared_ptr<Collider> collider)
+	void CollisionArea::AddCollider(Collider::P collider)
 	{
 		m_colliders.push_back(collider);
 	}
-	void CollisionArea::RemoveCollider(std::shared_ptr<Collider> collider)
+	void CollisionArea::RemoveCollider(Collider::P collider)
 	{
 		for (auto c = m_colliders.begin(); c != m_colliders.end(); c++)
 		{
@@ -288,9 +292,10 @@ namespace pfw
 
 			deltaTime = m_player->Update(collData, deltaTime, collision);
 
-			if (counter++ == 100)	//probably stuck looping forever, let it be (this is just a number, could be else)
+			if (counter++ == 5)	//probably stuck looping forever, let it be (this is just a number, could be else)
 			{
 				m_player->velocity = mth::float3();
+				std::wcout << L"Stuck" << std::endl;
 				return;
 			}
 		}

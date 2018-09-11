@@ -10,29 +10,30 @@ namespace gfw
 
 	class Entity :public mth::Position
 	{
-		std::shared_ptr<Model> m_model;
-		std::vector<std::shared_ptr<Texture>> m_textures;
-		std::vector<std::shared_ptr<Texture>> m_normalmaps;
+		SHARED_ONLY(Entity);
+		Model::P m_model;
+		std::vector<Texture::P> m_textures;
+		std::vector<Texture::P> m_normalmaps;
 		bool m_shown;
 
+	private:
+		Entity(Model::P model);
+		Entity(Model::P model, Texture::P texture);
+		Entity(Model::P model, Texture::P texture, Texture::P normalmap);
+		Entity(Model::P model, Texture::P textures[]);
+		Entity(Model::P model, Texture::P textures[], Texture::P normalmaps[]);
+		void CreateEntity(Model::P model);
+		void CreateEntity(Model::P model, Texture::P texture);
+		void CreateEntity(Model::P model, Texture::P texture, Texture::P normalmap);
+		void CreateEntity(Model::P model, Texture::P texture[]);
+		void CreateEntity(Model::P model, Texture::P texture[], Texture::P normalmap[]);
+
 	public:
-		Entity();
-		Entity(std::shared_ptr<Model> model);
-		Entity(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture);
-		Entity(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture, std::shared_ptr<Texture> normalmap);
-		Entity(std::shared_ptr<Model> model, std::shared_ptr<Texture> textures[]);
-		Entity(std::shared_ptr<Model> model, std::shared_ptr<Texture> textures[], std::shared_ptr<Texture> normalmaps[]);
-		static std::shared_ptr<Entity> Create();
-		static std::shared_ptr<Entity> Create(std::shared_ptr<Model> model);
-		static std::shared_ptr<Entity> Create(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture);
-		static std::shared_ptr<Entity> Create(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture, std::shared_ptr<Texture> normalmap);
-		static std::shared_ptr<Entity> Create(std::shared_ptr<Model> model, std::shared_ptr<Texture> textures[]);
-		static std::shared_ptr<Entity> Create(std::shared_ptr<Model> model, std::shared_ptr<Texture> textures[], std::shared_ptr<Texture> normalmaps[]);
-		void CreateEntity(std::shared_ptr<Model> model);
-		void CreateEntity(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture);
-		void CreateEntity(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture, std::shared_ptr<Texture> normalmap);
-		void CreateEntity(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture[]);
-		void CreateEntity(std::shared_ptr<Model> model, std::shared_ptr<Texture> texture[], std::shared_ptr<Texture> normalmap[]);
+		static Entity::P Create(Model::P model);
+		static Entity::P Create(Model::P model, Texture::P texture);
+		static Entity::P Create(Model::P model, Texture::P texture, Texture::P normalmap);
+		static Entity::P Create(Model::P model, Texture::P textures[]);
+		static Entity::P Create(Model::P model, Texture::P textures[], Texture::P normalmaps[]);
 		void Clear();
 
 		void Hide();
@@ -41,8 +42,8 @@ namespace gfw
 		void Render(ID3D11DeviceContext* deviceContext);
 		void RenderModel(ID3D11DeviceContext* deviceContext);
 
-		std::weak_ptr<Model> getModel();
-		std::vector<std::shared_ptr<Texture>>& getTextures();
-		std::vector<std::shared_ptr<Texture>>& getNormalmaps();
+		Model::P getModel();
+		std::vector<Texture::P>& getTextures();
+		std::vector<Texture::P>& getNormalmaps();
 	};
 }

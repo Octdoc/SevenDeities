@@ -2,16 +2,11 @@
 
 namespace gfw
 {
-	SkyDome::SkyDome() {}
 	SkyDome::SkyDome(ID3D11Device* device, const WCHAR* filename)
 	{
 		CreateSkyDome(device, filename);
 	}
-	std::shared_ptr<SkyDome> SkyDome::Create()
-	{
-		return std::make_shared<SkyDome>();
-	}
-	std::shared_ptr<SkyDome> SkyDome::Create(ID3D11Device* device, const WCHAR* filename)
+	SkyDome::P SkyDome::Create(ID3D11Device* device, const WCHAR* filename)
 	{
 		return std::make_shared<SkyDome>(device, filename);
 	}
@@ -29,13 +24,13 @@ namespace gfw
 	}
 	void SkyDome::Render(ID3D11DeviceContext* deviceContext, Camera& camera)
 	{
-		m_sampler->SetSamplerState(deviceContext);
+		m_sampler->SetSamplerStateToRender(deviceContext);
 		m_vertexShader->SetShaderToRender(deviceContext);
 		m_pixelShader->SetShaderToRender(deviceContext);
 		mth::float4x4 matrixBuffer = camera.GetCameraMatrix()*mth::float4x4::Translation(camera.position);
 		m_cBuffer->WriteBuffer(deviceContext, &matrixBuffer);
-		VertexShader::SetCBuffer(deviceContext, *m_cBuffer);
-		m_texture->SetTexture(deviceContext);
+		VertexShader::SetCBuffer(deviceContext, m_cBuffer);
+		m_texture->SetTextureToRender(deviceContext);
 		m_model->Render(deviceContext);
 	}
 }

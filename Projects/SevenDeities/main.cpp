@@ -2,18 +2,16 @@
 
 INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
 {
-	gfw::Window window;
-	sd::SD_Scene scene;
+	gfw::Window::P window;
 	try
 	{
-		window.Initialize();
-		window.setScene(&scene);
-		window.Run();
+		window = gfw::Window::Create(true);
+		window->setScene(sd::SD_Scene::Create());
+		window->Run();
 	}
 	catch (hcs::Exception& e)
 	{
 		e.ShowMessageBox();
 	}
-	window.Shutdown();
 	return 0;
 }

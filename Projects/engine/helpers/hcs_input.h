@@ -1,11 +1,14 @@
 #pragma once
 
 #include "hcs_helpers.h"
+#include "graphics/resources/gfw_resource.h"
 
 namespace hcs
 {
 	class Input
 	{
+		SHARED_ONLY(Input);
+
 		bool m_keys[256];
 		bool m_rMouseBtn;
 		bool m_lMouseBtn;
@@ -14,8 +17,13 @@ namespace hcs
 		int m_mouseX, m_mouseY;
 		int m_prevMouseX, m_prevMouseY;
 
-	public:
+	private:
+		Input();
 		void Initialize();
+
+	public:
+		static Input::P Create();
+
 		void HandleMessage(MSG& msg);
 
 		bool isPressed(unsigned int key);

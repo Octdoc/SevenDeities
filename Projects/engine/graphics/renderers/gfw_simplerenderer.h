@@ -6,21 +6,25 @@ namespace gfw
 {
 	class SimpleRenderer :public Renderer
 	{
+		SHARED_ONLY(SimpleRenderer);
+
 		float m_ambient;
-		std::shared_ptr<gfw::PixelShader> m_pixelShader;
-		std::shared_ptr<gfw::VertexShader> m_vertexShader;
-		std::shared_ptr<gfw::CBuffer> m_vsBuffer;
-		std::shared_ptr<gfw::CBuffer> m_psBuffer;
-		std::shared_ptr<gfw::SamplerState> m_sampler;
+		gfw::PixelShader::P m_pixelShader;
+		gfw::VertexShader::P m_vertexShader;
+		gfw::CBuffer::P m_vsBuffer;
+		gfw::CBuffer::P m_psBuffer;
+		gfw::SamplerState::P m_sampler;
 		
-	public:
+	private:
 		SimpleRenderer();
-		SimpleRenderer(Graphics& graphics);
-		void CreateRenderer(Graphics& graphics);
+		SimpleRenderer(Graphics::P graphics);
+		void CreateRenderer(Graphics::P graphics);
 
-		static std::shared_ptr<SimpleRenderer> Create();
-		static std::shared_ptr<SimpleRenderer> Create(Graphics& graphics);
+	public:
 
-		virtual void Render(Graphics& graphics, Camera& camera) override;
+		static SimpleRenderer::P Create();
+		static SimpleRenderer::P Create(Graphics::P graphics);
+
+		virtual void Render(Graphics::P graphics, Camera& camera) override;
 	};
 }

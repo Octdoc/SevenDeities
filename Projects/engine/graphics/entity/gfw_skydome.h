@@ -9,19 +9,20 @@ namespace gfw
 {
 	class SkyDome
 	{
-		std::shared_ptr<Model> m_model;
-		std::shared_ptr<VertexShader> m_vertexShader;
-		std::shared_ptr<PixelShader> m_pixelShader;
-		std::shared_ptr<CBuffer> m_cBuffer;
-		std::shared_ptr<Texture> m_texture;
-		std::shared_ptr<SamplerState> m_sampler;
+		SHARED_ONLY(SkyDome);
+		Model::P m_model;
+		VertexShader::P m_vertexShader;
+		PixelShader::P m_pixelShader;
+		CBuffer::P m_cBuffer;
+		Texture::P m_texture;
+		SamplerState::P m_sampler;
+
+	private:
+		SkyDome(ID3D11Device* device, const WCHAR* filename);
+		void CreateSkyDome(ID3D11Device* device, const WCHAR* filename);
 
 	public:
-		SkyDome();
-		SkyDome(ID3D11Device* device, const WCHAR* filename);
-		static std::shared_ptr<SkyDome> Create();
-		static std::shared_ptr<SkyDome> Create(ID3D11Device* device, const WCHAR* filename);
-		void CreateSkyDome(ID3D11Device* device, const WCHAR* filename);
+		static SkyDome::P Create(ID3D11Device* device, const WCHAR* filename);
 		void Render(ID3D11DeviceContext* deviceContext, Camera& camera);
 	};
 }

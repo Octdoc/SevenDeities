@@ -16,17 +16,10 @@ namespace gfw
 		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	}
 
-	std::shared_ptr<CBuffer> CBuffer::Create()
-	{
-		return std::make_shared<CBuffer>();
-	}
-
-	std::shared_ptr<CBuffer> CBuffer::Create(ID3D11Device* device, UINT sizeInBytes)
+	CBuffer::P CBuffer::Create(ID3D11Device* device, UINT sizeInBytes)
 	{
 		return std::make_shared<CBuffer>(device, sizeInBytes);
 	}
-
-	CBuffer::CBuffer():m_bufferSize(0) {}
 	CBuffer::CBuffer(ID3D11Device* device, UINT sizeInBytes) : m_bufferSize(0)
 	{
 		CreateCBuffer(device, sizeInBytes);
@@ -51,11 +44,6 @@ namespace gfw
 		memcpy(resource.pData, dataptr, m_bufferSize);
 		deviceContext->Unmap(m_buffer, 0);
 		return true;
-	}
-	void CBuffer::Release()
-	{
-		m_buffer.Release();
-		m_bufferSize = 0;
 	}
 	ID3D11Buffer* CBuffer::getBuffer()
 	{
@@ -216,17 +204,10 @@ namespace gfw
 			throw hcs::Exception(L"Failed To Create Input Layout.", result);
 	}
 
-	std::shared_ptr<VertexShader> VertexShader::Create()
-	{
-		return std::make_shared<VertexShader>();
-	}
-
-	std::shared_ptr<VertexShader> VertexShader::Create(ID3D11Device* device, const WCHAR* shaderFileName, UINT inputLayoutType)
+	VertexShader::P VertexShader::Create(ID3D11Device* device, const WCHAR* shaderFileName, UINT inputLayoutType)
 	{
 		return std::make_shared<VertexShader>(device, shaderFileName, inputLayoutType);
 	}
-
-	VertexShader::VertexShader() :m_inputLayout(0) {}
 	VertexShader::VertexShader(ID3D11Device* device, const WCHAR* shaderFileName, UINT inputLayoutType) :m_inputLayout(0)
 	{
 		LoadVertexShader(device, shaderFileName, inputLayoutType);
@@ -239,20 +220,14 @@ namespace gfw
 		m_inputLayoutType = inputLayoutType;
 		CreateInputLayout(device, shaderBuffer);
 	}
-	void VertexShader::Release()
-	{
-		m_inputLayout.Release();
-		m_shader.Release();
-		m_inputLayoutType = 0;
-	}
 	void VertexShader::SetShaderToRender(ID3D11DeviceContext* deviceContext)
 	{
 		deviceContext->IASetInputLayout(m_inputLayout);
 		deviceContext->VSSetShader(m_shader, nullptr, 0);
 	}
-	void VertexShader::SetCBuffer(ID3D11DeviceContext* deviceContext, CBuffer& buffer, UINT index)
+	void VertexShader::SetCBuffer(ID3D11DeviceContext* deviceContext, CBuffer::P buffer, UINT index)
 	{
-		ID3D11Buffer* bufferPtr = buffer.getBuffer();
+		ID3D11Buffer* bufferPtr = buffer->getBuffer();
 		deviceContext->VSSetConstantBuffers(index, 1, &bufferPtr);
 	}
 
@@ -260,18 +235,11 @@ namespace gfw
 
 #pragma region PixelShader
 
-	PixelShader::PixelShader() {}
 	PixelShader::PixelShader(ID3D11Device* device, const WCHAR* shaderFileName)
 	{
 		LoadPixelShader(device, shaderFileName);
 	}
-
-	std::shared_ptr<PixelShader> PixelShader::Create()
-	{
-		return std::make_shared<PixelShader>();
-	}
-
-	std::shared_ptr<PixelShader> PixelShader::Create(ID3D11Device* device, const WCHAR* shaderFileName)
+	PixelShader::P PixelShader::Create(ID3D11Device* device, const WCHAR* shaderFileName)
 	{
 		return std::make_shared<PixelShader>(device, shaderFileName);
 	}
@@ -286,17 +254,13 @@ namespace gfw
 		if (FAILED(result))
 			throw hcs::Exception(L"Failed To Create Pixel Shader.", result);
 	}
-	void PixelShader::Release()
-	{
-		m_shader.Release();
-	}
 	void PixelShader::SetShaderToRender(ID3D11DeviceContext* deviceContext)
 	{
 		deviceContext->PSSetShader(m_shader, nullptr, 0);
 	}
-	void PixelShader::SetCBuffer(ID3D11DeviceContext* deviceContext, CBuffer& buffer, UINT index)
+	void PixelShader::SetCBuffer(ID3D11DeviceContext* deviceContext, CBuffer::P buffer, UINT index)
 	{
-		ID3D11Buffer* bufferPtr = buffer.getBuffer();
+		ID3D11Buffer* bufferPtr = buffer->getBuffer();
 		deviceContext->PSSetConstantBuffers(index, 1, &bufferPtr);
 	}
 

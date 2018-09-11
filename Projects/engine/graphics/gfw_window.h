@@ -8,8 +8,23 @@ namespace gfw
 {
 	class Scene;
 
+	struct WindowSettings
+	{
+		int width;
+		int height;
+		bool fullscreen;
+		std::wstring windowName;
+
+	public:
+		WindowSettings();
+	};
+
 	class Window
 	{
+		SHARED_ONLY(Window);
+
+		Window::W m_self;
+
 		RECT m_boundingBox;
 		bool m_fullscreen;
 		bool m_periodicUpdate;
@@ -20,57 +35,66 @@ namespace gfw
 
 		hcs::Timer m_timer;
 
-		hcs::Input m_input;
-		Graphics m_graphics;
+		hcs::Input::P m_input;
+		Graphics::P m_graphics;
 
-		Scene *m_scene;
+		std::shared_ptr<Scene> m_scene;
 
 	private:
+		Window(int width, int height, bool fullscreen, std::wstring& windowName);
+		void Initialize(int width, int height, bool fullscreen, std::wstring& windowName);
+
 		void FillWndClassEx(WNDCLASSEX& wc);
-		void FillDevModeSettings(DEVMODE& devMode, unsigned long width, unsigned long height);
+		void FillDevModeSettings(DEVMODE& devMode);
 		void FillFullscreenBoundingBox(int width, int height);
-		void FillWindowedBoundingBox(GraphicsSettings& settings);
-		void CreateHWND(GraphicsSettings& settings);
-		void CreateFullscreenWindow(GraphicsSettings& settings);
-		void CreateOverlappedWindow(GraphicsSettings& settings);
+		void FillWindowedBoundingBox(int width, int height);
+		void CreateHWND(int width, int height);
+		void CreateFullscreenWindow(int width, int height);
+		void CreateOverlappedWindow(int width, int height);
 		void Frame();
 		void MessageLoop(MSG& msg);
 		void MessageHandler(MSG& msg);
-		void InitializeWindow(GraphicsSettings& settings);
 		void ShutdownWindow();
 
 	public:
-		Window();
+		~Window();
 
-		void Initialize();
-		void Initialize(GraphicsSettings& settings);
+		static Window::P Create(bool initGraphics = false);
+		static Window::P Create(WindowSettings& settings);
+		static Window::P Create(GraphicsSettings& settings);
+
 		void Run(bool periodicUpdate = true);
-		void Shutdown();
-		void ShutdownDeleteScene();
 
-		void ChangeScene(Scene* scene, bool deletePrevious);
-		void setScene(Scene* scene);
-		Scene* getScene();
-		void DeleteScene();
+		void AddGraphics();
+		void AddGraphics(GraphicsSettings& settings);
+		Graphics::P getGraphics();
+
+		void AddInput();
+		hcs::Input::P getInput();
+
+		void setScene(std::shared_ptr<Scene> scene);
+		std::shared_ptr<Scene> getScene();
 
 		void setPeriodicUpdate(bool update);
 
-		int GetWindowWidth();
-		int GetWindowHeight();
-		Graphics& getGraphics();
-		hcs::Input& getInput();
+		int GetClientWidth();
+		int GetClientHeight();
 		HWND getHWND();
+		HINSTANCE getHInstance();
 	};
 
 	class Scene
 	{
+		SHARED_ONLY(Scene);
+
 	protected:
-		Window* m_window;
-		Graphics* m_graphics;
-		hcs::Input* m_input;
+		Scene() = default;
+		Window::P m_window;
+		Graphics::P m_graphics;
+		hcs::Input::P m_input;
 
 	public:
-		void SetWindow(Window* window);
+		void SetWindow(Window::P window);
 
 		virtual void Start() = 0;
 		virtual void Quit() = 0;

@@ -23,6 +23,7 @@ namespace pfw
 
 	class Player :public mth::Position
 	{
+		SHARED_ONLY(Player);
 	protected:
 		BV_AABB m_boundingBox;
 		bool canJump;
@@ -32,8 +33,12 @@ namespace pfw
 		float speed;
 		float jumpStrength;
 
-	public:
+	private:
 		Player();
+
+	public:
+		static Player::P Create();
+
 		BV_AABB* GetBoundingBox(float deltaTime);
 		float Update(CollisionData& collData, float deltaTime, bool collision);
 		void Control_FreeMove(hcs::Input& input);
@@ -42,19 +47,20 @@ namespace pfw
 
 	class Collider
 	{
+		SHARED_ONLY(Collider);
 		BV_AABB m_boundingBox;
 		std::vector<Triangle> m_mesh;
 
 	public:
 		mth::float3 position;
 
-	public:
-		Collider();
+	private:
 		Collider(gfw::ModelLoader& modelLoader);
 		Collider(gfw::ModelLoader& modelLoader, mth::float3 position);
-		static std::shared_ptr<Collider> Create();
-		static std::shared_ptr<Collider> Create(gfw::ModelLoader& modelLoader);
-		static std::shared_ptr<Collider> Create(gfw::ModelLoader& modelLoader, mth::float3 position);
+
+	public:
+		static Collider::P Create(gfw::ModelLoader& modelLoader);
+		static Collider::P Create(gfw::ModelLoader& modelLoader, mth::float3 position);
 		void CreateCollider(gfw::ModelLoader& modelLoader);
 		
 		bool CollidesWithPlayer(std::shared_ptr<Player>& player, CollisionData& collData);
@@ -62,18 +68,22 @@ namespace pfw
 
 	class CollisionArea
 	{
-		std::shared_ptr<Player> m_player;
-		std::vector<std::shared_ptr<Collider>> m_colliders;
+		SHARED_ONLY(CollisionArea);
+		Player::P m_player;
+		std::vector<Collider::P> m_colliders;
 
 	public:
 		float gravity;
 
-	public:
+	private:
 		CollisionArea();
 
-		void setPlayer(std::shared_ptr<Player> player);
-		void AddCollider(std::shared_ptr<Collider> collider);
-		void RemoveCollider(std::shared_ptr<Collider> collider);
+	public:
+		static CollisionArea::P Create();
+
+		void setPlayer(Player::P player);
+		void AddCollider(Collider::P collider);
+		void RemoveCollider(Collider::P collider);
 		void RemoveAllColliders();
 
 		void Update(float deltaTime);

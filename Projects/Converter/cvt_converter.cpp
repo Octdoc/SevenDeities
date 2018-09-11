@@ -31,7 +31,7 @@ namespace cvt
 			{
 				m_renderer->ClearEntities();
 				m_entity.reset();
-				m_entity = m_modelManager.CreateEntity(*m_graphics);
+				m_entity = m_modelManager.CreateEntity(m_graphics);
 				m_renderer->AddEntity(m_entity);
 				Render();
 			}
@@ -83,18 +83,26 @@ namespace cvt
 		return false;
 	}
 
+	Converter::P Converter::Create()
+	{
+		return std::make_shared<Converter>();
+	}
+
 	void Converter::Start()
 	{
 		ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
-		m_camera.Init();
+		float width = 920.0f;
+		float height = 720.0f;
+		m_camera.Init(width / height);
 		m_camDistance = 10.0f;
 		m_camera.position.z = -m_camDistance;
+		m_graphics->SetViewPort(width, height);
 
 		DragAcceptFiles(m_window->getHWND(), true);
 
-		m_renderer = gfw::SimpleRenderer::Create(*m_graphics);
+		m_renderer = gfw::SimpleRenderer::Create(m_graphics);
 		m_renderer->AddEntity(m_entity = gfw::Entity::Create(gfw::Model::Create(device, L"Media/monkey.omd"),
 			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
@@ -108,7 +116,7 @@ namespace cvt
 	}
 	void Converter::Render()
 	{
-		m_renderer->Render(*m_graphics, m_camera);
+		m_renderer->Render(m_graphics, m_camera);
 	}
 	void Converter::MessageHandler(MSG& message)
 	{

@@ -3,18 +3,18 @@
 //INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
 int wmain()
 {
-	gfw::Window window;
-	cvt::Converter scene;
+	gfw::Window::P window;
+	gfw::GraphicsSettings settings;
+	settings.windowName = L"Converter";
 	try
 	{
-		window.Initialize();
-		window.setScene(&scene);
-		window.Run(false);
+		window = gfw::Window::Create(settings);
+		window->setScene(cvt::Converter::Create());
+		window->Run(false);
 	}
 	catch (hcs::Exception& e)
 	{
 		e.ShowMessageBox();
 	}
-	window.Shutdown();
 	return 0;
 }

@@ -291,43 +291,27 @@ namespace gfw
 		m_deviceContext->RSSetState(m_rasterizerStateSolid);
 		SetPrimitiveTopology_Triangles();
 		m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-		SetViewPort(m_screenWidth, m_screenHeight);
+		SetViewPort((float)m_screenWidth, (float)m_screenHeight);
 		EnableAlphaBlending(settings.enableAlpha);
 		EnableZBuffer(settings.enableZBuffer);
-	}
-	void Graphics::ShutdownDirect3D()
-	{
-		if (m_fullscreen && m_swapChain != nullptr)
-			m_swapChain->SetFullscreenState(false, nullptr);
-		m_device.Release();
-		m_deviceContext.Release();
-		m_swapChain.Release();
-		m_renderTargetView.Release();
-		m_depthStencilBuffer.Release();
-		m_depthStencilView.Release();
-		m_depthStencilState_ZEnabled.Release();
-		m_depthStencilState_ZDisabled.Release();
-		m_rasterizerStateSolid.Release();
-		m_rasterizerStateWireframe.Release();
-		m_blendState_alphaOn.Release();
-		m_blendState_alphaOff.Release();
 	}
 
 #pragma endregion
 
 #pragma region Create, shutdown
 	
-	Graphics::Graphics() :m_vsync(false), m_fullscreen(false), m_screenWidth(0), m_screenHeight(0), m_videoCardMemory(0)
+	Graphics::Graphics(HWND hwnd, GraphicsSettings& settings)
 	{
-		m_clearColor[0] = 0.0f;
-		m_clearColor[1] = 0.0f;
-		m_clearColor[2] = 0.0f;
-		m_clearColor[3] = 0.0f;
+		Initialize(hwnd, settings);
 	}
-
+	Graphics::P Graphics::Create(HWND hwnd, GraphicsSettings& settings)
+	{
+		return std::make_shared<Graphics>(hwnd, settings);
+	}
 	Graphics::~Graphics()
 	{
-		Shutdown();
+		if (m_fullscreen && m_swapChain != nullptr)
+			m_swapChain->SetFullscreenState(false, nullptr);
 	}
 
 	void Graphics::Initialize(HWND hwnd, GraphicsSettings& settings)
@@ -339,10 +323,6 @@ namespace gfw
 		setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 		InitializeDirect3D(hwnd, settings);
-	}
-	void Graphics::Shutdown()
-	{
-		ShutdownDirect3D();
 	}
 
 #pragma endregion
@@ -390,17 +370,21 @@ namespace gfw
 	}
 	void Graphics::SetViewPort()
 	{
-		SetViewPort(m_screenWidth, m_screenHeight);
+		SetViewPort(0.0f, 0.0f, (float)m_screenWidth, (float)m_screenHeight);
 	}
 	void Graphics::SetViewPort(float width, float height)
 	{
+		SetViewPort(0.0f, 0.0f, width, height);
+	}
+	void Graphics::SetViewPort(float x, float y, float width, float height)
+	{
 		D3D11_VIEWPORT viewport;
+		viewport.TopLeftX = x;
+		viewport.TopLeftY = y;
 		viewport.Width = width;
 		viewport.Height = height;
 		viewport.MinDepth = 0.0f;
 		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = 0.0f;
-		viewport.TopLeftY = 0.0f;
 		m_deviceContext->RSSetViewports(1, &viewport);
 	}
 	void Graphics::EnableAlphaBlending(bool alpha)
