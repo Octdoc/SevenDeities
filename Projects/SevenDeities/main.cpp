@@ -5,7 +5,7 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline
 	gfw::Window::P window;
 	try
 	{
-		window = gfw::Window::Create();
+		window = gfw::Window::Create(true);
 		window->setScene(sd::SD_Scene::Create());
 		window->Run();
 	}

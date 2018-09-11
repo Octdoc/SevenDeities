@@ -27,17 +27,17 @@ namespace gfw
 		wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 		wc.hIconSm = wc.hIcon;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+		wc.hbrBackground = (HBRUSH)NULL;
 		wc.lpszMenuName = NULL;
 		wc.lpszClassName = m_windowName.c_str();
 		wc.cbSize = sizeof(WNDCLASSEX);
 	}
-	void Window::FillDevModeSettings(DEVMODE& devMode, unsigned long width, unsigned long height)
+	void Window::FillDevModeSettings(DEVMODE& devMode)
 	{
 		ClearStruct(devMode);
 		devMode.dmSize = sizeof(devMode);
-		devMode.dmPelsWidth = width;
-		devMode.dmPelsHeight = height;
+		devMode.dmPelsWidth = GetClientWidth();
+		devMode.dmPelsHeight = GetClientHeight();
 		devMode.dmBitsPerPel = 32;
 		devMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 	}
@@ -48,54 +48,126 @@ namespace gfw
 		m_boundingBox.right = width;
 		m_boundingBox.bottom = height;
 	}
-	void Window::FillWindowedBoundingBox(GraphicsSettings& settings)
+	void Window::FillWindowedBoundingBox(int width, int height)
 	{
-		int deltax = (GetSystemMetrics(SM_CXSCREEN) - settings.width) / 2;
-		int deltay = (GetSystemMetrics(SM_CYSCREEN) - settings.height) / 2;
+		int deltax = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
+		int deltay = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
 		m_boundingBox.left = 0;
 		m_boundingBox.top = 0;
-		m_boundingBox.right = settings.width;
-		m_boundingBox.bottom = settings.height;
+		m_boundingBox.right = width;
+		m_boundingBox.bottom = height;
 		AdjustWindowRectEx(&m_boundingBox, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
 		m_boundingBox.left += deltax;
 		m_boundingBox.right += deltax;
 		m_boundingBox.top += deltay;
 		m_boundingBox.bottom += deltay;
 	}
-	void Window::CreateHWND(GraphicsSettings& settings)
+	void Window::CreateHWND(int width, int height)
 	{
-		if (m_fullscreen = settings.fullscreen)
-			CreateFullscreenWindow(settings);
+		if (m_fullscreen)
+			CreateFullscreenWindow(width, height);
 		else
-			CreateOverlappedWindow(settings);
+			CreateOverlappedWindow(width, height);
 
 		if (m_hwnd == NULL)
 			throw hcs::Exception(L"Error", L"Could not create window");
 	}
-	void Window::CreateFullscreenWindow(GraphicsSettings& settings)
+	void Window::CreateFullscreenWindow(int width, int height)
 	{
+		FillFullscreenBoundingBox(width, height);
+
 		DEVMODE dmScreenSettings;
-		FillDevModeSettings(dmScreenSettings, settings.width, settings.height);
-		FillFullscreenBoundingBox(settings.width, settings.height);
+		FillDevModeSettings(dmScreenSettings);
 		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
 
 		m_hwnd = CreateWindowEx(
 			WS_EX_APPWINDOW
 			, m_windowName.c_str(), m_windowName.c_str(),
 			WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP
-			, m_boundingBox.left, m_boundingBox.top, GetWindowWidth(), GetWindowHeight(),
+			, m_boundingBox.left, m_boundingBox.top, GetClientWidth(), GetClientHeight(),
 			NULL, NULL, m_hInstance, NULL);
 	}
-	void Window::CreateOverlappedWindow(GraphicsSettings& settings)
+	void Window::CreateOverlappedWindow(int width, int height)
 	{
-		FillWindowedBoundingBox(settings);
+		FillWindowedBoundingBox(width, height);
 
 		m_hwnd = CreateWindowEx(
 			WS_EX_OVERLAPPEDWINDOW
 			, m_windowName.c_str(), m_windowName.c_str(),
 			WS_OVERLAPPEDWINDOW
-			, m_boundingBox.left, m_boundingBox.top, GetWindowWidth(), GetWindowHeight(),
+			, m_boundingBox.left, m_boundingBox.top, GetClientWidth(), GetClientHeight(),
 			NULL, NULL, m_hInstance, NULL);
+	}
+	void Window::Initialize(int width, int height, bool fullscreen, std::wstring& windowName)
+	{
+		WNDCLASSEX wc;
+		m_windowName = windowName;
+		m_fullscreen = fullscreen;
+		m_hInstance = GetModuleHandle(NULL);
+		FillWndClassEx(wc);
+		RegisterClassEx(&wc);
+		CreateHWND(width, height);
+		ShowWindow(m_hwnd, SW_SHOW);
+		SetForegroundWindow(m_hwnd);
+		SetFocus(m_hwnd);
+	}
+	Window::Window(int width, int height, bool fullscreen, std::wstring& windowName) : m_hwnd(nullptr), m_hInstance(nullptr), m_scene(nullptr)
+	{
+		Initialize(width, height, fullscreen, windowName);
+	}
+	Window::~Window()
+	{
+		ShutdownWindow();
+		UnregisterClass(m_windowName.c_str(), m_hInstance);
+	}
+	Window::P Window::Create(bool initGraphics)
+	{
+		if (initGraphics)
+		{
+			GraphicsSettings settings;
+			return Create(settings);
+		}
+		WindowSettings settings;
+		return Create(settings);
+	}
+	Window::P Window::Create(WindowSettings& settings)
+	{
+		Window::P window = std::make_shared<Window>(settings.width, settings.height, settings.fullscreen, settings.windowName);
+		window->m_self = window;
+		return window;
+	}
+	Window::P Window::Create(GraphicsSettings& settings)
+	{
+		Window::P window = std::make_shared<Window>(settings.width, settings.height, settings.fullscreen, settings.windowName);
+		window->m_self = window;
+		window->AddInput();
+		window->AddGraphics(settings);
+		return window;
+	}
+	void Window::ShutdownWindow()
+	{
+		if (m_fullscreen)
+			ChangeDisplaySettings(NULL, 0);
+		if (m_hwnd != NULL)
+		{
+			DestroyWindow(m_hwnd);
+			m_hwnd = NULL;
+		}
+	}
+	void Window::Run(bool periodicUpdate)
+	{
+		MSG msg;
+		msg.message = WM_NULL;
+		m_periodicUpdate = periodicUpdate;
+		m_timer.Reset();
+		if (m_scene)
+		{
+			m_scene->Start();
+			if (!m_periodicUpdate)
+				m_scene->Render();
+		}
+		while (msg.message != WM_QUIT)
+			MessageLoop(msg);
 	}
 	void Window::Frame()
 	{
@@ -125,103 +197,48 @@ namespace gfw
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-		m_input->HandleMessage(msg);
+		if (m_input)
+			m_input->HandleMessage(msg);
 		if (m_scene)
 			m_scene->MessageHandler(msg);
-	}
-	Window::Window() :m_hwnd(nullptr), m_hInstance(nullptr), m_scene(nullptr)
-	{
-		Initialize();
-	}
-	Window::Window(GraphicsSettings& settings) : m_hwnd(nullptr), m_hInstance(nullptr), m_scene(nullptr)
-	{
-		Initialize(settings);
-	}
-	Window::~Window()
-	{
-		DestroyWindow(m_hwnd);
-		UnregisterClass(m_windowName.c_str(), m_hInstance);
-	}
-	Window::P Window::Create()
-	{
-		Window::P window = std::make_shared<Window>();
-		window->m_self = window;
-		return window;
-	}
-	Window::P Window::Create(GraphicsSettings& settings)
-	{
-		Window::P window = std::make_shared<Window>(settings);
-		window->m_self = window;
-		return window;
-	}
-	void Window::Initialize()
-	{
-		GraphicsSettings settings;
-		Initialize(settings);
-	}
-	void Window::Initialize(GraphicsSettings& settings)
-	{
-		InitializeWindow(settings);
-		m_graphics = Graphics::Create(m_hwnd, settings);
-		m_input = hcs::Input::Create();
-	}
-	void Window::InitializeWindow(GraphicsSettings& settings)
-	{
-		WNDCLASSEX wc;
-		m_windowName = settings.windowName;
-		m_hInstance = GetModuleHandle(NULL);
-		FillWndClassEx(wc);
-		RegisterClassEx(&wc);
-		CreateHWND(settings);
-		ShowWindow(m_hwnd, SW_SHOW);
-		SetForegroundWindow(m_hwnd);
-		SetFocus(m_hwnd);
-	}
-	void Window::ShutdownWindow()
-	{
-		if (m_fullscreen)
-			ChangeDisplaySettings(NULL, 0);
-		if (m_hwnd != NULL)
-		{
-			DestroyWindow(m_hwnd);
-			m_hwnd = NULL;
-		}
-	}
-	void Window::Run(bool periodicUpdate)
-	{
-		MSG msg;
-		msg.message = WM_NULL;
-		m_periodicUpdate = periodicUpdate;
-		m_timer.Reset();
-		if (m_scene)
-		{
-			m_scene->Start();
-			if (!m_periodicUpdate)
-				m_scene->Render();
-		}
-		while (msg.message != WM_QUIT)
-			MessageLoop(msg);
 	}
 	void Window::setScene(Scene::P scene)
 	{
 		m_scene = scene;
 		m_scene->SetWindow(m_self.lock());
 	}
+	Scene::P Window::getScene()
+	{
+		return m_scene;
+	}
 	void Window::setPeriodicUpdate(bool update)
 	{
 		m_periodicUpdate = update;
 	}
-	int Window::GetWindowWidth()
+	int Window::GetClientWidth()
 	{
 		return m_boundingBox.right - m_boundingBox.left;
 	}
-	int Window::GetWindowHeight()
+	int Window::GetClientHeight()
 	{
 		return m_boundingBox.bottom - m_boundingBox.top;
+	}
+	void Window::AddGraphics()
+	{
+		GraphicsSettings settings;
+		m_graphics = Graphics::Create(m_hwnd, settings);
+	}
+	void Window::AddGraphics(GraphicsSettings& settings)
+	{
+		m_graphics = Graphics::Create(m_hwnd, settings);
 	}
 	Graphics::P Window::getGraphics()
 	{
 		return m_graphics;
+	}
+	void Window::AddInput()
+	{
+		m_input = hcs::Input::Create();
 	}
 	hcs::Input::P Window::getInput()
 	{
@@ -231,11 +248,20 @@ namespace gfw
 	{
 		return m_hwnd;
 	}
-	
+	HINSTANCE Window::getHInstance()
+	{
+		return m_hInstance;
+	}	
 	void Scene::SetWindow(Window::P window)
 	{
 		m_window = window;
 		m_graphics = window->getGraphics();
 		m_input = window->getInput();
 	}
+
+	WindowSettings::WindowSettings()
+		:width(1280),
+		height(720),
+		fullscreen(false),
+		windowName(L"Octdoc") {}
 }

@@ -93,9 +93,12 @@ namespace cvt
 		ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
-		m_camera.Init();
+		float width = 920.0f;
+		float height = 720.0f;
+		m_camera.Init(width / height);
 		m_camDistance = 10.0f;
 		m_camera.position.z = -m_camDistance;
+		m_graphics->SetViewPort(width, height);
 
 		DragAcceptFiles(m_window->getHWND(), true);
 

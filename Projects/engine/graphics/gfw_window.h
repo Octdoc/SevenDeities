@@ -8,6 +8,17 @@ namespace gfw
 {
 	class Scene;
 
+	struct WindowSettings
+	{
+		int width;
+		int height;
+		bool fullscreen;
+		std::wstring windowName;
+
+	public:
+		WindowSettings();
+	};
+
 	class Window
 	{
 		SHARED_ONLY(Window);
@@ -30,42 +41,46 @@ namespace gfw
 		std::shared_ptr<Scene> m_scene;
 
 	private:
-		Window();
-		Window(GraphicsSettings& settings);
-		void Initialize();
-		void Initialize(GraphicsSettings& settings);
-		
+		Window(int width, int height, bool fullscreen, std::wstring& windowName);
+		void Initialize(int width, int height, bool fullscreen, std::wstring& windowName);
+
 		void FillWndClassEx(WNDCLASSEX& wc);
-		void FillDevModeSettings(DEVMODE& devMode, unsigned long width, unsigned long height);
+		void FillDevModeSettings(DEVMODE& devMode);
 		void FillFullscreenBoundingBox(int width, int height);
-		void FillWindowedBoundingBox(GraphicsSettings& settings);
-		void CreateHWND(GraphicsSettings& settings);
-		void CreateFullscreenWindow(GraphicsSettings& settings);
-		void CreateOverlappedWindow(GraphicsSettings& settings);
+		void FillWindowedBoundingBox(int width, int height);
+		void CreateHWND(int width, int height);
+		void CreateFullscreenWindow(int width, int height);
+		void CreateOverlappedWindow(int width, int height);
 		void Frame();
 		void MessageLoop(MSG& msg);
 		void MessageHandler(MSG& msg);
-		void InitializeWindow(GraphicsSettings& settings);
 		void ShutdownWindow();
 
 	public:
 		~Window();
 
-		static Window::P Create();
+		static Window::P Create(bool initGraphics = false);
+		static Window::P Create(WindowSettings& settings);
 		static Window::P Create(GraphicsSettings& settings);
 
 		void Run(bool periodicUpdate = true);
+
+		void AddGraphics();
+		void AddGraphics(GraphicsSettings& settings);
+		Graphics::P getGraphics();
+
+		void AddInput();
+		hcs::Input::P getInput();
 
 		void setScene(std::shared_ptr<Scene> scene);
 		std::shared_ptr<Scene> getScene();
 
 		void setPeriodicUpdate(bool update);
 
-		int GetWindowWidth();
-		int GetWindowHeight();
-		Graphics::P getGraphics();
-		hcs::Input::P getInput();
+		int GetClientWidth();
+		int GetClientHeight();
 		HWND getHWND();
+		HINSTANCE getHInstance();
 	};
 
 	class Scene

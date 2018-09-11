@@ -4,11 +4,13 @@
 int wmain()
 {
 	gfw::Window::P window;
+	gfw::GraphicsSettings settings;
+	settings.windowName = L"Converter";
 	try
 	{
-		window = gfw::Window::Create();
+		window = gfw::Window::Create(settings);
 		window->setScene(cvt::Converter::Create());
-		window->Run();
+		window->Run(false);
 	}
 	catch (hcs::Exception& e)
 	{
