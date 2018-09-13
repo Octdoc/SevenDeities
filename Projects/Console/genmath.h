@@ -194,7 +194,7 @@ namespace math
 			Vector<T, C> q;
 			for (uint c = 0; c < C; c++)
 				for (uint i = 0; i < N; i++)
-					q(i) += m(i, c) * m_v[i];
+					q(c) += m(i, c) * m_v[i];
 			return q;
 		}
 		T operator()(uint i) const
@@ -313,7 +313,7 @@ namespace math
 			Vector<T, R> q;
 			for (uint r = 0; r < R; r++)
 				for (uint i = 0; i < C; i++)
-					q(i) += m_m[r][i] * v(i);
+					q(r) += m_m[r][i] * v(i);
 			return q;
 		}
 		T Determinant() const

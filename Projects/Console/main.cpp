@@ -3,14 +3,8 @@
 #include <ctime>
 
 
-void f()
-{
-
-}
-
 #define SIZE 7
-
-int wmain()
+void f()
 {
 	srand(time(NULL));
 	math::Matrix<double, SIZE, SIZE> m1;
@@ -25,8 +19,21 @@ int wmain()
 	m1.Print();
 	m2.Print();
 	m3.Print();
+}
+
+
+int wmain()
+{
+	double d1[] = { 2,3,4,1,3,1,3,2,2 };
+	double d2[] = { 1,2,3 };
+	math::Matrix<double, 3, 3> m(d1);
+	math::Vector<double, 3> v(d2);
+
+	m.Print();
+	v.Print();
+	(v*m).Print();
+	(m.Trasposed()*v).Print();
 
 	system("pause");
-
 	return 0;
 }

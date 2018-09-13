@@ -13,6 +13,7 @@
 *.userprefs
 
 # Build results
+Shaders/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
