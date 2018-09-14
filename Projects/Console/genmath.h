@@ -40,7 +40,7 @@ namespace math
 		void Print()
 		{
 			for (uint n = 0; n < N; n++)
-				std::cout << m_v[n] << std::endl;
+				std::cout << (abs(m_v[n]) < 1e-5 ? 0 : m_v[n]) << std::endl;
 			std::cout << std::endl;
 		}
 		T Dot(const Vector<T, N> v) const
@@ -293,8 +293,8 @@ namespace math
 			for (uint r = 0; r < R; r++)
 			{
 				for (uint c = 0; c < C; c++)
-				{
-					std::cout << m_m[r][c] << '\t';
+				{					
+					std::cout << (abs(m_m[r][c]) < 1e-5 ? 0 : m_m[r][c]) << '\t';
 				}
 				std::cout << std::endl;
 			}

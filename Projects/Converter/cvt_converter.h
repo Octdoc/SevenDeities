@@ -14,6 +14,8 @@ namespace cvt
 		gfw::Renderer::P m_renderer;
 		gfw::Entity::P m_entity;
 
+		form::Button::P m_button;
+
 		ModelManager m_modelManager;
 
 	private:

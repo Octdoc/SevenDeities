@@ -1,10 +1,11 @@
 #include "test.h"
 #include "genmath.h"
 #include <ctime>
+#include <chrono>
 
 
-#define SIZE 7
-void f()
+#define SIZE 4
+void f1()
 {
 	srand(time(NULL));
 	math::Matrix<double, SIZE, SIZE> m1;
@@ -21,8 +22,7 @@ void f()
 	m3.Print();
 }
 
-
-int wmain()
+void f2()
 {
 	double d1[] = { 2,3,4,1,3,1,3,2,2 };
 	double d2[] = { 1,2,3 };
@@ -34,6 +34,19 @@ int wmain()
 	(v*m).Print();
 	(m.Trasposed()*v).Print();
 
+	std::cout << sizeof(m) / sizeof(double) << std::endl << sizeof(v) / sizeof(double) << std::endl;
+}
+
+int wmain()
+{
+	auto start = std::chrono::steady_clock::now();
+
+	f1();
+
+	auto end = std::chrono::steady_clock::now();
+	std::cout << std::endl << "Process took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds.";
+	std::cout << std::endl << "Process took " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " microseconds.";
+	std::cout << std::endl << "Process took " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << " nanoseconds." << std::endl;
 	system("pause");
 	return 0;
 }

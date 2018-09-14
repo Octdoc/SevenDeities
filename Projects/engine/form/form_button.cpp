@@ -4,11 +4,24 @@ namespace form
 {
 	void Button::ApplyWindowSize()
 	{
-		SetWindowPos(m_hwnd, (HWND)HWND_TOP, getX(), getY(), getW(), getH(), 0);
+		MoveWindow(m_hwnd, getX(), getY(), getW(), getH(), TRUE);
 	}
-	Button::P Button::Create(const WCHAR text[])
+
+	Button::Button(const gfw::Window::P parent, const WCHAR text[]) :m_text(text)
 	{
-		return std::make_shared<Button>(text);
+		m_boundingbox.top = 100;
+		m_boundingbox.bottom = 200;
+		m_boundingbox.left = 100;
+		m_boundingbox.right = 1100;
+		Initialize(parent);
+	}
+	void Button::Initialize(const gfw::Window::P parent)
+	{
+		m_hwnd = CreateWindow(L"button", m_text.c_str(), WS_VISIBLE | WS_CHILD, getX(), getY(), getW(), getH(), parent->getHWND(), NULL, NULL, NULL);
+	}
+	Button::P Button::Create(const gfw::Window::P parent, const WCHAR text[])
+	{
+		return std::make_shared<Button>(parent, text);
 	}
 
 #pragma region getter, setter
@@ -43,13 +56,13 @@ namespace form
 	}
 	void Button::setSize(int w, int h)
 	{
-		m_boundingbox.left = m_boundingbox.right + w;
+		m_boundingbox.right = m_boundingbox.left + w;
 		m_boundingbox.bottom = m_boundingbox.top + h;
 		ApplyWindowSize();
 	}
 	void Button::setW(int w)
 	{
-		m_boundingbox.left = m_boundingbox.right + w;
+		m_boundingbox.right = m_boundingbox.left + w;
 		ApplyWindowSize();
 	}
 	void Button::setH(int h)
@@ -59,11 +72,11 @@ namespace form
 	}
 	int Button::getW()
 	{
-		return m_boundingbox.bottom - m_boundingbox.top;
+		return m_boundingbox.right - m_boundingbox.left;
 	}
 	int Button::getH()
 	{
-		return m_boundingbox.left - m_boundingbox.right;
+		return m_boundingbox.bottom - m_boundingbox.top;
 	}
 	void Button::setRect(int x, int y, int w, int h)
 	{

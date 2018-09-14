@@ -9,15 +9,14 @@
 namespace gfw
 {
 	GraphicsSettings::GraphicsSettings()
-		:width(1280),
-		height(720),
+		:width(-1),
+		height(-1),
 		fullscreen(false),
 		vsync(true),
 		antialiasing(false),
 		cullBack(true),
 		enableAlpha(false),
-		enableZBuffer(true),
-		windowName(L"Octdoc") {}
+		enableZBuffer(true) {}
 
 #pragma region Adapter init
 

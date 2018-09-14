@@ -4,12 +4,16 @@
 int main()
 {
 	gfw::Window::P window;
-	gfw::GraphicsSettings settings;
-	settings.vsync = true;
-	settings.windowName = L"Physics Test";
+	gfw::WindowSettings wsettings;
+	gfw::GraphicsSettings gsettings;
+	wsettings.hasFrame = false;
+	gsettings.vsync = true;
+	wsettings.windowName = L"Physics Test";
 	try
 	{
-		window = gfw::Window::Create(settings);
+		window = gfw::Window::Create();
+		window->AddGraphics();
+		window->AddInput();
 		window->setScene(test::Test_Scene::Create());
 		window->Run();
 	}

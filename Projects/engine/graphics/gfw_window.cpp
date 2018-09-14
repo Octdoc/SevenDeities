@@ -41,40 +41,43 @@ namespace gfw
 		devMode.dmBitsPerPel = 32;
 		devMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 	}
-	void Window::FillFullscreenBoundingBox(int width, int height)
+	void Window::FillFullscreenBoundingBox(WindowSettings& settings)
 	{
 		m_boundingBox.left = 0;
 		m_boundingBox.top = 0;
-		m_boundingBox.right = width;
-		m_boundingBox.bottom = height;
+		m_boundingBox.right = settings.width;
+		m_boundingBox.bottom = settings.height;
 	}
-	void Window::FillWindowedBoundingBox(int width, int height)
+	void Window::FillWindowedBoundingBox(WindowSettings& settings)
 	{
-		int deltax = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
-		int deltay = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
+		if (settings.x < 0)
+			settings.x = (GetSystemMetrics(SM_CXSCREEN) - settings.width) / 2;
+		if (settings.y < 0)
+			settings.y = (GetSystemMetrics(SM_CYSCREEN) - settings.height) / 2;
 		m_boundingBox.left = 0;
 		m_boundingBox.top = 0;
-		m_boundingBox.right = width;
-		m_boundingBox.bottom = height;
-		AdjustWindowRectEx(&m_boundingBox, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
-		m_boundingBox.left += deltax;
-		m_boundingBox.right += deltax;
-		m_boundingBox.top += deltay;
-		m_boundingBox.bottom += deltay;
+		m_boundingBox.right = settings.width;
+		m_boundingBox.bottom = settings.height;
+		if (settings.hasFrame)
+			AdjustWindowRectEx(&m_boundingBox, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
+		m_boundingBox.left += settings.x;
+		m_boundingBox.right += settings.x;
+		m_boundingBox.top += settings.y;
+		m_boundingBox.bottom += settings.y;
 	}
-	void Window::CreateHWND(int width, int height)
+	void Window::CreateHWND(WindowSettings& settings, Window::P parent)
 	{
-		if (m_fullscreen)
-			CreateFullscreenWindow(width, height);
+		if (m_fullscreen && parent == nullptr)
+			CreateFullscreenWindow(settings);
 		else
-			CreateOverlappedWindow(width, height);
+			CreateOverlappedWindow(settings, parent);
 
 		if (m_hwnd == NULL)
 			throw hcs::Exception(L"Error", L"Could not create window");
 	}
-	void Window::CreateFullscreenWindow(int width, int height)
+	void Window::CreateFullscreenWindow(WindowSettings& settings)
 	{
-		FillFullscreenBoundingBox(width, height);
+		FillFullscreenBoundingBox(settings);
 
 		DEVMODE dmScreenSettings;
 		FillDevModeSettings(dmScreenSettings);
@@ -87,61 +90,62 @@ namespace gfw
 			, m_boundingBox.left, m_boundingBox.top, GetClientWidth(), GetClientHeight(),
 			NULL, NULL, m_hInstance, NULL);
 	}
-	void Window::CreateOverlappedWindow(int width, int height)
+	void Window::CreateOverlappedWindow(WindowSettings& settings, Window::P parent)
 	{
-		FillWindowedBoundingBox(width, height);
+		FillWindowedBoundingBox(settings);
+		DWORD exStyle = 0;
+		DWORD style = 0;
+		if (settings.hasFrame)
+		{
+			exStyle = WS_EX_OVERLAPPEDWINDOW;
+			style = WS_OVERLAPPEDWINDOW;
+			if (parent)
+				style |= WS_CHILD | WS_VISIBLE;
+			if (!settings.resizeable)
+				style &= (~(WS_THICKFRAME | WS_MAXIMIZEBOX));
+		}
+		else
+		{
+			exStyle = WS_EX_APPWINDOW;
+			style = parent ? WS_CHILD | WS_VISIBLE : WS_POPUP;
+		}
 
-		m_hwnd = CreateWindowEx(
-			WS_EX_OVERLAPPEDWINDOW
-			, m_windowName.c_str(), m_windowName.c_str(),
-			WS_OVERLAPPEDWINDOW
-			, m_boundingBox.left, m_boundingBox.top, GetClientWidth(), GetClientHeight(),
-			NULL, NULL, m_hInstance, NULL);
+		m_hwnd = CreateWindowEx(exStyle, m_windowName.c_str(), m_windowName.c_str(), style,
+			m_boundingBox.left, m_boundingBox.top, GetClientWidth(), GetClientHeight(),
+			parent ? parent->getHWND() : NULL, NULL, m_hInstance, NULL);
 	}
-	void Window::Initialize(int width, int height, bool fullscreen, std::wstring& windowName)
+	void Window::InitializeWindow(WindowSettings& settings, Window::P parent)
 	{
 		WNDCLASSEX wc;
-		m_windowName = windowName;
-		m_fullscreen = fullscreen;
+		m_windowName = settings.windowName;
+		m_fullscreen = settings.fullscreen;
 		m_hInstance = GetModuleHandle(NULL);
 		FillWndClassEx(wc);
 		RegisterClassEx(&wc);
-		CreateHWND(width, height);
+		CreateHWND(settings, parent);
 		ShowWindow(m_hwnd, SW_SHOW);
-		SetForegroundWindow(m_hwnd);
-		SetFocus(m_hwnd);
 	}
-	Window::Window(int width, int height, bool fullscreen, std::wstring& windowName) : m_hwnd(nullptr), m_hInstance(nullptr), m_scene(nullptr)
+	Window::Window(WindowSettings& settings, Window::P parent)
 	{
-		Initialize(width, height, fullscreen, windowName);
+		m_parent = parent;
+		InitializeWindow(settings, parent);
 	}
 	Window::~Window()
 	{
 		ShutdownWindow();
 		UnregisterClass(m_windowName.c_str(), m_hInstance);
 	}
-	Window::P Window::Create(bool initGraphics)
+	Window::P Window::Create()
 	{
-		if (initGraphics)
-		{
-			GraphicsSettings settings;
-			return Create(settings);
-		}
 		WindowSettings settings;
 		return Create(settings);
 	}
-	Window::P Window::Create(WindowSettings& settings)
+	Window::P Window::Create(WindowSettings& settings, Window::P parent)
 	{
-		Window::P window = std::make_shared<Window>(settings.width, settings.height, settings.fullscreen, settings.windowName);
+		Window::P window = std::make_shared<Window>(settings, parent);
 		window->m_self = window;
-		return window;
-	}
-	Window::P Window::Create(GraphicsSettings& settings)
-	{
-		Window::P window = std::make_shared<Window>(settings.width, settings.height, settings.fullscreen, settings.windowName);
-		window->m_self = window;
-		window->AddInput();
-		window->AddGraphics(settings);
+		if (parent)
+			parent->AddChild(window);
 		return window;
 	}
 	void Window::ShutdownWindow()
@@ -158,6 +162,16 @@ namespace gfw
 	{
 		MSG msg;
 		msg.message = WM_NULL;
+		Start(periodicUpdate);
+		while (msg.message != WM_QUIT)
+			MessageLoop(msg);
+	}
+	void Window::AddChild(Window::W child)
+	{
+		m_children.push_back(child);
+	}
+	void Window::Start(bool periodicUpdate)
+	{
 		m_periodicUpdate = periodicUpdate;
 		m_timer.Reset();
 		if (m_scene)
@@ -166,8 +180,11 @@ namespace gfw
 			if (!m_periodicUpdate)
 				m_scene->Render();
 		}
-		while (msg.message != WM_QUIT)
-			MessageLoop(msg);
+		for (Window::W child : m_children)
+		{
+			Window::P c = child.lock();
+			c->Start(periodicUpdate);
+		}
 	}
 	void Window::Frame()
 	{
@@ -177,30 +194,48 @@ namespace gfw
 			m_scene->Update(m_timer.GetTimeDelta(), m_timer.GetTimeTotal());
 			m_scene->Render();
 		}
+		for (Window::W child : m_children)
+		{
+			Window::P c = child.lock();
+			c->Frame();
+		}
 	}
 	void Window::MessageLoop(MSG& msg)
 	{
 		if (m_periodicUpdate)
 		{
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
 				MessageHandler(msg);
+			}
 			else
+			{
 				Frame();
+			}
 		}
 		else
 		{
 			if (GetMessage(&msg, NULL, 0, 0))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
 				MessageHandler(msg);
+			}
 		}
 	}
 	void Window::MessageHandler(MSG& msg)
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
 		if (m_input)
 			m_input->HandleMessage(msg);
 		if (m_scene)
 			m_scene->MessageHandler(msg);
+		for (Window::W child : m_children)
+		{
+			Window::P c = child.lock();
+			c->MessageHandler(msg);
+		}
 	}
 	void Window::setScene(Scene::P scene)
 	{
@@ -226,10 +261,15 @@ namespace gfw
 	void Window::AddGraphics()
 	{
 		GraphicsSettings settings;
-		m_graphics = Graphics::Create(m_hwnd, settings);
+		AddGraphics(settings);
 	}
 	void Window::AddGraphics(GraphicsSettings& settings)
 	{
+		if (settings.width < 0)
+			settings.width = GetClientWidth();
+		if (settings.height < 0)
+			settings.height = GetClientHeight();
+		settings.fullscreen = m_fullscreen;
 		m_graphics = Graphics::Create(m_hwnd, settings);
 	}
 	Graphics::P Window::getGraphics()
@@ -251,7 +291,12 @@ namespace gfw
 	HINSTANCE Window::getHInstance()
 	{
 		return m_hInstance;
-	}	
+	}
+	bool Window::isFullscreen()
+	{
+		return m_fullscreen;
+	}
+
 	void Scene::SetWindow(Window::P window)
 	{
 		m_window = window;
@@ -260,8 +305,12 @@ namespace gfw
 	}
 
 	WindowSettings::WindowSettings()
-		:width(1280),
+		:x(-1),
+		y(-1),
+		width(1280),
 		height(720),
 		fullscreen(false),
+		resizeable(false),
+		hasFrame(true),
 		windowName(L"Octdoc") {}
 }

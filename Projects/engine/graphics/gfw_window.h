@@ -10,9 +10,13 @@ namespace gfw
 
 	struct WindowSettings
 	{
+		int x;
+		int y;
 		int width;
 		int height;
 		bool fullscreen;
+		bool resizeable;
+		bool hasFrame;
 		std::wstring windowName;
 
 	public:
@@ -24,6 +28,8 @@ namespace gfw
 		SHARED_ONLY(Window);
 
 		Window::W m_self;
+		Window::W m_parent;
+		std::vector<Window::W> m_children;
 
 		RECT m_boundingBox;
 		bool m_fullscreen;
@@ -41,16 +47,18 @@ namespace gfw
 		std::shared_ptr<Scene> m_scene;
 
 	private:
-		Window(int width, int height, bool fullscreen, std::wstring& windowName);
-		void Initialize(int width, int height, bool fullscreen, std::wstring& windowName);
+		Window(WindowSettings& settings, Window::P parent);
+		void InitializeWindow(WindowSettings& settings, Window::P parent);
 
 		void FillWndClassEx(WNDCLASSEX& wc);
 		void FillDevModeSettings(DEVMODE& devMode);
-		void FillFullscreenBoundingBox(int width, int height);
-		void FillWindowedBoundingBox(int width, int height);
-		void CreateHWND(int width, int height);
-		void CreateFullscreenWindow(int width, int height);
-		void CreateOverlappedWindow(int width, int height);
+		void FillFullscreenBoundingBox(WindowSettings& settings);
+		void FillWindowedBoundingBox(WindowSettings& settings);
+		void CreateHWND(WindowSettings& settings, Window::P parent);
+		void CreateFullscreenWindow(WindowSettings& settings);
+		void CreateOverlappedWindow(WindowSettings& settings, Window::P parent);
+
+		void Start(bool periodicUpdate);
 		void Frame();
 		void MessageLoop(MSG& msg);
 		void MessageHandler(MSG& msg);
@@ -59,11 +67,12 @@ namespace gfw
 	public:
 		~Window();
 
-		static Window::P Create(bool initGraphics = false);
-		static Window::P Create(WindowSettings& settings);
-		static Window::P Create(GraphicsSettings& settings);
+		static Window::P Create();
+		static Window::P Create(WindowSettings& settings, Window::P parent = nullptr);
 
 		void Run(bool periodicUpdate = true);
+
+		void AddChild(Window::W child);
 
 		void AddGraphics();
 		void AddGraphics(GraphicsSettings& settings);
@@ -81,6 +90,7 @@ namespace gfw
 		int GetClientHeight();
 		HWND getHWND();
 		HINSTANCE getHInstance();
+		bool isFullscreen();
 	};
 
 	class Scene

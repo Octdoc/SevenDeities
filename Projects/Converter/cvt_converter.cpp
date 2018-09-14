@@ -106,6 +106,8 @@ namespace cvt
 		m_renderer->AddEntity(m_entity = gfw::Entity::Create(gfw::Model::Create(device, L"Media/monkey.omd"),
 			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
+
+		m_button = form::Button::Create(m_window, L"Button");
 	}
 	void Converter::Quit()
 	{
@@ -117,6 +119,7 @@ namespace cvt
 	void Converter::Render()
 	{
 		m_renderer->Render(m_graphics, m_camera);
+		InvalidateRect(m_window->getHWND(), NULL, TRUE);
 	}
 	void Converter::MessageHandler(MSG& message)
 	{

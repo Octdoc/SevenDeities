@@ -18,7 +18,6 @@ namespace gfw
 		bool cullBack;
 		bool enableAlpha;
 		bool enableZBuffer;
-		std::wstring windowName;
 
 	public:
 		GraphicsSettings();
