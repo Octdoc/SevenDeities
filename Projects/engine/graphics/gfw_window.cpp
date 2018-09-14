@@ -27,7 +27,7 @@ namespace gfw
 		wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 		wc.hIconSm = wc.hIcon;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)NULL;
+		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		wc.lpszMenuName = NULL;
 		wc.lpszClassName = m_windowName.c_str();
 		wc.cbSize = sizeof(WNDCLASSEX);
