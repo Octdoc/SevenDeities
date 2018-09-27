@@ -1,17 +1,13 @@
 #include "sd_scene.h"
+#include <future>
 
 #pragma comment(lib, "engine.lib")
 
 namespace sd
 {
-	void SD_Scene::Test()
-	{
-	}
-
 	void SD_Scene::Start()
 	{
-		Test();
-		ID3D11Device* device = m_graphics->getDevice();
+		/*ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
 		m_controller.setTarget(&m_camera);
@@ -33,7 +29,7 @@ namespace sd
 		m_renderer->AddEntity(gfw::Entity::Create(
 			gfw::Model::Create(device, L"Media/plain.omd"),
 			gfw::Texture::Create2D(device, L"Media/green.png"),
-			gfw::Texture::Create2D(device, L"Media/normal.png")));
+			gfw::Texture::Create2D(device, L"Media/normal.png")));*/
 
 	}
 	SD_Scene::P SD_Scene::Create()
@@ -43,18 +39,17 @@ namespace sd
 	void SD_Scene::Quit()
 	{
 	}
-	void SD_Scene::Update(double deltaTime, double totalTime)
+	/*void SD_Scene::Update(float deltaTime, float totalTime)
 	{
-		m_controller.Update_FirstPersonMode_Fly(*m_input, (float)deltaTime);
-		m_input->ResetMouseDelta();
-	}
+		m_controller.Update_FirstPersonMode_Fly(octdoc::Program::Instance().Input(), (float)deltaTime);
+	}*/
 	void SD_Scene::Render()
 	{
-		m_renderer->Render(m_graphics, m_camera);
+		//m_renderer->Render(m_graphics, m_camera);
 	}
-	void SD_Scene::MessageHandler(MSG& message)
+	/*void SD_Scene::HandleMessage(hcs::Input& input)
 	{
-		if (message.message == WM_KEYDOWN && message.wParam == VK_ESCAPE)
+		if (input.getMSG().message == WM_KEYDOWN && input.getMSG().wParam == VK_ESCAPE)
 			PostQuitMessage(0);
-	}
+	}*/
 }

@@ -1,14 +1,12 @@
 #pragma once
 
-#include "hcs_helpers.h"
-#include "graphics/resources/gfw_resource.h"
+#include "hcs_exception.h"
 
 namespace hcs
 {
+
 	class Input
 	{
-		SHARED_ONLY(Input);
-
 		bool m_keys[256];
 		bool m_rMouseBtn;
 		bool m_lMouseBtn;
@@ -17,12 +15,13 @@ namespace hcs
 		int m_mouseX, m_mouseY;
 		int m_prevMouseX, m_prevMouseY;
 
+		MSG m_msg;
+
 	private:
-		Input();
 		void Initialize();
 
 	public:
-		static Input::P Create();
+		Input();
 
 		void HandleMessage(MSG& msg);
 
@@ -32,6 +31,10 @@ namespace hcs
 		bool isMMouseBtnDown();
 		void getMousePosition(int& x, int& y);
 		void getMouseDelta(int& x, int& y);
-		void ResetMouseDelta();
+		int getMX();
+		int getMY();
+		int getMDX();
+		int getMDY();
+		MSG& getMSG();
 	};
 }

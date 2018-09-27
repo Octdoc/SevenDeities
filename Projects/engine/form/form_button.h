@@ -1,10 +1,11 @@
 #pragma once
 
 #include "graphics/gfw_window.h"
+#include "form_form.h"
 
 namespace form
 {
-	class Button
+	class Button :public Form
 	{
 		SHARED_ONLY(Button);
 		HWND m_hwnd;
@@ -21,16 +22,5 @@ namespace form
 	public:
 		static Button::P Create(const gfw::Window::P parent, const WCHAR text[]);
 
-		void setPosition(int x, int y);
-		void setX(int x);
-		void setY(int y);
-		int getX();
-		int getY();
-		void setSize(int w, int h);
-		void setW(int w);
-		void setH(int h);
-		int getW();
-		int getH();
-		void setRect(int x, int y, int w, int h);
 	};
 }

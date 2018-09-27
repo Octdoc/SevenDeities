@@ -1,7 +1,7 @@
 #include "gfw_window.h"
 
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch (msg)
 	{
@@ -20,11 +20,11 @@ namespace gfw
 	{
 		ClearStruct(wc);
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpfnWndProc = WndProc;
+		wc.lpfnWndProc = WindowProc;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = m_hInstance;
-		wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+		wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 		wc.hIconSm = wc.hIcon;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -176,9 +176,9 @@ namespace gfw
 		m_timer.Reset();
 		if (m_scene)
 		{
-			m_scene->Start();
-			if (!m_periodicUpdate)
-				m_scene->Render();
+			//m_scene->Start();
+			if (!m_periodicUpdate);
+			//m_scene->Render();
 		}
 		for (Window::W child : m_children)
 		{
@@ -191,8 +191,8 @@ namespace gfw
 		m_timer.Update();
 		if (m_scene)
 		{
-			m_scene->Update(m_timer.GetTimeDelta(), m_timer.GetTimeTotal());
-			m_scene->Render();
+			//m_scene->Update(m_timer.GetTimeDelta(), m_timer.GetTimeTotal());
+			//m_scene->Render();
 		}
 		for (Window::W child : m_children)
 		{
@@ -227,17 +227,17 @@ namespace gfw
 	}
 	void Window::MessageHandler(MSG& msg)
 	{
-		if (m_input)
+		/*if (m_input)
 			m_input->HandleMessage(msg);
 		if (m_scene)
-			m_scene->MessageHandler(msg);
+			m_scene->MessageHandler(msg);*/
 		for (Window::W child : m_children)
 		{
 			Window::P c = child.lock();
 			c->MessageHandler(msg);
 		}
 	}
-	void Window::setScene(Scene::P scene)
+	/*void Window::setScene(Scene::P scene)
 	{
 		m_scene = scene;
 		m_scene->SetWindow(m_self.lock());
@@ -245,7 +245,7 @@ namespace gfw
 	Scene::P Window::getScene()
 	{
 		return m_scene;
-	}
+	}*/
 	void Window::setPeriodicUpdate(bool update)
 	{
 		m_periodicUpdate = update;
@@ -276,14 +276,14 @@ namespace gfw
 	{
 		return m_graphics;
 	}
-	void Window::AddInput()
+	/*void Window::AddInput()
 	{
 		m_input = hcs::Input::Create();
 	}
 	hcs::Input::P Window::getInput()
 	{
 		return m_input;
-	}
+	}*/
 	HWND Window::getHWND()
 	{
 		return m_hwnd;
@@ -297,12 +297,6 @@ namespace gfw
 		return m_fullscreen;
 	}
 
-	void Scene::SetWindow(Window::P window)
-	{
-		m_window = window;
-		m_graphics = window->getGraphics();
-		m_input = window->getInput();
-	}
 
 	WindowSettings::WindowSettings()
 		:x(-1),

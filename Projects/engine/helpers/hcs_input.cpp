@@ -20,13 +20,10 @@ namespace hcs
 	{
 		Initialize();
 	}
-	Input::P Input::Create()
-	{
-		return std::make_shared<Input>();
-	}
 
 	void Input::HandleMessage(MSG& msg)
 	{
+		m_msg = msg;
 		switch (msg.message)
 		{
 		case WM_KEYDOWN:
@@ -36,6 +33,8 @@ namespace hcs
 			m_keys[msg.wParam & 0xff] = false;
 			break;
 		case WM_MOUSEMOVE:
+			m_prevMouseX = m_mouseX;
+			m_prevMouseY = m_mouseY;
 			m_mouseX = GET_X_LPARAM(msg.lParam);
 			m_mouseY = GET_Y_LPARAM(msg.lParam);
 			break;
@@ -86,9 +85,24 @@ namespace hcs
 		x = m_mouseX - m_prevMouseX;
 		y = m_mouseY - m_prevMouseY;
 	}
-	void Input::ResetMouseDelta()
+	int Input::getMDX()
 	{
-		m_prevMouseX = m_mouseX;
-		m_prevMouseY = m_mouseY;
+		return m_mouseX - m_prevMouseX;;
+	}
+	int Input::getMDY()
+	{
+		return m_mouseY - m_prevMouseY;
+	}
+	MSG& Input::getMSG()
+	{
+		return m_msg;
+	}
+	int Input::getMX()
+	{
+		return m_mouseX;
+	}
+	int Input::getMY()
+	{
+		return m_mouseY;
 	}
 }

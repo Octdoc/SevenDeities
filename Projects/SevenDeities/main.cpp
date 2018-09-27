@@ -1,11 +1,28 @@
 #include "sd_scene.h"
 
+using namespace octdoc;
+
 INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
 {
-	gfw::Window::P window;
+	Program::Initialize();
+	form::Window::P window = form::Window::Create(L"Parent", 1280, 720);
+	form::WindowSettings settings;
+	settings.width = 640;
+	settings.height = 480;
+	settings.windowName = L"Child";
+	settings.parentHandle = window->getHWND();
+	window->AddChild(form::Window::Create(settings));
+	window->AddGraphics();
+	//window->setScene(sd::SD_Scene::Create());
+
+	Program::Instance().RegisterWindow(window);
+	Program::Instance().Run();
+	return 0;
+	/*gfw::Window::P window;
 	gfw::Window::P childwindow;
 	gfw::WindowSettings settings;
 	settings.windowName = L"octchild";
+	settings.hasFrame = true;
 	settings.x = 100;
 	settings.y = 100;
 	settings.width = 800;
@@ -25,5 +42,5 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline
 	{
 		e.ShowMessageBox();
 	}
-	return 0;
+	return 0;*/
 }

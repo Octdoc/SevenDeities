@@ -41,7 +41,7 @@ namespace gfw
 
 		hcs::Timer m_timer;
 
-		hcs::Input::P m_input;
+		//hcs::Input::P m_input;
 		Graphics::P m_graphics;
 
 		std::shared_ptr<Scene> m_scene;
@@ -79,7 +79,7 @@ namespace gfw
 		Graphics::P getGraphics();
 
 		void AddInput();
-		hcs::Input::P getInput();
+		//hcs::Input::P getInput();
 
 		void setScene(std::shared_ptr<Scene> scene);
 		std::shared_ptr<Scene> getScene();
@@ -93,23 +93,4 @@ namespace gfw
 		bool isFullscreen();
 	};
 
-	class Scene
-	{
-		SHARED_ONLY(Scene);
-
-	protected:
-		Scene() = default;
-		Window::P m_window;
-		Graphics::P m_graphics;
-		hcs::Input::P m_input;
-
-	public:
-		void SetWindow(Window::P window);
-
-		virtual void Start() = 0;
-		virtual void Quit() = 0;
-		virtual void Update(double deltaTime, double totalTime) = 0;
-		virtual void Render() = 0;
-		virtual void MessageHandler(MSG& message) = 0;
-	};
 }
