@@ -33,7 +33,8 @@ namespace cvt
 				m_entity.reset();
 				m_entity = m_modelManager.CreateEntity(m_graphics);
 				m_renderer->AddEntity(m_entity);
-				Render();
+				m_renderer->Render(m_graphics, m_camera);
+				InvalidateRect(m_window->getHWND(), NULL, TRUE);
 			}
 			catch (hcs::Exception& e)
 			{
@@ -107,29 +108,25 @@ namespace cvt
 			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 	}
-	void Converter::Quit()
-	{
-	}
-	void Converter::Update(double deltaTime, double totalTime)
-	{
-		m_input->ResetMouseDelta();
-	}
-	void Converter::Render()
+	void Converter::Update(float deltaTime, float totalTime)
 	{
 		m_renderer->Render(m_graphics, m_camera);
 		InvalidateRect(m_window->getHWND(), NULL, TRUE);
 	}
-	void Converter::MessageHandler(MSG& message)
+	void Converter::HandleMessage(hcs::Input& input)
 	{
-		if (HandleCamera(message))
-			Render();
-		switch (message.message)
+		if (HandleCamera(input.getMSG()))
+		{
+			m_renderer->Render(m_graphics, m_camera);
+			InvalidateRect(m_window->getHWND(), NULL, TRUE);
+		}
+		switch (input.getMSG().message)
 		{
 		case WM_DROPFILES:
-			DropFileEvent((HDROP)message.wParam);
+			DropFileEvent((HDROP)input.getMSG().wParam);
 			return;
 		case WM_KEYDOWN:
-			switch (message.wParam)
+			switch (input.getMSG().wParam)
 			{
 			case VK_ESCAPE:
 				PostQuitMessage(0);

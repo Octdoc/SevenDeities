@@ -2,6 +2,11 @@
 
 namespace form
 {
+	Form::Form()
+	{
+		m_hwnd = nullptr;
+		m_destroyed = false;
+	}
 	Form::~Form()
 	{
 		Destroy();
@@ -11,7 +16,7 @@ namespace form
 	{
 		MoveWindow(m_hwnd, getX(), getY(), getW(), getH(), TRUE);
 	}
-
+	
 #pragma region getter, setter
 
 	void Form::setPosition(int x, int y)
@@ -101,8 +106,12 @@ namespace form
 	}
 	void Form::Destroy()
 	{
-		//for (auto child : m_children) child->Destroy();
-		m_parent.lock()->RemoveChild(m_self.lock());
+		if (!m_destroyed)
+		{
+			m_destroyed = true;
+			//for (auto child : m_children) child->Destroy();
+			m_parent.lock()->RemoveChild(m_self.lock());
+		}
 	}
 
 	void Form::setParent(FormContainer::W parent)

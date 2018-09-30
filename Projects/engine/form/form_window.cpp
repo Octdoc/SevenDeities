@@ -134,8 +134,11 @@ namespace form
 	}
 	void Window::Destroy()
 	{
-		Form::Destroy();
-		ShutdownWindow();
+		if (!m_destroyed)
+		{
+			Form::Destroy();
+			ShutdownWindow();
+		}
 	}
 	Window::P Window::Create()
 	{
@@ -169,7 +172,8 @@ namespace form
 			ChangeDisplaySettings(NULL, 0);
 		if (m_hwnd != NULL)
 		{
-			DestroyWindow(m_hwnd);
+			if (!m_destroyed)
+				DestroyWindow(m_hwnd);
 			m_hwnd = NULL;
 		}
 		RemoveScene(m_scene);

@@ -6,7 +6,7 @@
 
 namespace cvt
 {
-	class Converter :public gfw::Scene
+	class Converter :public form::Scene
 	{
 		SHARED_ONLY(Converter);
 		gfw::Camera m_camera;
@@ -26,9 +26,7 @@ namespace cvt
 		static Converter::P Create();
 
 		virtual void Start() override;
-		virtual void Quit() override;
-		virtual void Update(double deltaTime, double totalTime) override;
-		virtual void Render() override;
-		virtual void MessageHandler(MSG& message) override;
+		virtual void Update(float deltaTime, float totalTime) override;
+		virtual void HandleMessage(hcs::Input& input) override;
 	};
 }

@@ -31,6 +31,7 @@ namespace form
 		FormContainer::W m_parent;
 
 		HWND m_hwnd;
+		bool m_destroyed;
 		RECT m_boundingbox;
 
 	public:
@@ -40,7 +41,7 @@ namespace form
 		void ApplyWindowSize();
 
 	protected:
-		Form() = default;
+		Form();
 
 	public:
 		virtual ~Form();
