@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics/gfw_graphics.h"
+#include "graphics/gfw_window.h"
 #include <forward_list>
 
 namespace form
@@ -43,7 +43,6 @@ namespace form
 		Form() = default;
 
 	public:
-		virtual ~Form();
 		HWND getHWND();
 		void setPosition(int x, int y);
 		void setX(int x);
@@ -61,7 +60,7 @@ namespace form
 		virtual void RemoveChild(Form::P child)  override;
 		virtual void RemoveAllChild()  override;
 		bool CloseWindow(HWND hwnd);
-		virtual void Destroy();
+		void Destroy();
 		void setParent(FormContainer::W parent);
 	};
 }

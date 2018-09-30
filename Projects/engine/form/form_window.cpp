@@ -1,7 +1,6 @@
 #include "form_window.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-void RemoveScene(form::Scene::P scene);
 
 namespace form
 {
@@ -131,11 +130,7 @@ namespace form
 	Window::~Window()
 	{
 		ShutdownWindow();
-	}
-	void Window::Destroy()
-	{
-		Form::Destroy();
-		ShutdownWindow();
+		UnregisterClass(windowName.c_str(), GetModuleHandle(NULL));
 	}
 	Window::P Window::Create()
 	{
@@ -172,44 +167,37 @@ namespace form
 			DestroyWindow(m_hwnd);
 			m_hwnd = NULL;
 		}
-		RemoveScene(m_scene);
-		UnregisterClass(windowName.c_str(), GetModuleHandle(NULL));
 	}
-	bool Window::isFullscreen()
+	void Window::setScene(gfw::Scene::P scene)
 	{
-		return m_fullscreen;
+		m_scene = scene;
+		m_scene->setWndGfx(m_self.lock(), m_graphics);
+		m_scene->Start();
 	}
-	void Window::InitGraphics()
+	gfw::Scene::P Window::getScene()
+	{
+		return m_scene;
+	}
+	void Window::AddGraphics()
 	{
 		gfw::GraphicsSettings settings;
-		InitGraphics(settings);
+		AddGraphics(settings);
 	}
-	void Window::InitGraphics(gfw::GraphicsSettings settings)
+	void Window::AddGraphics(gfw::GraphicsSettings& settings)
 	{
 		if (settings.width < 0)
 			settings.width = getW();
 		if (settings.height < 0)
 			settings.height = getH();
+		settings.fullscreen = m_fullscreen;
 		m_graphics = gfw::Graphics::Create(m_hwnd, settings);
-	}
-	Scene::P Window::getScene()
-	{
-		return m_scene;
 	}
 	gfw::Graphics::P Window::getGraphics()
 	{
 		return m_graphics;
 	}
-	void Window::setScene(Scene::P scene)
+	bool Window::isFullscreen()
 	{
-		RemoveScene(m_scene);
-		m_scene = scene;
-		scene->setWindow(m_self.lock());
-		scene->Start();
-	}
-	void Scene::setWindow(Form::P window)
-	{
-		m_window = window;
-		m_graphics = std::dynamic_pointer_cast<Window>(window)->getGraphics();
+		return m_fullscreen;
 	}
 }

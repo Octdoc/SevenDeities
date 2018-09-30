@@ -7,7 +7,6 @@ namespace hcs
 	{
 		POINT cursorpos;
 		memset(m_keys, false, sizeof(m_keys));
-		memset(&m_msg, 0, sizeof(m_msg));
 
 		m_rMouseBtn = false;
 		m_lMouseBtn = false;
@@ -22,21 +21,22 @@ namespace hcs
 		Initialize();
 	}
 
-	void Input::HandleMessage()
+	void Input::HandleMessage(MSG& msg)
 	{
-		switch (m_msg.message)
+		m_msg = msg;
+		switch (msg.message)
 		{
 		case WM_KEYDOWN:
-			m_keys[m_msg.wParam & 0xff] = true;
+			m_keys[msg.wParam & 0xff] = true;
 			break;
 		case WM_KEYUP:
-			m_keys[m_msg.wParam & 0xff] = false;
+			m_keys[msg.wParam & 0xff] = false;
 			break;
 		case WM_MOUSEMOVE:
 			m_prevMouseX = m_mouseX;
 			m_prevMouseY = m_mouseY;
-			m_mouseX = GET_X_LPARAM(m_msg.lParam);
-			m_mouseY = GET_Y_LPARAM(m_msg.lParam);
+			m_mouseX = GET_X_LPARAM(msg.lParam);
+			m_mouseY = GET_Y_LPARAM(msg.lParam);
 			break;
 		case WM_RBUTTONDOWN:
 			m_rMouseBtn = true;

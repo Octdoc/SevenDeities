@@ -1,6 +1,6 @@
 #pragma once
 
-#include "helpers/hcs_timer.h"
+#include "graphics/gfw_window.h"
 #include "graphics/entity/gfw_controller.h"
 #include "graphics/renderers/gfw_simplerenderer.h"
 #include "graphics/renderers/gfw_shadowrenderer.h"
@@ -20,15 +20,15 @@ namespace octdoc
 
 		hcs::Timer m_timer;
 		hcs::Input m_input;
-		bool m_autoUpdate;
+		bool m_autocUpdate;
 
-		std::forward_list<hcs::MessageHandler::P> m_msgHandlers;
-		std::forward_list<hcs::AutoUpdater::P> m_autoUpdaters;
+		std::forward_list<hcs::MessageHandler::W> m_msgHandlers;
+		std::forward_list<hcs::AutoUpdater::W> m_autoUpdaters;
 
 	private:
 		Program();
 
-		void MessageHandler();
+		void MessageHandler(MSG& msg);
 		void Frame();
 
 	public:
@@ -39,11 +39,11 @@ namespace octdoc
 		void RegisterWindow(form::Window::P window);
 		void UnregisterWindow(form::Window::P window);
 		void CloseAllWindows();
-		void SubscribeMessageHandler(hcs::MessageHandler::P msgHandler);
-		void UnsubscribeMessageHandler(hcs::MessageHandler::P msgHandler);
+		void SubscribeMessageHandler(hcs::MessageHandler::W msgHandler);
+		void UnsubscribeMessageHandler(hcs::MessageHandler::W msgHandler);
 		void UnsubscribeAllMessageHandlers();
-		void SubscribeAutoUpdater(hcs::AutoUpdater::P autoUpdater);
-		void UnsubscribeAutoUpdater(hcs::AutoUpdater::P autoUpdater);
+		void SubscribeAutoUpdater(hcs::AutoUpdater::W autoUpdater);
+		void UnsubscribeAutoUpdater(hcs::AutoUpdater::W autoUpdater);
 		void UnsubscribeAllAutoUpdaters();
 
 		virtual void AddChild(form::Form::P child) override;

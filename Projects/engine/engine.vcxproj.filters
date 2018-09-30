@@ -69,6 +69,9 @@
     <ClInclude Include="helpers\hcs_exception.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\gfw_window.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
     <ClInclude Include="graphics\gfw_graphics.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
@@ -141,6 +144,9 @@
     <ClInclude Include="form\form_form.h">
       <Filter>Header Files\form</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\gfw_scene.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="helpers\hcs_helpers.cpp">
@@ -148,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="helpers\hcs_exception.cpp">
       <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\gfw_window.cpp">
+      <Filter>Source Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="graphics\gfw_graphics.cpp">
       <Filter>Source Files\graphics</Filter>
@@ -220,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="octdoc.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\gfw_scene.cpp">
+      <Filter>Source Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

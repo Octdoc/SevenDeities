@@ -23,7 +23,7 @@ namespace hcs
 	public:
 		Input();
 
-		void HandleMessage();
+		void HandleMessage(MSG& msg);
 
 		bool isPressed(unsigned int key);
 		bool isRMouseBtnDown();
