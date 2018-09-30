@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
+    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x86\Bin\))</OutDir>
+    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x86\Build\))</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
+    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x64\Bin\))</OutDir>
+    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x64\Build\))</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
+    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x86\Bin\))</OutDir>
+    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x86\Build\))</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
+    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x64\Bin\))</OutDir>
+    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x64\Build\))</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,7 +102,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Debug\x86\Bin\Projects\DirectXTex;$(SolutionDir)Debug\x86\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -121,7 +121,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Debug\x64\Bin\Projects\DirectXTex;$(SolutionDir)Debug\x64\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -144,7 +144,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Release\x86\Bin\Projects\DirectXTex;$(SolutionDir)Release\x86\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -167,7 +167,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Release\x64\Bin\Projects\DirectXTex;$(SolutionDir)Release\x64\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>

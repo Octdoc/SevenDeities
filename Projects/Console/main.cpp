@@ -9,7 +9,6 @@
 #include <forward_list>
 #include <Windows.h>
 
-
 std::mutex m;
 
 template<math::uint N>
