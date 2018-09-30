@@ -5,14 +5,14 @@ namespace octdoc
 {
 	Program::P Program::m_instance;
 
-	Program::Program() :m_autocUpdate(false), m_input() {}
-	void Program::MessageHandler(MSG& msg)
+	Program::Program() :m_autoUpdate(false), m_input() {}
+	void Program::MessageHandler()
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-		m_input.HandleMessage(msg);
-		for (hcs::MessageHandler::W msgHandler : m_msgHandlers)
-			msgHandler.lock()->HandleMessage(m_input);
+		TranslateMessage(&m_input.getMSG());
+		DispatchMessage(&m_input.getMSG());
+		m_input.HandleMessage();
+		for (auto msgHandler : m_msgHandlers)
+			msgHandler->HandleMessage(m_input);
 	}
 	void Program::Frame()
 	{
@@ -20,7 +20,7 @@ namespace octdoc
 		float delta = (float)m_timer.GetTimeDelta();
 		float total = (float)m_timer.GetTimeTotal();
 		for (auto au : m_autoUpdaters)
-			au.lock()->Update(delta, total);
+			au->Update(delta, total);
 	}
 	void Program::RegisterWindow(form::Window::P window)
 	{
@@ -34,25 +34,25 @@ namespace octdoc
 	{
 		RemoveAllChild();
 	}
-	void Program::SubscribeMessageHandler(hcs::MessageHandler::W msgHandler)
+	void Program::SubscribeMessageHandler(hcs::MessageHandler::P msgHandler)
 	{
 		m_msgHandlers.push_front(msgHandler);
 	}
-	void Program::UnsubscribeMessageHandler(hcs::MessageHandler::W msgHandler)
+	void Program::UnsubscribeMessageHandler(hcs::MessageHandler::P msgHandler)
 	{
-		m_msgHandlers.remove_if([msgHandler](hcs::MessageHandler::W msgh)->bool {return msgHandler.lock() == msgh.lock(); });
+		m_msgHandlers.remove(msgHandler);
 	}
 	void Program::UnsubscribeAllMessageHandlers()
 	{
 		m_msgHandlers.clear();
 	}
-	void Program::SubscribeAutoUpdater(hcs::AutoUpdater::W autoUpdater)
+	void Program::SubscribeAutoUpdater(hcs::AutoUpdater::P autoUpdater)
 	{
 		m_autoUpdaters.push_front(autoUpdater);
 	}
-	void Program::UnsubscribeAutoUpdater(hcs::AutoUpdater::W autoUpdater)
+	void Program::UnsubscribeAutoUpdater(hcs::AutoUpdater::P autoUpdater)
 	{
-		m_autoUpdaters.remove_if([autoUpdater](hcs::AutoUpdater::W au)->bool {return autoUpdater.lock() == au.lock(); });
+		m_autoUpdaters.remove(autoUpdater);
 	}
 	void Program::UnsubscribeAllAutoUpdaters()
 	{
@@ -88,29 +88,34 @@ namespace octdoc
 	}
 	void Program::Run(bool updatePeriodicly)
 	{
-		MSG msg{};
-		m_autocUpdate = updatePeriodicly;
+		m_autoUpdate = updatePeriodicly;
 		m_timer.Reset();
-		while (msg.message != WM_QUIT)
+		while (m_input.getMSG().message != WM_QUIT)
 		{
-			if (m_autocUpdate)
+			if (m_autoUpdate)
 			{
-				if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-					MessageHandler(msg);
+				if (PeekMessage(&m_input.getMSG(), NULL, 0, 0, PM_REMOVE))
+					MessageHandler();
 				else
 					Frame();
 			}
 			else
 			{
-				if (GetMessage(&msg, NULL, 0, 0))
-					MessageHandler(msg);
+				if (GetMessage(&m_input.getMSG(), NULL, 0, 0))
+					MessageHandler();
 			}
 		}
 	}
 	void Program::setAutoUpdate(bool autoUpdate)
 	{
-		m_autocUpdate = autoUpdate;
+		m_autoUpdate = autoUpdate;
 	}
+}
+
+void RemoveScene(form::Scene::P scene)
+{
+	octdoc::Program::Instance().UnsubscribeMessageHandler(scene);
+	octdoc::Program::Instance().UnsubscribeAutoUpdater(scene);
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)

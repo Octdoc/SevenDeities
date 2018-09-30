@@ -4,7 +4,7 @@
 
 namespace test
 {
-	class Test_Scene :public gfw::Scene
+	class Test_Scene :public form::Scene
 	{
 		SHARED_ONLY(Test_Scene);
 		gfw::Controller m_controller;
@@ -17,15 +17,12 @@ namespace test
 
 	private:
 		Test_Scene() = default;
-		void Test();
 
 	public:
 		static Test_Scene::P Create();
 
 		virtual void Start() override;
-		virtual void Quit() override;
-		virtual void Update(double deltaTime, double totalTime) override;
-		virtual void Render() override;
-		virtual void MessageHandler(MSG& message) override;
+		virtual void Update(float deltaTime, float totalTime) override;
+		virtual void HandleMessage(hcs::Input& input) override;
 	};
 }

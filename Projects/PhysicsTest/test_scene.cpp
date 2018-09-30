@@ -3,12 +3,10 @@
 
 #pragma comment(lib, "engine.lib")
 
+using namespace octdoc;
+
 namespace test
 {
-	void Test_Scene::Test()
-	{
-	}
-
 	Test_Scene::P Test_Scene::Create()
 	{
 		return std::make_shared<Test_Scene>();
@@ -16,7 +14,6 @@ namespace test
 
 	void Test_Scene::Start()
 	{
-		Test();
 		ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
@@ -65,10 +62,7 @@ namespace test
 		m_physicsArea->gravity = 0.0f;
 
 	}
-	void Test_Scene::Quit()
-	{
-	}
-	void Test_Scene::Update(double deltaTime, double totalTime)
+	void Test_Scene::Update(float deltaTime, float totalTime)
 	{
 		static double prevTime = 0.0;
 		static double tTime = 0.0;
@@ -83,20 +77,17 @@ namespace test
 			prevTime = tTime;
 		}
 
-		m_controller.Update_FirstPersonMode_Fly(*m_input, (float)deltaTime);
-		m_input->ResetMouseDelta();
+		m_controller.Update_FirstPersonMode_Fly(Program::Instance().Input(), (float)deltaTime);
 
-		m_phyPlayer->Control_FreeMove(*m_input);
+		m_phyPlayer->Control_FreeMove(Program::Instance().Input());
 		m_physicsArea->Update((float)deltaTime);
 		m_gfxPlayer->position = m_phyPlayer->position;
-	}
-	void Test_Scene::Render()
-	{
+
 		m_renderer->Render(m_graphics, m_camera);
 	}
-	void Test_Scene::MessageHandler(MSG& message)
+	void Test_Scene::HandleMessage(hcs::Input& input)
 	{
-		if (message.message == WM_KEYDOWN && message.wParam == VK_ESCAPE)
+		if (input.getMSG().message == WM_KEYDOWN && input.getMSG().wParam == VK_ESCAPE)
 			PostQuitMessage(0);
 	}
 }
