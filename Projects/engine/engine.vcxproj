@@ -73,23 +73,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x86\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x86\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x64\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x64\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x86\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x86\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x64\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x64\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,7 +111,7 @@
       <ObjectFileOutput>$(SolutionDir)Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Debug\x86\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -134,7 +134,7 @@
       <ObjectFileOutput>$(SolutionDir)Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Debug\x64\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -161,7 +161,7 @@
       <ObjectFileOutput>$(SolutionDir)Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Release\x86\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,7 +188,7 @@
       <ObjectFileOutput>$(SolutionDir)Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Release\x64\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x86\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x86\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x64\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Debug\x64\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x86\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x86\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x64\Bin\))</OutDir>
-    <IntDir>$(ProjectDir.Replace($(SolutionDir),$(SolutionDir)Release\x64\Build\))</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\Bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\Build\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,12 +102,15 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Debug\x86\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,12 +124,15 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Debug\x64\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -144,12 +150,15 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Release\x86\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -167,12 +176,15 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Release\x64\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\DirectXTex;$(SolutionDir)$(Configuration)\$(Platform)\Bin\Projects\engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="genmath.cpp" />
