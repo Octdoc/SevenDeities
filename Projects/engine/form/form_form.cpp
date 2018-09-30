@@ -2,6 +2,10 @@
 
 namespace form
 {
+	Form::~Form()
+	{
+		Destroy();
+	}
 	HWND Form::getHWND() { return m_hwnd; }
 	void Form::ApplyWindowSize()
 	{

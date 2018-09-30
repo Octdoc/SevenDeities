@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics/gfw_scene.h"
+#include "form_form.h"
 
 namespace form
 {
@@ -20,15 +20,29 @@ namespace form
 		WindowSettings();
 	};
 
+
+	class Scene :public hcs::MessageHandler, public hcs::AutoUpdater
+	{
+		SHARED_ONLY(Scene);
+
+	protected:
+		Scene() = default;
+		Form::P m_window;
+		gfw::Graphics::P m_graphics;
+
+	public:
+		void setWindow(Form::P window);
+		virtual void Start() = 0;
+	};
+
 	class Window :public Form
 	{
 		SHARED_ONLY(Window);
 
-		bool m_fullscreen;
-
+	protected:
 		gfw::Graphics::P m_graphics;
-
-		gfw::Scene::P m_scene;
+		Scene::P m_scene;
+		bool m_fullscreen;
 
 	private:
 		Window(WindowSettings& settings);
@@ -41,23 +55,22 @@ namespace form
 		void CreateHWND(WindowSettings& settings);
 		void CreateFullscreenWindow(WindowSettings& settings);
 		void CreateOverlappedWindow(WindowSettings& settings);
-
 		void ShutdownWindow();
 
 	public:
 		~Window();
+		virtual void Destroy() override;
 
 		static Window::P Create();
 		static Window::P Create(int width, int height);
 		static Window::P Create(const WCHAR wndname[], int width, int height);
 		static Window::P Create(WindowSettings& settings);
 
-		void AddGraphics();
-		void AddGraphics(gfw::GraphicsSettings& settings);
-		gfw::Graphics::P getGraphics();
-
-		void setScene(gfw::Scene::P scene);
-		gfw::Scene::P getScene();
 		bool isFullscreen();
+		void InitGraphics();
+		void InitGraphics(gfw::GraphicsSettings settings);
+		gfw::Graphics::P getGraphics();
+		void setScene(Scene::P scene);
+		Scene::P getScene();
 	};
 }

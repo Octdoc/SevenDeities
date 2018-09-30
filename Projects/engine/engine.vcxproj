@@ -201,8 +201,6 @@
     <ClInclude Include="graphics\entity\gfw_light.h" />
     <ClInclude Include="graphics\entity\gfw_skydome.h" />
     <ClInclude Include="graphics\gfw_graphics.h" />
-    <ClInclude Include="graphics\gfw_scene.h" />
-    <ClInclude Include="graphics\gfw_window.h" />
     <ClInclude Include="graphics\renderers\gfw_renderer.h" />
     <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h" />
     <ClInclude Include="graphics\renderers\gfw_simplerenderer.h" />
@@ -232,8 +230,6 @@
     <ClCompile Include="graphics\entity\gfw_light.cpp" />
     <ClCompile Include="graphics\entity\gfw_skydome.cpp" />
     <ClCompile Include="graphics\gfw_graphics.cpp" />
-    <ClCompile Include="graphics\gfw_scene.cpp" />
-    <ClCompile Include="graphics\gfw_window.cpp" />
     <ClCompile Include="graphics\renderers\gfw_renderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_simplerenderer.cpp" />

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "graphics/gfw_window.h"
-#include "form_form.h"
+#include "form_window.h"
 
 namespace form
 {
@@ -13,14 +12,14 @@ namespace form
 		RECT m_boundingbox;
 
 	private:
-		Button(const gfw::Window::P parent, const WCHAR text[]);
+		Button(const form::Window::P parent, const WCHAR text[]);
 
-		void Initialize(const gfw::Window::P parent);
+		void Initialize(const form::Window::P parent);
 
 		void ApplyWindowSize();
 
 	public:
-		static Button::P Create(const gfw::Window::P parent, const WCHAR text[]);
+		static Button::P Create(const form::Window::P parent, const WCHAR text[]);
 
 	};
 }
