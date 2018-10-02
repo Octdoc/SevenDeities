@@ -3,8 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-#Shader build results
-.cso
+#Built shader file
+*.cso
 
 # User-specific files
 *.suo
@@ -24,6 +24,7 @@ x64/
 x86/
 bld/
 [Bb]in/
+[Bb]uild/
 [Oo]bj/
 [Ll]og/
 
