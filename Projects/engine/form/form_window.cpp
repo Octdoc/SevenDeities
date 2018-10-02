@@ -15,21 +15,43 @@ namespace form
 		hasFrame(true),
 		parentHandle(nullptr),
 		windowName(L"Octdoc") {}
-	void Window::FillWndClassEx(WNDCLASSEX& wc)
+
+	std::map<std::wstring, size_t> Window::m_registeredClasses;
+
+	void Window::RegisterWindowClass(const WCHAR className[])
 	{
-		ClearStruct(wc);
-		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpfnWndProc = WndProc;
-		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 0;
-		wc.hInstance = GetModuleHandle(NULL);
-		wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		wc.hIconSm = wc.hIcon;
-		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-		wc.lpszMenuName = NULL;
-		wc.lpszClassName = windowName.c_str();
-		wc.cbSize = sizeof(WNDCLASSEX);
+		auto wcname = m_registeredClasses.find(className);
+		if (wcname == m_registeredClasses.end())
+		{
+			WNDCLASSEX wc{};
+			wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+			wc.lpfnWndProc = WndProc;
+			wc.cbClsExtra = 0;
+			wc.cbWndExtra = 0;
+			wc.hInstance = GetModuleHandle(NULL);
+			wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+			wc.hIconSm = wc.hIcon;
+			wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+			wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+			wc.lpszMenuName = NULL;
+			wc.lpszClassName = className;
+			wc.cbSize = sizeof(WNDCLASSEX);
+			RegisterClassEx(&wc);
+			m_registeredClasses[className] = 1;
+		}
+		else
+		{
+			wcname->second++;
+		}
+	}
+	void Window::UnregisterWindowClass(const WCHAR className[])
+	{
+		auto wcname = m_registeredClasses.find(className);
+		if (--wcname->second == 0)
+		{
+			UnregisterClass(className, GetModuleHandle(NULL));
+			m_registeredClasses.erase(wcname);
+		}
 	}
 	void Window::FillDevModeSettings(DEVMODE& devMode)
 	{
@@ -116,11 +138,9 @@ namespace form
 	}
 	void Window::InitializeWindow(WindowSettings& settings)
 	{
-		WNDCLASSEX wc;
 		windowName = settings.windowName;
 		m_fullscreen = settings.fullscreen;
-		FillWndClassEx(wc);
-		RegisterClassEx(&wc);
+		RegisterWindowClass(windowName.c_str());
 		CreateHWND(settings);
 		ShowWindow(m_hwnd, SW_SHOW);
 	}
@@ -130,15 +150,12 @@ namespace form
 	}
 	Window::~Window()
 	{
-		ShutdownWindow();
+		Destroy();
 	}
 	void Window::Destroy()
 	{
-		if (!m_destroyed)
-		{
-			Form::Destroy();
-			ShutdownWindow();
-		}
+		Form::Destroy();
+		ShutdownWindow();
 	}
 	Window::P Window::Create()
 	{
@@ -172,12 +189,11 @@ namespace form
 			ChangeDisplaySettings(NULL, 0);
 		if (m_hwnd != NULL)
 		{
-			if (!m_destroyed)
-				DestroyWindow(m_hwnd);
+			DestroyWindow(m_hwnd);
 			m_hwnd = NULL;
 		}
 		RemoveScene(m_scene);
-		UnregisterClass(windowName.c_str(), GetModuleHandle(NULL));
+		UnregisterWindowClass(windowName.c_str());
 	}
 	bool Window::isFullscreen()
 	{

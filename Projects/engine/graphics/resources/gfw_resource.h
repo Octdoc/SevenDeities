@@ -2,8 +2,6 @@
 
 namespace gfw
 {
-
-
 	template <typename T>
 	class AutoReleasePtr
 	{

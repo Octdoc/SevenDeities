@@ -1,6 +1,7 @@
 #pragma once
 
 #include "form_form.h"
+#include <map>
 
 namespace form
 {
@@ -39,6 +40,8 @@ namespace form
 	{
 		SHARED_ONLY(Window);
 
+		static std::map<std::wstring, size_t> m_registeredClasses;
+
 	protected:
 		gfw::Graphics::P m_graphics;
 		Scene::P m_scene;
@@ -47,8 +50,9 @@ namespace form
 	private:
 		Window(WindowSettings& settings);
 		void InitializeWindow(WindowSettings& settings);
+		static void RegisterWindowClass(const WCHAR className[]);
+		static void UnregisterWindowClass(const WCHAR className[]);
 
-		void FillWndClassEx(WNDCLASSEX& wc);
 		void FillDevModeSettings(DEVMODE& devMode);
 		void FillFullscreenBoundingBox(WindowSettings& settings);
 		void FillWindowedBoundingBox(WindowSettings& settings);
