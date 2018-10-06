@@ -48,6 +48,7 @@ namespace math
 			T dot = 0;
 			for (uint i = 0; i < N; i++)
 				dot += m_v[i] * v.m_v[i];
+			return dot;
 		}
 		T LengthSquare() const
 		{

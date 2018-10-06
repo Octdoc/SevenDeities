@@ -10,8 +10,8 @@ int wmain()
 	form::WindowSettings settings;
 	settings.windowName = L"renderScreen";
 	settings.hasFrame = false;
-	settings.x = 100;
-	settings.y = 100;
+	settings.x = 0;
+	settings.y = 0;
 	settings.width = 800;
 	settings.height = 600;
 	settings.parentHandle = window->getHWND();

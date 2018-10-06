@@ -8,6 +8,7 @@
 #include <functional>
 #include <forward_list>
 #include <Windows.h>
+#include <windowsx.h>
 
 std::mutex m;
 
@@ -37,81 +38,137 @@ void f1()
 	m.unlock();
 }
 
+using d3 = math::Vector<double, 3>;
 
-class A
+bool isPointOnTriangle(d3 tri[], d3 p)
 {
-protected:
-	char a = 'a';
-public:
-	virtual void PrintAChar()
-	{
-		std::cout << "PrintAChar - " << 'A' << std::endl;
-	}
-	void PrintAVar()
-	{
-		std::cout << "PrintAVar - " << a << std::endl;
-	}
-};
-class B
-{
-protected:
-	char b = 'b';
-public:
-	virtual void PrintBChar()
-	{
-		std::cout << "PrintBChar - " << 'B' << std::endl;
-	}
-	void PrintBVar()
-	{
-		std::cout << "PrintBVar - " << b << std::endl;
-	}
-};
-class C :public A, public B
-{
-protected:
-	char c = 'c';
-public:
-	virtual void PrintCChar()
-	{
-		std::cout << "PrintCChar - " << 'C' << std::endl;
-	}
-	void PrintCVar()
-	{
-		std::cout << "PrintCVar - " << c << std::endl;
-	}
-};
+	d3 vecs[3] = {tri[1] - tri[0],
+		tri[2] - tri[0],
+		p - tri[0] };
+	double dot00 = vecs[0].Dot(vecs[0]);
+	double dot01 = vecs[0].Dot(vecs[1]);
+	double dot02 = vecs[0].Dot(vecs[2]);
+	double dot11 = vecs[1].Dot(vecs[1]);
+	double dot12 = vecs[1].Dot(vecs[2]);
+	double denom = dot00 * dot11 - dot01 * dot01;
+	double u = (dot11 * dot02 - dot01 * dot12) / denom;
+	double v = (dot00 * dot12 - dot01 * dot02) / denom;
+	return u >= 0.0f && v >= 0.0f && u + v <= 1.0f;
+}
 
+int start();
 int wmain()
 {
-	A* c = (A*)new C;
+	return start();
 
-	std::cout << "c->PrintAChar(): ";
-	c->PrintAChar();
-	std::cout << "c->PrintAVar(): ";
-	c->PrintAVar();
+	d3 tri[3];
+	tri[0](0) = 0.0;
+	tri[0](1) = 0.0;
+	tri[0](2) = 0.0;
+	tri[1](0) = 1.0;
+	tri[1](1) = 0.0;
+	tri[1](2) = 0.0;
+	tri[2](0) = 0.0;
+	tri[2](1) = 0.0;
+	tri[2](2) = 1.0;
+	d3 p;
 
-	std::cout << "((B*)c)->PrintBChar(): ";
-	((B*)c)->PrintBChar();
-	std::cout << "((B*)c)->PrintBVar(): ";
-	((B*)c)->PrintBVar();
+	p(0) = 0.4;
+	p(1) = 0.45;
+	p(2) = 0.5;
+	std::cout << isPointOnTriangle(tri, p) << std::endl;
 
-	std::cout << "((B*)(C*)c)->PrintBChar(): ";
-	((B*)(C*)c)->PrintBChar();
-	std::cout << "((B*)(C*)c)->PrintBVar((): ";
-	((B*)(C*)c)->PrintBVar();
+	p(0) = 0.6;
+	p(1) = 0.0;
+	p(2) = 0.5;
+	std::cout << isPointOnTriangle(tri, p) << std::endl;
 
-	std::cout << "((C*)c)->PrintAChar(): ";
-	((C*)c)->PrintAChar();
-	std::cout << "((C*)c)->PrintAVar((): ";
-	((C*)c)->PrintAVar();
+	p(0) = -0.5;
+	p(1) = 0.0;
+	p(2) = 0.2;
+	std::cout << isPointOnTriangle(tri, p) << std::endl;
 
-	std::cout << "((C*)c)->PrintBChar(): ";
-	((C*)c)->PrintBChar();
-	std::cout << "((C*)c)->PrintBVar((): ";
-	((C*)c)->PrintBVar();
-
-	std::cout << std::endl;
 	system("pause");
-	delete c;
 	return 0;
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+	HDC hdc;
+	PAINTSTRUCT ps;
+	POINT points[3];
+	points[0].x = 100;
+	points[0].y = 100;
+	points[1].x = 200;
+	points[1].y = 300;
+	points[2].x = 400;
+	points[2].y = 200;
+	d3 tri[3];
+	tri[0](0) = 10.0;
+	tri[0](1) = 10.0;
+	tri[0](2) = 0.0;
+	tri[1](0) = 20.0;
+	tri[1](1) = 30.0;
+	tri[1](2) = 0.0;
+	tri[2](0) = 40.0;
+	tri[2](1) = 20.0;
+	tri[2](2) = 0.0;
+	d3 p;
+	static HBRUSH hb = CreateSolidBrush(0xff0000);
+
+	switch (msg)
+	{	
+	case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		SelectObject(hdc, hb);
+		Polygon(hdc, points, 3);
+		EndPaint(hwnd, &ps);
+		return 0;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	case WM_MOUSEMOVE:
+		p(0) = GET_X_LPARAM(lparam) / 10.0;
+		p(1) = GET_Y_LPARAM(lparam) / 10.0;
+		p(2) = 2.1;
+		DeleteObject(hb);
+		hb = CreateSolidBrush(isPointOnTriangle(tri, p) ? 0x00ff00 : 0x0000ff);
+		InvalidateRect(hwnd, NULL, FALSE);
+		return 0;
+	}
+	return DefWindowProc(hwnd, msg, wparam, lparam);
+}
+
+int start()
+{
+	const WCHAR appName[] = L"GraphApp";
+	WNDCLASS wc;
+	MSG msg;
+	HWND hwnd;
+
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc = WndProc;
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = GetModuleHandle(NULL);
+	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = appName;
+
+	RegisterClass(&wc);
+	hwnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, appName, L"Grapher", WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, GetModuleHandle(NULL), NULL);
+
+	ShowWindow(hwnd, SW_SHOW);
+	UpdateWindow(hwnd);
+
+	while (GetMessage(&msg, NULL, 0, 0))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	return msg.wParam;
 }

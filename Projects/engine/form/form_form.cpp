@@ -5,15 +5,51 @@ namespace form
 	Form::Form()
 	{
 		m_hwnd = nullptr;
+		ClearStruct(m_boundingbox);
 	}
 	Form::~Form()
 	{
 		Destroy();
 	}
-	HWND Form::getHWND() { return m_hwnd; }
+	void Form::AddChild(Form::P child)
+	{
+		m_children.push_front(child);
+		child->setParent(m_self.lock());
+	}
+	void Form::RemoveChild(Form::P child)
+	{
+		m_children.remove(child);
+	}
+	void Form::RemoveAllChild()
+	{
+		m_children.clear();
+	}
+	bool Form::CloseWindow(HWND hwnd)
+	{
+		if (m_hwnd == hwnd)
+		{
+			Destroy();
+			return true;
+		}
+		for (auto child : m_children)
+			if (child->CloseWindow(hwnd))
+				return true;
+		return false;
+	}
+	void Form::Destroy()
+	{
+		auto child = m_children.begin();
+		while (child != m_children.end())
+		{
+			auto tmp = child++;
+			(*tmp)->Destroy();
+		}
+		if (!m_self.expired())
+			m_parent->RemoveChild(m_self.lock());
+	}
 	void Form::ApplyWindowSize()
 	{
-		MoveWindow(m_hwnd, getX(), getY(), getW(), getH(), TRUE);
+		MoveWindow(m_hwnd, getX(), getY(), getW(), getH(), FALSE);
 	}
 
 #pragma region getter, setter
@@ -78,43 +114,20 @@ namespace form
 		m_boundingbox.top = y;
 		ApplyWindowSize();
 	}
-	void Form::AddChild(Form::P child)
+	void Form::setText(const WCHAR text[])
 	{
-		m_children.push_front(child);
-		child->setParent(m_self);
+		m_windowName = text;
+		SetWindowText(m_hwnd, text);
 	}
-	void Form::RemoveChild(Form::P child)
+	const std::wstring& Form::getText()
 	{
-		m_children.remove(child);
+		return m_windowName;
 	}
-	void Form::RemoveAllChild()
+	HWND Form::getHWND()
 	{
-		m_children.clear();
+		return m_hwnd;
 	}
-	bool Form::CloseWindow(HWND hwnd)
-	{
-		if (m_hwnd == hwnd)
-		{
-			Destroy();
-			return true;
-		}
-		for (auto child : m_children)
-			if (child->CloseWindow(hwnd))
-				return true;
-		return false;
-	}
-	void Form::Destroy()
-	{
-		auto child = m_children.begin();
-		while (child != m_children.end())
-		{
-			auto tmp = child++;
-			(*tmp)->Destroy();
-		}
-		m_parent.lock()->RemoveChild(m_self.lock());
-	}
-
-	void Form::setParent(FormContainer::W parent)
+	void Form::setParent(FormContainer::P parent)
 	{
 		m_parent = parent;
 	}

@@ -441,6 +441,16 @@ namespace gfw
 		memory = m_videoCardMemory;
 	}
 
+	float Graphics::getWidth()
+	{
+		return (float)m_screenWidth;
+	}
+
+	float Graphics::getHeight()
+	{
+		return (float)m_screenHeight;
+	}
+
 #pragma endregion
 
 }

@@ -106,7 +106,7 @@ namespace form
 
 		m_hwnd = CreateWindowEx(
 			WS_EX_APPWINDOW
-			, windowName.c_str(), windowName.c_str(),
+			, m_windowName.c_str(), m_windowName.c_str(),
 			WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP
 			, getX(), getY(), getW(), getH(),
 			NULL, NULL, GetModuleHandle(NULL), NULL);
@@ -131,16 +131,16 @@ namespace form
 			style = settings.parentHandle ? WS_CHILD | WS_VISIBLE : WS_POPUP;
 		}
 
-		m_hwnd = CreateWindowEx(exStyle, windowName.c_str(), windowName.c_str(), style,
-			CW_USEDEFAULT, CW_USEDEFAULT, getW(), getH(),
+		m_hwnd = CreateWindowEx(exStyle, m_windowName.c_str(), m_windowName.c_str(), style,
+			getX(), getY(), getW(), getH(),
 			settings.parentHandle ? settings.parentHandle : NULL, NULL, GetModuleHandle(NULL), NULL);
 		GetWindowRect(m_hwnd, &m_boundingbox);
 	}
 	void Window::InitializeWindow(WindowSettings& settings)
 	{
-		windowName = settings.windowName;
+		m_windowName = settings.windowName;
 		m_fullscreen = settings.fullscreen;
-		RegisterWindowClass(windowName.c_str());
+		RegisterWindowClass(m_windowName.c_str());
 		CreateHWND(settings);
 		ShowWindow(m_hwnd, SW_SHOW);
 	}
@@ -193,7 +193,7 @@ namespace form
 			m_hwnd = NULL;
 		}
 		RemoveScene(m_scene);
-		UnregisterWindowClass(windowName.c_str());
+		UnregisterWindowClass(m_windowName.c_str());
 	}
 	bool Window::isFullscreen()
 	{

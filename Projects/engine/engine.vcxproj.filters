@@ -58,6 +58,12 @@
     <Filter Include="Source Files\form">
       <UniqueIdentifier>{eb63c4c9-bfed-4cc9-aab6-629ee7d687b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{f899a11e-7e9c-4ca3-b987-22b9dfdbeca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{3af813ad-80a8-4a52-b5d6-b55cdda0b501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="octdoc.h">
@@ -78,9 +84,6 @@
     <ClInclude Include="helpers\hcs_input.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\mth_math.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\resources\DDSTextureLoader.h">
       <Filter>Header Files\graphics\resources</Filter>
     </ClInclude>
@@ -98,9 +101,6 @@
     </ClInclude>
     <ClInclude Include="graphics\resources\gfw_texture.h">
       <Filter>Header Files\graphics\resources</Filter>
-    </ClInclude>
-    <ClInclude Include="helpers\mth_position.h">
-      <Filter>Header Files\helpers</Filter>
     </ClInclude>
     <ClInclude Include="graphics\entity\gfw_camera.h">
       <Filter>Header Files\graphics\entity</Filter>
@@ -129,9 +129,6 @@
     <ClInclude Include="physics\pfw_boundingvolume.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
-    <ClInclude Include="physics\pfw_collider.h">
-      <Filter>Header Files\physics</Filter>
-    </ClInclude>
     <ClInclude Include="form\form_button.h">
       <Filter>Header Files\form</Filter>
     </ClInclude>
@@ -140,6 +137,21 @@
     </ClInclude>
     <ClInclude Include="form\form_form.h">
       <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\pfw_collider.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_checkbox.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mth_geometry.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mth_position.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mth_linalg.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +170,6 @@
     <ClCompile Include="helpers\hcs_input.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="helpers\mth_math.cpp">
-      <Filter>Source Files\helpers</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\resources\DDSTextureLoader.cpp">
       <Filter>Source Files\graphics\resources</Filter>
     </ClCompile>
@@ -175,9 +184,6 @@
     </ClCompile>
     <ClCompile Include="graphics\resources\gfw_texture.cpp">
       <Filter>Source Files\graphics\resources</Filter>
-    </ClCompile>
-    <ClCompile Include="helpers\mth_position.cpp">
-      <Filter>Source Files\helpers</Filter>
     </ClCompile>
     <ClCompile Include="graphics\entity\gfw_camera.cpp">
       <Filter>Source Files\graphics\entity</Filter>
@@ -220,6 +226,18 @@
     </ClCompile>
     <ClCompile Include="octdoc.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_checkbox.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="math\mth_position.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\mth_geometry.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\mth_linalg.cpp">
+      <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

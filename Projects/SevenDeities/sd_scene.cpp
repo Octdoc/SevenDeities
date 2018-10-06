@@ -1,20 +1,18 @@
 #include "sd_scene.h"
-#include <future>
 
 #pragma comment(lib, "engine.lib")
 
-namespace sd
+namespace car
 {
-	void SD_Scene::Start()
+	void Scene::Start()
 	{
 		ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
 		m_controller.setTarget(&m_camera);
-		m_camera.Init();
+		m_camera.Init(m_graphics->getWidth()/m_graphics->getHeight());
 		m_camera.position = { 0.0f, 4.0f, -10.0f };
 
-		//m_renderer = gfw::SimpleRenderer::Create(m_graphics);
 		m_renderer = gfw::ShadowRenderer::Create(m_graphics);
 
 		m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
@@ -31,17 +29,21 @@ namespace sd
 			gfw::Texture::Create2D(device, L"Media/green.png"),
 			gfw::Texture::Create2D(device, L"Media/normal.png")));
 	}
-	SD_Scene::P SD_Scene::Create()
+	Scene::P Scene::Create()
 	{
-		return std::make_shared<SD_Scene>();
+		return std::make_shared<Scene>();
 	}
-	void SD_Scene::Update(float deltaTime, float totalTime)
+	void Scene::Update(float deltaTime, float totalTime)
 	{
 		m_controller.Update_FirstPersonMode_Fly(octdoc::Program::Instance().Input(), deltaTime);
 		m_renderer->Render(m_graphics, m_camera);
 	}
-	void SD_Scene::HandleMessage(hcs::Input& input)
+	void Scene::HandleMessage(hcs::Input& input)
 	{
+		if (input.getMSG().hwnd == m_window->getHWND())
+		{
+			m_controller.HandleMouseMove(input);
+		}
 		if (input.getMSG().message == WM_KEYDOWN && input.getMSG().wParam == VK_ESCAPE)
 			PostQuitMessage(0);
 	}

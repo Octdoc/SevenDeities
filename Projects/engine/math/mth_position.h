@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mth_math.h"
+#include "mth_linalg.h"
 
 namespace mth
 {

@@ -2,21 +2,21 @@
 
 #include "octdoc.h"
 
-namespace sd
+namespace car
 {
-	class SD_Scene :public form::Scene
+	class Scene :public form::Scene
 	{
-		SHARED_ONLY(SD_Scene);
+		SHARED_ONLY(Scene);
 
 		gfw::Controller m_controller;
 		gfw::Camera m_camera;
 		gfw::Renderer::P m_renderer;
 
 	private:
-		SD_Scene() = default;
+		Scene() = default;
 
 	public:
-		static SD_Scene::P Create();
+		static Scene::P Create();
 
 		virtual void Start() override;
 		virtual void Update(float deltaTime, float totalTime) override;

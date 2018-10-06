@@ -94,46 +94,52 @@ namespace cvt
 		ID3D11Device* device = m_graphics->getDevice();
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
-		float width = 920.0f;
-		float height = 720.0f;
+		float width = (float)m_graphics->getWidth();
+		float height = (float)m_graphics->getHeight();
 		m_camera.Init(width / height);
 		m_camDistance = 10.0f;
 		m_camera.position.z = -m_camDistance;
-		m_graphics->SetViewPort(width, height);
 
 		DragAcceptFiles(m_window->getHWND(), true);
 
 		m_renderer = gfw::SimpleRenderer::Create(m_graphics);
 		m_renderer->AddEntity(m_entity = gfw::Entity::Create(gfw::Model::Create(device, L"Media/monkey.omd"),
 			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
-		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
+		m_graphics->setClearColor(0.8f, 0.3f, 0.9f);
 	}
 	void Converter::Update(float deltaTime, float totalTime)
 	{
-		m_renderer->Render(m_graphics, m_camera);
-		InvalidateRect(m_window->getHWND(), NULL, TRUE);
 	}
 	void Converter::HandleMessage(hcs::Input& input)
 	{
-		if (HandleCamera(input.getMSG()))
+		if (input.getMSG().hwnd == m_window->getHWND())
 		{
-			m_renderer->Render(m_graphics, m_camera);
-			InvalidateRect(m_window->getHWND(), NULL, TRUE);
+			if (HandleCamera(input.getMSG()))
+			{
+				m_renderer->Render(m_graphics, m_camera);
+				InvalidateRect(m_window->getHWND(), NULL, FALSE);
+			}
+			switch (input.getMSG().message)
+			{
+			case WM_PAINT:
+				m_renderer->Render(m_graphics, m_camera);
+				return;
+			case WM_DROPFILES:
+				DropFileEvent((HDROP)input.getMSG().wParam);
+				InvalidateRect(m_window->getHWND(), NULL, FALSE);
+				return;
+			}
 		}
-		switch (input.getMSG().message)
+		if (input.getMSG().message == WM_KEYDOWN)
 		{
-		case WM_DROPFILES:
-			DropFileEvent((HDROP)input.getMSG().wParam);
-			return;
-		case WM_KEYDOWN:
 			switch (input.getMSG().wParam)
 			{
 			case VK_ESCAPE:
 				PostQuitMessage(0);
-				return;
+					return;
 			case 'E':
 				m_modelManager.Export(gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
-				return;
+					return;
 			}
 		}
 	}

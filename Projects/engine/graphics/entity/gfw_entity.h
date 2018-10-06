@@ -3,7 +3,7 @@
 #include "graphics/resources/gfw_model.h"
 #include "graphics/resources/gfw_shader.h"
 #include "graphics/resources/gfw_texture.h"
-#include "helpers/mth_position.h"
+#include "math/mth_position.h"
 
 namespace gfw
 {
@@ -12,9 +12,11 @@ namespace gfw
 	{
 		SHARED_ONLY(Entity);
 		Model::P m_model;
+		mth::float4 m_color;
 		std::vector<Texture::P> m_textures;
 		std::vector<Texture::P> m_normalmaps;
 		bool m_shown;
+		Entity::P m_relativeTo;
 
 	private:
 		Entity(Model::P model);
@@ -43,7 +45,11 @@ namespace gfw
 		void RenderModel(ID3D11DeviceContext* deviceContext);
 
 		Model::P getModel();
+		void setColor(mth::float4 color);
+		mth::float4 getColor();
 		std::vector<Texture::P>& getTextures();
 		std::vector<Texture::P>& getNormalmaps();
+		Entity::P getRelativeTo();
+		void setRelativeTo(Entity::P entity);
 	};
 }

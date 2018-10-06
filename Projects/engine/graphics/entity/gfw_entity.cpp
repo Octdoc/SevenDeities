@@ -50,6 +50,14 @@ namespace gfw
 	{
 		return m_model;
 	}
+	void Entity::setColor(mth::float4 color)
+	{
+		m_color = color;
+	}
+	mth::float4 Entity::getColor()
+	{
+		return m_color;
+	}
 	std::vector<Texture::P>& Entity::getTextures()
 	{
 		return m_textures;
@@ -57,6 +65,14 @@ namespace gfw
 	std::vector<Texture::P>& Entity::getNormalmaps()
 	{
 		return m_normalmaps;
+	}
+	Entity::P Entity::getRelativeTo()
+	{
+		return m_relativeTo;
+	}
+	void Entity::setRelativeTo(Entity::P entity)
+	{
+		m_relativeTo = entity;
 	}
 	void Entity::Render(ID3D11DeviceContext* deviceContext)
 	{

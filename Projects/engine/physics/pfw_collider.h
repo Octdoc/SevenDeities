@@ -1,5 +1,6 @@
 #pragma once
 
+#include "math/mth_geometry.h"
 #include "pfw_boundingvolume.h"
 #include "graphics/resources/gfw_modelloader.h"
 #include "helpers/hcs_input.h"
@@ -12,13 +13,6 @@ namespace pfw
 	{
 		float collisionTime;
 		mth::float3 normal;
-	};
-
-	struct Triangle
-	{
-		mth::float3 vertices[3];
-		mth::float3 normal;
-		float distance;
 	};
 
 	class Player :public mth::Position
@@ -45,14 +39,11 @@ namespace pfw
 		void Control_Gravity(hcs::Input& input);
 	};
 
-	class Collider
+	class Collider:public mth::Position
 	{
 		SHARED_ONLY(Collider);
 		BV_AABB m_boundingBox;
-		std::vector<Triangle> m_mesh;
-
-	public:
-		mth::float3 position;
+		std::vector<mth::Triangle> m_mesh;
 
 	private:
 		Collider(gfw::ModelLoader& modelLoader);
@@ -64,6 +55,7 @@ namespace pfw
 		void CreateCollider(gfw::ModelLoader& modelLoader);
 		
 		bool CollidesWithPlayer(std::shared_ptr<Player>& player, CollisionData& collData);
+		std::vector<mth::Triangle>& getMesh();
 	};
 
 	class CollisionArea
@@ -85,6 +77,7 @@ namespace pfw
 		void AddCollider(Collider::P collider);
 		void RemoveCollider(Collider::P collider);
 		void RemoveAllColliders();
+		std::vector<Collider::P>& getColliders();
 
 		void Update(float deltaTime);
 	};

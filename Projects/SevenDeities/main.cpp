@@ -5,18 +5,19 @@ using namespace octdoc;
 INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
 {
 	Program::Initialize();
-	form::Window::P window = form::Window::Create(L"Seven Deities", 1280, 720);
+	form::Window::P window = form::Window::Create(L"Seven Deities", 1280, 768);
+	window->AddChild(form::CheckBox::Create(window, L"PRESS", 1030, 20, 60, 24, NULL));
 	form::WindowSettings settings;
-	settings.x = 200;
-	settings.y = 160;
-	settings.width = 640;
-	settings.height = 360;
+	settings.x = 0;
+	settings.y = 0;
+	settings.width = 1024;
+	settings.height = 768;
 	settings.windowName = L"Child";
 	settings.parentHandle = window->getHWND();
-	//settings.hasFrame = false;
+	settings.hasFrame = false;
 	form::Window::P child = form::Window::Create(settings);
 	child->InitGraphics();
-	child->setScene(sd::SD_Scene::Create());
+	child->setScene(car::Scene::Create());
 	window->AddChild(child);
 	Program::Instance().SubscribeMessageHandler(child->getScene());
 	Program::Instance().SubscribeAutoUpdater(child->getScene());

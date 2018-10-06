@@ -1,6 +1,6 @@
 #pragma once
 
-#include "helpers/mth_position.h"
+#include "math/mth_position.h"
 
 namespace gfw
 {

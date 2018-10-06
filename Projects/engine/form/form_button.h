@@ -7,19 +7,18 @@ namespace form
 	class Button :public Form
 	{
 		SHARED_ONLY(Button);
-		HWND m_hwnd;
-		std::wstring m_text;
-		RECT m_boundingbox;
+		HMENU m_id;
 
 	private:
-		Button(const form::Window::P parent, const WCHAR text[]);
+		Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h, HMENU id);
 
 		void Initialize(const form::Window::P parent);
 
-		void ApplyWindowSize();
-
 	public:
-		static Button::P Create(const form::Window::P parent, const WCHAR text[]);
-
+		static Button::P Create(const form::Window::P parent, const WCHAR text[], HMENU id);
+		static Button::P Create(const form::Window::P parent, const WCHAR text[], int x, int y, HMENU id);
+		static Button::P Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h, HMENU id);
+		bool IDMatch(HMENU id);
+		HMENU getID();
 	};
 }

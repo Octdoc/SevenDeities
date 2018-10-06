@@ -1,7 +1,7 @@
 #pragma once
 
 #include "helpers/hcs_input.h"
-#include "helpers/mth_position.h"
+#include "math/mth_position.h"
 
 namespace gfw
 {
@@ -18,6 +18,7 @@ namespace gfw
 		unsigned char m_key_jump;
 		unsigned char m_key_run;
 
+		float m_distance;
 		float m_speed;
 		float m_sensitivity;
 
@@ -47,8 +48,9 @@ namespace gfw
 		void setSpeed(float speed);
 		void setSensitivity(float sensitivity);
 
+		void HandleMouseMove(hcs::Input& input);
 		void Update_FirstPersonMode_Fly(hcs::Input& input, float deltaTime);
 		void Update_FirstPersonMode_Gravity(hcs::Input& input, float deltaTime);
-		bool Update_LookAt(MSG& msg);
+		bool Update_LookAt(hcs::Input& input);
 	};
 }

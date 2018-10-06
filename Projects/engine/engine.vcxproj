@@ -193,6 +193,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="form\form_button.h" />
+    <ClInclude Include="form\form_checkbox.h" />
     <ClInclude Include="form\form_form.h" />
     <ClInclude Include="form\form_window.h" />
     <ClInclude Include="graphics\entity\gfw_camera.h" />
@@ -214,14 +215,16 @@
     <ClInclude Include="helpers\hcs_helpers.h" />
     <ClInclude Include="helpers\hcs_input.h" />
     <ClInclude Include="helpers\hcs_timer.h" />
-    <ClInclude Include="helpers\mth_math.h" />
-    <ClInclude Include="helpers\mth_position.h" />
+    <ClInclude Include="math\mth_geometry.h" />
+    <ClInclude Include="math\mth_linalg.h" />
+    <ClInclude Include="math\mth_position.h" />
     <ClInclude Include="octdoc.h" />
     <ClInclude Include="physics\pfw_boundingvolume.h" />
     <ClInclude Include="physics\pfw_collider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="form\form_button.cpp" />
+    <ClCompile Include="form\form_checkbox.cpp" />
     <ClCompile Include="form\form_form.cpp" />
     <ClCompile Include="form\form_window.cpp" />
     <ClCompile Include="graphics\entity\gfw_camera.cpp" />
@@ -242,8 +245,9 @@
     <ClCompile Include="helpers\hcs_helpers.cpp" />
     <ClCompile Include="helpers\hcs_input.cpp" />
     <ClCompile Include="helpers\hcs_timer.cpp" />
-    <ClCompile Include="helpers\mth_math.cpp" />
-    <ClCompile Include="helpers\mth_position.cpp" />
+    <ClCompile Include="math\mth_geometry.cpp" />
+    <ClCompile Include="math\mth_linalg.cpp" />
+    <ClCompile Include="math\mth_position.cpp" />
     <ClCompile Include="octdoc.cpp" />
     <ClCompile Include="physics\pfw_boundingvolume.cpp" />
     <ClCompile Include="physics\pfw_collider.cpp" />

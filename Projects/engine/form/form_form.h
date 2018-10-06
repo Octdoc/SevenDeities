@@ -28,13 +28,11 @@ namespace form
 		SHARED_ONLY(Form);
 	protected:
 		Form::W m_self;
-		FormContainer::W m_parent;
+		FormContainer::P m_parent;
 
 		HWND m_hwnd;
 		RECT m_boundingbox;
-
-	public:
-		std::wstring windowName;
+		std::wstring m_windowName;
 
 	private:
 		void ApplyWindowSize();
@@ -56,12 +54,14 @@ namespace form
 		int getW();
 		int getH();
 		void setRect(int x, int y, int w, int h);
+		void setText(const WCHAR text[]);
+		const std::wstring& getText();
 
 		virtual void AddChild(Form::P child) override;
 		virtual void RemoveChild(Form::P child)  override;
 		virtual void RemoveAllChild()  override;
 		bool CloseWindow(HWND hwnd);
 		virtual void Destroy();
-		void setParent(FormContainer::W parent);
+		void setParent(FormContainer::P parent);
 	};
 }

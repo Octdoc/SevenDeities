@@ -8,7 +8,7 @@
 #include "physics/pfw_collider.h"
 
 #include "form/form_button.h"
-#include "form/form_window.h"
+#include "form/form_checkbox.h"
 #include <forward_list>
 
 namespace octdoc

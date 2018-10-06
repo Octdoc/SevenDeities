@@ -252,7 +252,7 @@ namespace cvt
 	{
 		ID3D11Device* device = graphics->getDevice();
 		UINT shaderInputType = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
-		
+
 		std::vector<std::shared_ptr<gfw::Texture>> textures, normalmaps;
 		textures.resize(m_textureNames.size());
 		normalmaps.resize(m_textureNames.size());
@@ -271,7 +271,7 @@ namespace cvt
 		}
 		std::shared_ptr<gfw::Entity> entity = gfw::Entity::Create(
 			gfw::Model::Create(device, m_vertices.data(), (UINT)m_vertices.size(),
-			shaderInputType, m_indices.data(), (UINT)m_indices.size()),
+				shaderInputType, m_indices.data(), (UINT)m_indices.size()),
 			textures.data(), normalmaps.data());
 		std::wcout << L"Entity created" << std::endl;
 		return entity;
@@ -286,13 +286,27 @@ namespace cvt
 		filename = m_sourceFolder + m_sourceFile + L".omd";
 		std::wcout << L"Exporting file: " << filename << std::endl;
 
-		header.shaderInputLayout = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
+		//header.shaderInputLayout = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
+		header.shaderInputLayout = gfw::SIL_POSITION | gfw::SIL_NORMAL;
 		header.vertexCount = (UINT)m_vertices.size();
 		header.indexCount = (UINT)m_indices.size();
 
 		outfile.open(filename, std::ios::out | std::ios::binary);
 		outfile.write((char*)&header, sizeof(header));
-		outfile.write((char*)m_vertices.data(), m_vertices.size() * sizeof(gfw::VertexType));
+		for (UINT i = 0; i < m_vertices.size(); i++)
+		{
+			if (header.shaderInputLayout&gfw::SIL_POSITION)
+				outfile.write((char*)&m_vertices[i].position, sizeof(m_vertices[i].position));
+			if (header.shaderInputLayout&gfw::SIL_TEXCOORD)
+				outfile.write((char*)&m_vertices[i].texcoord, sizeof(m_vertices[i].texcoord));
+			if (header.shaderInputLayout&gfw::SIL_NORMAL)
+				outfile.write((char*)&m_vertices[i].normal, sizeof(m_vertices[i].normal));
+			if (header.shaderInputLayout&gfw::SIL_NORMALMAP)
+			{
+				outfile.write((char*)&m_vertices[i].tangent, sizeof(m_vertices[i].tangent));
+				outfile.write((char*)&m_vertices[i].binormal, sizeof(m_vertices[i].binormal));
+			}
+		}
 		outfile.write((char*)m_indices.data(), m_indices.size() * sizeof(UINT));
 
 		outfile.close();

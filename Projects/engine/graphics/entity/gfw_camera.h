@@ -1,7 +1,7 @@
 #pragma once
 
 #include "helpers/hcs_input.h"
-#include "helpers/mth_position.h"
+#include "math/mth_position.h"
 
 namespace gfw
 {

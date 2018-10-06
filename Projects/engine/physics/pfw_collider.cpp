@@ -1,5 +1,4 @@
 #include "pfw_collider.h"
-#include <iostream>
 
 namespace pfw
 {
@@ -16,14 +15,15 @@ namespace pfw
 			return false;
 		mth::float3 playerPosition = player->position / player->scale;
 		mth::float3 playerVelocity = player->velocity / player->scale;
+		mth::float3x3 rotationMatrix = mth::float3x3::Rotation(rotation);
 
-		for (Triangle& tri : m_mesh)	//for each triangle
+		for (mth::Triangle& tri : m_mesh)	//for each triangle
 		{
 			//transform triangle to eSpace
-			Triangle t;
-			t.vertices[0] = (tri.vertices[0] + position) / player->scale;
-			t.vertices[1] = (tri.vertices[1] + position) / player->scale;
-			t.vertices[2] = (tri.vertices[2] + position) / player->scale;
+			mth::Triangle t;
+			t.vertices[0] = (rotationMatrix * tri.vertices[0] + position) / player->scale;
+			t.vertices[1] = (rotationMatrix * tri.vertices[1] + position) / player->scale;
+			t.vertices[2] = (rotationMatrix * tri.vertices[2] + position) / player->scale;
 			t.normal = (tri.normal * player->scale).Normalized();
 			t.distance = t.normal.Dot(t.vertices[0]);
 
@@ -34,19 +34,7 @@ namespace pfw
 			{
 				if (t0 > 0.0f)
 				{
-					mth::float3 vecs[3] = {
-						t.vertices[1] - t.vertices[0],
-						t.vertices[2] - t.vertices[0],
-						playerPosition + playerVelocity * t0 - t.normal - t.vertices[0] };
-					float dot00 = vecs[0].Dot(vecs[0]);
-					float dot01 = vecs[0].Dot(vecs[1]);
-					float dot02 = vecs[0].Dot(vecs[2]);
-					float dot11 = vecs[1].Dot(vecs[1]);
-					float dot12 = vecs[1].Dot(vecs[2]);
-					float denom = dot00 * dot11 - dot01 * dot01;
-					float u = (dot11 * dot02 - dot01 * dot12) / denom;
-					float v = (dot00 * dot12 - dot01 * dot02) / denom;
-					if (u >= 0.0f && v >= 0.0f && u + v <= 1.0f)	//collided with triangle face
+					if (mth::isPointOverTriangle(t.vertices, playerPosition + playerVelocity * t0))
 					{
 						collData.collisionTime = t0;
 						collData.normal = t.normal;
@@ -107,12 +95,18 @@ namespace pfw
 		return collision;
 	}
 
+	std::vector<mth::Triangle>& Collider::getMesh()
+	{
+		return m_mesh;
+	}
+
 	Collider::Collider(gfw::ModelLoader& modelLoader)
 	{
 		CreateCollider(modelLoader);
 	}
-	Collider::Collider(gfw::ModelLoader& modelLoader, mth::float3 position) :position(position)
+	Collider::Collider(gfw::ModelLoader& modelLoader, mth::float3 position)
 	{
+		this->position = position;
 		CreateCollider(modelLoader);
 	}
 	Collider::P Collider::Create(gfw::ModelLoader& modelLoader)
@@ -131,19 +125,12 @@ namespace pfw
 			UINT vertexSize = modelLoader.getVertexSizeInFloats();
 			for (int i = 0; i < m_mesh.size(); i++)
 			{
-				m_mesh[i].vertices[0].x = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 0] * vertexSize + 0];
-				m_mesh[i].vertices[0].y = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 0] * vertexSize + 1];
-				m_mesh[i].vertices[0].z = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 0] * vertexSize + 2];
-				m_mesh[i].vertices[1].x = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 1] * vertexSize + 0];
-				m_mesh[i].vertices[1].y = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 1] * vertexSize + 1];
-				m_mesh[i].vertices[1].z = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 1] * vertexSize + 2];
-				m_mesh[i].vertices[2].x = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 2] * vertexSize + 0];
-				m_mesh[i].vertices[2].y = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 2] * vertexSize + 1];
-				m_mesh[i].vertices[2].z = modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 2] * vertexSize + 2];
-				m_mesh[i].normal = (m_mesh[i].vertices[1] - m_mesh[i].vertices[2]).Cross(m_mesh[i].vertices[1] - m_mesh[i].vertices[0]).Normalized();
-				m_mesh[i].distance = m_mesh[i].normal.Dot(m_mesh[i].vertices[0]);
+				m_mesh[i] = mth::Triangle(
+					&modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 0] * vertexSize],
+					&modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 1] * vertexSize],
+					&modelLoader.getVertices()[modelLoader.getIndices()[i * 3 + 2] * vertexSize]);
 			}
-			mth::float3 maxpos(modelLoader.getVertices()[0], modelLoader.getVertices()[1], modelLoader.getVertices()[2]);
+			mth::float3 maxpos(modelLoader.getVertices());
 			mth::float3 minpos = maxpos;
 			for (UINT i = 1; i < modelLoader.getVertexCount(); i++)
 			{
@@ -274,6 +261,10 @@ namespace pfw
 	{
 		m_colliders.clear();
 	}
+	std::vector<Collider::P>& CollisionArea::getColliders()
+	{
+		return m_colliders;
+	}
 	void CollisionArea::Update(float deltaTime)
 	{
 		int counter = 0;
@@ -295,7 +286,6 @@ namespace pfw
 			if (counter++ == 5)	//probably stuck looping forever, let it be (this is just a number, could be else)
 			{
 				m_player->velocity = mth::float3();
-				std::wcout << L"Stuck" << std::endl;
 				return;
 			}
 		}

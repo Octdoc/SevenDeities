@@ -2,7 +2,7 @@
 #pragma once
 
 #include "graphics/gfw_graphics.h"
-#include "helpers/mth_math.h"
+#include "math/mth_linalg.h"
 
 namespace gfw
 {

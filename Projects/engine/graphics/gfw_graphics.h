@@ -87,7 +87,7 @@ namespace gfw
 		void RenderToSurface(ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView);
 		void Present();
 
-		void setClearColor(float r, float g, float b, float a);
+		void setClearColor(float r, float g, float b, float a = 1.0f);
 		void SetViewPort();
 		void SetViewPort(float width, float height);
 		void SetViewPort(float x, float y, float width, float height);
@@ -104,5 +104,7 @@ namespace gfw
 		float GetScreenAspectRatio();
 
 		void getVideoCardInfo(std::wstring& cardName, int& memory);
+		float getWidth();
+		float getHeight();
 	};
 }
