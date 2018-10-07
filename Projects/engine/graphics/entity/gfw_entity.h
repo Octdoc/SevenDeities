@@ -16,6 +16,7 @@ namespace gfw
 		std::vector<Texture::P> m_textures;
 		std::vector<Texture::P> m_normalmaps;
 		bool m_shown;
+		std::vector<Entity::P> m_subparts;
 		Entity::P m_relativeTo;
 
 	private:
@@ -42,6 +43,8 @@ namespace gfw
 		void Show();
 
 		void Render(ID3D11DeviceContext* deviceContext);
+		void RenderWithSubparts(ID3D11DeviceContext* deviceContext, mth::float4x4 *matrixBuffer,
+			CBuffer::P vsMatrixBuffer, CBuffer::P psColorBuffer = nullptr);
 		void RenderModel(ID3D11DeviceContext* deviceContext);
 
 		Model::P getModel();
@@ -49,6 +52,9 @@ namespace gfw
 		mth::float4 getColor();
 		std::vector<Texture::P>& getTextures();
 		std::vector<Texture::P>& getNormalmaps();
+		void AddSubpart(Entity::P entity);
+		Entity::P getSubpart(UINT index);
+		UINT getSubpartCount();
 		Entity::P getRelativeTo();
 		void setRelativeTo(Entity::P entity);
 	};

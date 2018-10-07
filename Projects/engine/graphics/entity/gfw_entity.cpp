@@ -66,6 +66,18 @@ namespace gfw
 	{
 		return m_normalmaps;
 	}
+	void Entity::AddSubpart(Entity::P entity)
+	{
+		m_subparts.push_back(entity);
+	}
+	Entity::P Entity::getSubpart(UINT index)
+	{
+		return m_subparts[index];
+	}
+	UINT Entity::getSubpartCount()
+	{
+		return m_subparts.size();
+	}
 	Entity::P Entity::getRelativeTo()
 	{
 		return m_relativeTo;
@@ -73,6 +85,23 @@ namespace gfw
 	void Entity::setRelativeTo(Entity::P entity)
 	{
 		m_relativeTo = entity;
+	}
+	void Entity::RenderWithSubparts(ID3D11DeviceContext *deviceContext, mth::float4x4 *matrixBuffer, CBuffer::P vsMatrixBuffer, CBuffer::P psColorBuffer)
+	{
+		if (m_shown)
+		{
+			mth::float4x4 matrix = matrixBuffer[0] * GetWorldMatrix();
+			matrixBuffer[0] = matrix;
+			vsMatrixBuffer->WriteBuffer(deviceContext, matrixBuffer);
+			if (psColorBuffer)
+				psColorBuffer->WriteBuffer(deviceContext, &m_color);
+			Render(deviceContext);
+			for (auto e : m_subparts)
+			{
+				matrixBuffer[0] = matrix;
+				e->RenderWithSubparts(deviceContext, matrixBuffer, vsMatrixBuffer, psColorBuffer);
+			}
+		}
 	}
 	void Entity::Render(ID3D11DeviceContext* deviceContext)
 	{

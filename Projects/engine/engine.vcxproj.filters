@@ -153,6 +153,9 @@
     <ClInclude Include="math\mth_linalg.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_colorrenderer.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="helpers\hcs_helpers.cpp">
@@ -239,6 +242,9 @@
     <ClCompile Include="math\mth_linalg.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_colorrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\vsSky.hlsl">
@@ -266,6 +272,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\vsShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psColor.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsColor.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -202,6 +202,7 @@
     <ClInclude Include="graphics\entity\gfw_light.h" />
     <ClInclude Include="graphics\entity\gfw_skydome.h" />
     <ClInclude Include="graphics\gfw_graphics.h" />
+    <ClInclude Include="graphics\renderers\gfw_colorrenderer.h" />
     <ClInclude Include="graphics\renderers\gfw_renderer.h" />
     <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h" />
     <ClInclude Include="graphics\renderers\gfw_simplerenderer.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="graphics\entity\gfw_light.cpp" />
     <ClCompile Include="graphics\entity\gfw_skydome.cpp" />
     <ClCompile Include="graphics\gfw_graphics.cpp" />
+    <ClCompile Include="graphics\renderers\gfw_colorrenderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_renderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_simplerenderer.cpp" />
@@ -253,6 +255,12 @@
     <ClCompile Include="physics\pfw_collider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shaders\psColor.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\psDepth.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -280,6 +288,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsColor.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\vsDepth.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
