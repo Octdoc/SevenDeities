@@ -6,7 +6,7 @@ namespace car
 
 	void Sensor::LoadModel(ID3D11Device* device)
 	{
-		m_model = gfw::Model::Create(device, L"Media/sensor.omd");
+		m_model = gfw::Model::Create(device, L"Media/car/sensor.omd");
 	}
 	void Sensor::Init(mth::float3 position, mth::float3 rotation, gfw::Entity::P host)
 	{

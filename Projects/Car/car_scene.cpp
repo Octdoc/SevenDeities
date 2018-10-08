@@ -29,8 +29,8 @@ namespace car
 		m_renderer->AddEntity(m_cursor);
 #endif
 
-		gfw::ModelLoader plainModel(L"Media/plain.omd");
-		gfw::ModelLoader pathModel(L"Media/path.omd");
+		gfw::ModelLoader plainModel(L"Media/car/plain.omd");
+		gfw::ModelLoader pathModel(L"Media/car/path.omd");
 		m_plain = gfw::Entity::Create(gfw::Model::Create(device, plainModel));
 		m_plain->setColor({ 0.2f, 1.0f, 0.35f, 1.0f });
 		m_plainMesh = pfw::Collider::Create(plainModel);
@@ -94,11 +94,11 @@ namespace car
 	{
 		for (auto& c : m_cars)
 		{
-			c.UpdateLightSensors(m_enviromentColliders.data(), m_enviromentShades.data(), m_enviromentColliders.size());
-			c.UpdateDistanceSensors(m_carColliders.data(), m_carShades.data(), m_carColliders.size());
+			c.UpdateLightSensors(m_enviromentColliders.data(), m_enviromentShades.data(), (UINT)m_enviromentColliders.size());
+			c.UpdateDistanceSensors(m_carColliders.data(), m_carShades.data(), (UINT)m_carColliders.size());
 		}
-		m_userCar.UpdateLightSensors(m_enviromentColliders.data(), m_enviromentShades.data(), m_enviromentColliders.size());
-		m_userCar.UpdateDistanceSensors(m_carColliders.data(), m_carShades.data(), m_carColliders.size());
+		m_userCar.UpdateLightSensors(m_enviromentColliders.data(), m_enviromentShades.data(), (UINT)m_enviromentColliders.size());
+		m_userCar.UpdateDistanceSensors(m_carColliders.data(), m_carShades.data(), (UINT)m_carColliders.size());
 	}
 	void Scene::Update(float deltaTime, float totalTime)
 	{

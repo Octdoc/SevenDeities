@@ -43,9 +43,6 @@
     <Filter Include="Source Files\graphics\renderers">
       <UniqueIdentifier>{06c102c4-ac04-4b07-8261-9449afb3bc73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\graphics\renderer">
-      <UniqueIdentifier>{58962662-0496-4196-92dd-7202c5362982}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\physics">
       <UniqueIdentifier>{fbd7585a-849b-4f7a-92f0-dde298e08320}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,9 @@
     </Filter>
     <Filter Include="Source Files\math">
       <UniqueIdentifier>{3af813ad-80a8-4a52-b5d6-b55cdda0b501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\renderers">
+      <UniqueIdentifier>{58962662-0496-4196-92dd-7202c5362982}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,13 +118,10 @@
       <Filter>Header Files\graphics\entity</Filter>
     </ClInclude>
     <ClInclude Include="graphics\renderers\gfw_renderer.h">
-      <Filter>Header Files\graphics\renderer</Filter>
+      <Filter>Header Files\graphics\renderers</Filter>
     </ClInclude>
     <ClInclude Include="graphics\renderers\gfw_simplerenderer.h">
-      <Filter>Header Files\graphics\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h">
-      <Filter>Header Files\graphics\renderer</Filter>
+      <Filter>Header Files\graphics\renderers</Filter>
     </ClInclude>
     <ClInclude Include="physics\pfw_boundingvolume.h">
       <Filter>Header Files\physics</Filter>
@@ -154,7 +151,16 @@
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="graphics\renderers\gfw_colorrenderer.h">
-      <Filter>Header Files\graphics\renderer</Filter>
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_colorshadowrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_simpleshadowrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +215,6 @@
     <ClCompile Include="graphics\renderers\gfw_simplerenderer.cpp">
       <Filter>Source Files\graphics\renderers</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp">
-      <Filter>Source Files\graphics\renderers</Filter>
-    </ClCompile>
     <ClCompile Include="physics\pfw_boundingvolume.cpp">
       <Filter>Source Files\physics</Filter>
     </ClCompile>
@@ -244,6 +247,15 @@
     </ClCompile>
     <ClCompile Include="graphics\renderers\gfw_colorrenderer.cpp">
       <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_simpleshadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_colorshadowrenderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +290,15 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\vsColor.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\psColorShadowCube.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\psColorShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\vsColorShadow.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

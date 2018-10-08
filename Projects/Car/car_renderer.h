@@ -9,9 +9,6 @@ namespace car
 		SHARED_ONLY(Renderer);
 
 		float m_ambient;
-		gfw::PixelShader::P m_pixelShader;
-		gfw::VertexShader::P m_vertexShader;
-		gfw::CBuffer::P m_vsMatrixBuffer;
 		gfw::CBuffer::P m_psLightBuffer;
 		gfw::CBuffer::P m_psColorBuffer;
 

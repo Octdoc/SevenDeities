@@ -15,17 +15,20 @@ namespace quad
 
 		m_controller.setTarget(&m_camera);
 		m_camera.Init(m_graphics->getWidth() / m_graphics->getHeight());
-		m_camera.position = { 0.0f, 4.0f, -10.0f };
+		m_camera.position = { 2.0f, 4.0f, -4.0f };
+		m_camera.rotation = { 0.67f, -0.5f, 0.0f };
 		m_renderer = gfw::ColorRenderer::Create(m_graphics);
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 		m_graphics->setClearColor(0.5f, 0.75f, 0.96f);
 
-		m_plain = gfw::Entity::Create(gfw::Model::Create(device, L"Media/plain.omd"));
+		m_plain = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/plain.omd"));
 		m_plain->setColor({ 0.2f, 1.0f, 0.35f, 1.0f });
 		m_renderer->AddEntity(m_plain);
 
 		m_quad.Init(device);
 		m_renderer->AddEntity(m_quad.getEntity());
+		for (Leg& leg : m_quad.getLegs())
+			leg.setJointStates({ 0.0f, -mth::pi*0.25f, mth::pi*0.25f });
 	}
 	void Scene::Update(float deltaTime, float totalTime)
 	{
@@ -60,6 +63,10 @@ namespace quad
 			case  VK_ESCAPE:
 				PostQuitMessage(0);
 				break;
+			/*case 'L':
+				std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_camera.position;
+				std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().rotation = m_camera.rotation;
+				break;*/
 			}
 		}
 	}

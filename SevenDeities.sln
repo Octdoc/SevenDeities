@@ -33,6 +33,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Car", "Projects\Car\Car.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Quad", "Projects\Quad\Quad.vcxproj", "{6B7902D1-5D83-44DC-B273-47FB55AA47B8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A2EB2DF2-8D00-4AD5-A087-D6E2FFD9C197} = {A2EB2DF2-8D00-4AD5-A087-D6E2FFD9C197}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

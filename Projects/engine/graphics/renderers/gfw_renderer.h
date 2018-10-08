@@ -14,6 +14,9 @@ namespace gfw
 		Renderer() = default;
 
 		SkyDome::P m_sky;
+		gfw::PixelShader::P m_pixelShader;
+		gfw::VertexShader::P m_vertexShader;
+		gfw::CBuffer::P m_vsMatrixBuffer;
 
 		std::vector<Entity::P> m_entities;
 		

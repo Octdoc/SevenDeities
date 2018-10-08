@@ -22,7 +22,7 @@ namespace test
 		m_camera.position = { 0.0f, 4.0f, -10.0f };
 
 		//m_renderer = gfw::SimpleRenderer::Create(m_graphics);
-		m_renderer = gfw::ShadowRenderer::Create(m_graphics);
+		m_renderer = gfw::SimpleShadowRenderer::Create(m_graphics);
 
 		m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 

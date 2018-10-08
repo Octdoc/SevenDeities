@@ -6,8 +6,8 @@ namespace gfw
 	{
 		ID3D11Device* device = graphics->getDevice();
 		m_ambient = 0.5f;
-		m_vertexShader = gfw::VertexShader::Create(device, L"Shaders/vsCar.cso", gfw::SIL_POSITION | gfw::SIL_NORMAL);
-		m_pixelShader = gfw::PixelShader::Create(device, L"Shaders/psCar.cso");
+		m_vertexShader = gfw::VertexShader::Create(device, L"Shaders/vsColor.cso", gfw::SIL_POSITION | gfw::SIL_NORMAL);
+		m_pixelShader = gfw::PixelShader::Create(device, L"Shaders/psColor.cso");
 		m_vsMatrixBuffer = gfw::CBuffer::Create(device, sizeof(mth::float4x4) * 2);
 		m_psLightBuffer = gfw::CBuffer::Create(device, sizeof(float) * 8);
 		m_psColorBuffer = gfw::CBuffer::Create(device, sizeof(float) * 4);
@@ -54,13 +54,6 @@ namespace gfw
 
 		for (auto& e : m_entities)
 		{
-			/*if (e->getRelativeTo())
-				matrixBuffer[0] = e->getRelativeTo()->GetWorldMatrix()*e->GetWorldMatrix();
-			else
-				matrixBuffer[0] = e->GetWorldMatrix();
-			m_vsMatrixBuffer->WriteBuffer(deviceContext, matrixBuffer);
-			m_psColorBuffer->WriteBuffer(deviceContext, &e->getColor());
-			e->Render(deviceContext);*/
 			matrixBuffer[0] = mth::float4x4::Identity();
 			e->RenderWithSubparts(deviceContext, matrixBuffer, m_vsMatrixBuffer, m_psColorBuffer);
 		}

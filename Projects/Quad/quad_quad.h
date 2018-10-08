@@ -16,6 +16,14 @@ namespace quad
 		float m_o1, m_o2, m_o3;
 		float m_o3x;
 
+		mth::float3 m_joints;
+		mth::float3 m_position;
+
+	private:
+		void SetJointRotation();
+		void ForwardGeometry();
+		void InverseGeometry();
+
 	public:
 		void InitRF(ID3D11Device *device);
 		void InitLF(ID3D11Device *device);
@@ -23,6 +31,11 @@ namespace quad
 		void InitLB(ID3D11Device *device);
 
 		void Install(gfw::Entity::P body);
+
+		void setJointStates(mth::float3 joints);
+		mth::float3 getJointStates();
+		void setPosition(mth::float3 position);
+		mth::float3 getPosition();
 	};
 
 	class Quadruped
@@ -35,5 +48,11 @@ namespace quad
 		void Init(ID3D11Device* device);
 
 		gfw::Entity::P getEntity();
+		Leg& getLegRF();
+		Leg& getLegLF();
+		Leg& getLegRB();
+		Leg& getLegLB();
+		Leg& getLeg(UINT index);
+		std::array<Leg, 4> getLegs();
 	};
 }

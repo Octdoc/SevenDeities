@@ -203,8 +203,10 @@
     <ClInclude Include="graphics\entity\gfw_skydome.h" />
     <ClInclude Include="graphics\gfw_graphics.h" />
     <ClInclude Include="graphics\renderers\gfw_colorrenderer.h" />
+    <ClInclude Include="graphics\renderers\gfw_colorshadowrenderer.h" />
     <ClInclude Include="graphics\renderers\gfw_renderer.h" />
     <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h" />
+    <ClInclude Include="graphics\renderers\gfw_simpleshadowrenderer.h" />
     <ClInclude Include="graphics\renderers\gfw_simplerenderer.h" />
     <ClInclude Include="graphics\resources\DDSTextureLoader.h" />
     <ClInclude Include="graphics\resources\gfw_model.h" />
@@ -235,8 +237,10 @@
     <ClCompile Include="graphics\entity\gfw_skydome.cpp" />
     <ClCompile Include="graphics\gfw_graphics.cpp" />
     <ClCompile Include="graphics\renderers\gfw_colorrenderer.cpp" />
+    <ClCompile Include="graphics\renderers\gfw_colorshadowrenderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_renderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp" />
+    <ClCompile Include="graphics\renderers\gfw_simpleshadowrenderer.cpp" />
     <ClCompile Include="graphics\renderers\gfw_simplerenderer.cpp" />
     <ClCompile Include="graphics\resources\DDSTextureLoader.cpp" />
     <ClCompile Include="graphics\resources\gfw_model.cpp" />
@@ -255,6 +259,36 @@
     <ClCompile Include="physics\pfw_collider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="graphics\renderers\psColorShadow.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\psColorShadowCube.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\vsColorShadow.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shaders\psColor.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

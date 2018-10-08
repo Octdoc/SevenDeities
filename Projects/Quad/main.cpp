@@ -11,7 +11,7 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline
 		form::WindowSettings settings;
 		settings.x = 0;
 		settings.y = 0;
-		settings.width = 1280;
+		settings.width = 1000;
 		settings.height = 720;
 		settings.windowName = L"Child";
 		settings.parentHandle = window->getHWND();

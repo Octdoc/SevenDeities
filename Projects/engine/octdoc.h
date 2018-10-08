@@ -3,8 +3,9 @@
 #include "helpers/hcs_timer.h"
 #include "graphics/entity/gfw_controller.h"
 #include "graphics/renderers/gfw_simplerenderer.h"
-#include "graphics/renderers/gfw_shadowrenderer.h"
+#include "graphics/renderers/gfw_simpleshadowrenderer.h"
 #include "graphics/renderers/gfw_colorrenderer.h"
+#include "graphics/renderers/gfw_colorshadowrenderer.h"
 
 #include "physics/pfw_collider.h"
 

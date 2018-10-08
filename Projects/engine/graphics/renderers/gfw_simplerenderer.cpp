@@ -8,8 +8,8 @@ namespace gfw
 		m_ambient = 0.5f;
 		m_vertexShader = gfw::VertexShader::Create(device, L"Shaders/vsSimple.cso", gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
 		m_pixelShader = gfw::PixelShader::Create(device, L"Shaders/psSimple.cso");
-		m_vsBuffer = gfw::CBuffer::Create(device, sizeof(mth::float4x4) * 2);
-		m_psBuffer = gfw::CBuffer::Create(device, sizeof(float) * 8);
+		m_vsMatrixBuffer = gfw::CBuffer::Create(device, sizeof(mth::float4x4) * 2);
+		m_psLightBuffer = gfw::CBuffer::Create(device, sizeof(float) * 8);
 		m_sampler = gfw::SamplerState::Create(device, true);
 	}
 	SimpleRenderer::SimpleRenderer() :m_ambient(0.0f) {}
@@ -41,7 +41,7 @@ namespace gfw
 
 		mth::float4x4 matrixBuffer[2];
 		matrixBuffer[1] = camera.GetCameraMatrix();
-		gfw::VertexShader::SetCBuffer(deviceContext, m_vsBuffer);
+		gfw::VertexShader::SetCBuffer(deviceContext, m_vsMatrixBuffer);
 
 		mth::float3 campos = camera.position;
 		float lightBuffer[8] = {
@@ -49,14 +49,13 @@ namespace gfw
 			campos.x, campos.y, campos.z,
 			m_ambient
 		};
-		m_psBuffer->WriteBuffer(deviceContext, lightBuffer);
-		gfw::PixelShader::SetCBuffer(deviceContext, m_psBuffer);
+		m_psLightBuffer->WriteBuffer(deviceContext, lightBuffer);
+		gfw::PixelShader::SetCBuffer(deviceContext, m_psLightBuffer);
 
 		for (auto& e : m_entities)
 		{
-			matrixBuffer[0] = e->GetWorldMatrix();
-			m_vsBuffer->WriteBuffer(deviceContext, matrixBuffer);
-			e->Render(deviceContext);
+			matrixBuffer[0] = mth::float4x4::Identity();
+			e->RenderWithSubparts(deviceContext, matrixBuffer, m_vsMatrixBuffer);
 		}
 
 		graphics->Present();

@@ -9,39 +9,32 @@ namespace gfw
 	{
 		SHARED_ONLY(ShadowRenderer);
 
+	protected:
+		ShadowRenderer() = default;
+
 		VertexShader::P m_vsDepth;
 		PixelShader::P m_psDepth;
 		RenderTarget::P m_shadowTexture;
 		CBuffer::P m_depthMatrixBuffer;
 
-		VertexShader::P m_vsShadow;
-		PixelShader::P m_psShadow;
-		CBuffer::P m_shadowMatrixBuffer;
 		CBuffer::P m_vsLightBuffer;
 		CBuffer::P m_psLightBuffer;
-		SamplerState::P m_ssWrap;
 		SamplerState::P m_ssClamp;
 
 		bool m_cubicShadowMap;
 
 		Light m_light;
 
-	private:
-		ShadowRenderer();
-		ShadowRenderer(Graphics::P graphics);
-		ShadowRenderer(Graphics::P graphics, UINT shadowmapSize, bool cubicShadowMap);
-		void CreateRenderer(Graphics::P graphics);
-		void CreateRenderer(Graphics::P graphics, UINT shadowmapSize, bool cubicShadowMap);
-
+	protected:
 		void RenderShadowMap(Graphics::P graphics, Camera& camera);
-		void RenderScene(Graphics::P graphics, Camera& camera);
+		void FillLightBuffers(ID3D11DeviceContext *deviceContext);
+		void CreateDepthRenderingResources(ID3D11Device *device, UINT shadowmapSize, bool cubicShadowMap);
+
+		virtual void RenderScene(Graphics::P graphics, Camera& camera) = 0;
 
 	public:
+		Light& getLight();
 
-		static ShadowRenderer::P Create();
-		static ShadowRenderer::P Create(Graphics::P graphics);
-		static ShadowRenderer::P Create(Graphics::P graphics, UINT shadowmapSize, bool cubicShadowMap);
-
-		virtual void Render(Graphics::P graphics, Camera& camera);
+		virtual void Render(Graphics::P graphics, Camera& camera) override;
 	};
 }

@@ -9,10 +9,7 @@ namespace gfw
 		SHARED_ONLY(SimpleRenderer);
 
 		float m_ambient;
-		gfw::PixelShader::P m_pixelShader;
-		gfw::VertexShader::P m_vertexShader;
-		gfw::CBuffer::P m_vsBuffer;
-		gfw::CBuffer::P m_psBuffer;
+		gfw::CBuffer::P m_psLightBuffer;
 		gfw::SamplerState::P m_sampler;
 		
 	private:

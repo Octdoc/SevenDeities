@@ -23,7 +23,7 @@ namespace car
 			s.Init(pos, { mth::pi / 2.0f, 0.0f, 0.0f }, m_entity);
 			pos.x += 0.1f;
 		}
-		pos = { -0.25, 0.35, -0.8 };
+		pos = { -0.25f, 0.35f, -0.8f };
 		for (auto& s : m_distanceSensors)
 		{
 			s.Init(pos, { 0.0f, mth::pi, 0.0f }, m_entity,
@@ -43,7 +43,7 @@ namespace car
 
 	void Car::LoadModel(ID3D11Device* device)
 	{
-		m_modelLoader.LoadModel(L"Media/car.omd");
+		m_modelLoader.LoadModel(L"Media/car/car.omd");
 		m_model = gfw::Model::Create(device, m_modelLoader);
 	}
 

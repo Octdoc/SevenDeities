@@ -3,7 +3,7 @@ cbuffer LightBuffer
 	float4 lightColor;
 	float3 lightPosition;
 	float ambient;
-};
+}; 
 
 cbuffer ColorBuffer
 {
