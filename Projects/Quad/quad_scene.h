@@ -1,6 +1,7 @@
 #pragma once
 
 #include "quad_quad.h"
+#include "quad_movement.h"
 
 namespace quad
 {
@@ -14,12 +15,16 @@ namespace quad
 		gfw::Entity::P m_plain;
 
 		Quadruped m_quad;
+		MovementWalk m_walk;
+
+		form::Label::P m_labels[3];
 
 	private:
 		Scene() = default;
 
 	public:
 		static Scene::P Create();
+		static Scene::P Create(form::Label::P labels[]);
 
 		virtual void Start() override;
 		virtual void Update(float deltaTime, float totalTime) override;

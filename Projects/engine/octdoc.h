@@ -9,6 +9,8 @@
 
 #include "physics/pfw_collider.h"
 
+#include "form/form_textbox.h"
+#include "form/form_label.h"
 #include "form/form_button.h"
 #include "form/form_checkbox.h"
 #include <forward_list>

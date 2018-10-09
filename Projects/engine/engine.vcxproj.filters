@@ -162,6 +162,12 @@
     <ClInclude Include="graphics\renderers\gfw_shadowrenderer.h">
       <Filter>Header Files\graphics\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="form\form_textbox.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_label.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="helpers\hcs_helpers.cpp">
@@ -255,6 +261,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="graphics\renderers\gfw_colorshadowrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_textbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_label.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

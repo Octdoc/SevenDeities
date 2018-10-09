@@ -18,13 +18,20 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline
 		settings.hasFrame = false;
 		form::Window::P child = form::Window::Create(settings);
 		child->InitGraphics();
-		child->setScene(quad::Scene::Create());
 		window->AddChild(child);
+		form::Label::P labels[3];
+		window->AddChild(labels[0] = form::Label::Create(window, 1024, 100, 200, 24));
+		window->AddChild(labels[1] = form::Label::Create(window, 1024, 130, 200, 24));
+		window->AddChild(labels[2] = form::Label::Create(window, 1024, 160, 200, 24));
+		child->setScene(quad::Scene::Create(labels));
 		Program::Instance().SubscribeMessageHandler(child->getScene());
 		Program::Instance().SubscribeAutoUpdater(child->getScene());
 		Program::Instance().RegisterWindow(window);
 		window.reset();
 		child.reset();
+		labels[0].reset();
+		labels[1].reset();
+		labels[2].reset();
 		Program::Instance().Run(true);
 	}
 	catch (hcs::Exception e)

@@ -16,8 +16,10 @@ namespace quad
 		float m_o1, m_o2, m_o3;
 		float m_o3x;
 
-		mth::float3 m_joints;
+		mth::float3 m_joints[2];
+		bool m_valid[2];
 		mth::float3 m_position;
+		int m_chosenJoint;
 
 	private:
 		void SetJointRotation();
@@ -33,9 +35,15 @@ namespace quad
 		void Install(gfw::Entity::P body);
 
 		void setJointStates(mth::float3 joints);
+		void setJointStates(int index);
 		mth::float3 getJointStates();
+		mth::float3 getJointStates(int index);
+		bool isValid();
+		bool isValid(int index);
+		void MoveJoints(mth::float3 delta);
 		void setPosition(mth::float3 position);
 		mth::float3 getPosition();
+		void MovePosition(mth::float3 delta);
 	};
 
 	class Quadruped
@@ -53,6 +61,6 @@ namespace quad
 		Leg& getLegRB();
 		Leg& getLegLB();
 		Leg& getLeg(UINT index);
-		std::array<Leg, 4> getLegs();
+		std::array<Leg, 4>& getLegs();
 	};
 }

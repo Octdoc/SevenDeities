@@ -175,11 +175,13 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="quad_movement.cpp" />
     <ClCompile Include="quad_quad.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="quad_scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="quad_movement.h" />
     <ClInclude Include="quad_quad.h" />
     <ClInclude Include="quad_scene.h" />
   </ItemGroup>
