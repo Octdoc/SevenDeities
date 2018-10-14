@@ -33,6 +33,7 @@ namespace quad
 		void SetJointRotation();
 		void ForwardGeometry();
 
+		void CalculateKneeAngle(int index, float l);
 		bool InverseBaseAngle();
 		bool InverseShoulderAngle();
 		void InverseKneeAngle();

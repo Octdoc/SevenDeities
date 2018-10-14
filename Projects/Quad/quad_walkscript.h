@@ -23,6 +23,16 @@ namespace quad
 		bool m_rightBalanced;
 		std::list<QuadAction> m_script;
 
+	private:
+		void AddPathElementLegMovement(LegID legid, mth::float2 pos);
+		void AddPathElementBodyMovement(mth::float2 pos, float turn);
+		void AddLegTurnRightBalanced(mth::float2x2 rotmat);
+		void AddLegTurnLeftBalanced(mth::float2x2 rotmat);
+		void AddLegBodyElementsTurn(float angle);
+		void AddLegWalkStraightRightBalanced(float ratio);
+		void AddLegWalkStraightLeftBalanced(float ratio);
+		void AddLegBodyElementsWalkStraight(float distance);
+
 	public:
 		WalkScript();
 		void AddPathElementTurn(float angle);
@@ -50,6 +60,9 @@ namespace quad
 	private:
 		void MoveBody(float deltaTime);
 		void MoveLeg();
+		void ReceiveNextAction();
+		float FinishPreviousAction(float timeLeft);
+		void ExecuteAction(float deltaTime);
 
 	public:
 		void Init(Quadruped *quadruped);

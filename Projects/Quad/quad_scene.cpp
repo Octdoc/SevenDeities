@@ -45,9 +45,6 @@ namespace quad
 
 		m_walk.Init(&m_quad);
 		m_running = true;
-		/*for (auto& l : m_quad.getLegs())
-			l.setJointStates({ 0.0f, 0.0f, 0.0f });
-		m_quad.getEntity()->position.y = 0.4f;*/
 	}
 	void Scene::Update(float deltaTime, float totalTime)
 	{

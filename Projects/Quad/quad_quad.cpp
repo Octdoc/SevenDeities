@@ -58,6 +58,7 @@ namespace quad
 		m_joints[1].x = sol;
 		return true;
 	}
+
 	bool Leg::InverseShoulderAngle()
 	{
 		float a, b, d, discriminant, drt;
@@ -77,32 +78,25 @@ namespace quad
 			return false;
 		return true;
 	}
+
+	void Leg::CalculateKneeAngle(int index, float l)
+	{
+		if (m_valid[index])
+		{
+			m_joints[index].z = atan2f(m_oy - m_position.y - sinf(m_joints[index].y)*m_o2, l - cosf(m_joints[index].y)*m_o2) - m_joints[index].y;
+			m_joints[index].x -= m_a1;
+			m_joints[index].y -= m_a2;
+			m_joints[index].z -= m_a3;
+			if (m_valid[index] = (m_joints[index].z >= m_a3 - mth::pi*0.5f) && (m_joints[index].z <= m_a3 + mth::pi*0.5f))
+				m_chosenJoint = index;
+		}
+	}
 	void Leg::InverseKneeAngle()
 	{
 		float l = (m_position.x - m_ox - cosf(m_joints[0].x)*m_o3x) / sinf(m_joints[0].x) - m_o1;
-		if (m_valid[0])
-		{
-			m_joints[0].z = atan2f(m_oy - m_position.y - sinf(m_joints[0].y)*m_o2, l - cosf(m_joints[0].y)*m_o2) - m_joints[0].y;
-			m_joints[0].x -= m_a1;
-			m_joints[0].y -= m_a2;
-			m_joints[0].z -= m_a3;
-			m_valid[0] = (m_joints[0].z >= m_a3 - mth::pi*0.5f) && (m_joints[0].z <= m_a3 + mth::pi*0.5f);
-		}
-		if (m_valid[1])
-		{
-			m_joints[1].z = atan2f(m_oy - m_position.y - sinf(m_joints[1].y)*m_o2, l - cosf(m_joints[1].y)*m_o2) - m_joints[1].y;
-			m_joints[1].x -= m_a1;
-			m_joints[1].y -= m_a2;
-			m_joints[1].z -= m_a3;
-			m_valid[1] = (m_joints[1].z >= m_a3 - mth::pi*0.5f) && (m_joints[1].z <= m_a3 + mth::pi*0.5f);
-		}
-
-		if (m_valid[0])
-			m_chosenJoint = 0;
-		else if (m_valid[1])
-			m_chosenJoint = 1;
-		else
-			m_chosenJoint = -1;
+		m_chosenJoint = -1;
+		CalculateKneeAngle(0, l);
+		CalculateKneeAngle(1, l);
 	}
 	void Leg::InverseGeometry()
 	{
@@ -247,52 +241,43 @@ namespace quad
 		ForwardGeometry();
 		SetJointRotation();
 	}
-
 	void Leg::setJointStates(int index)
 	{
 		m_chosenJoint = index;
 		SetJointRotation();
 	}
-
 	mth::float3 Leg::getJointStates()
 	{
 		return m_joints;
 	}
-
 	mth::float3 Leg::getJointStates(int index)
 	{
 		return m_joints[index];
 	}
-
 	bool Leg::isValid()
 	{
 		return m_chosenJoint > 0;
 	}
-
 	bool Leg::isValid(int index)
 	{
 		return m_valid[index];
 	}
-
 	void Leg::MoveJoints(mth::float3 delta)
 	{
 		m_joints[0] = m_joints[m_chosenJoint] + delta;
 		ForwardGeometry();
 		SetJointRotation();
 	}
-
 	void Leg::setPosition(mth::float3 position)
 	{
 		m_position = position;
 		InverseGeometry();
 		SetJointRotation();
 	}
-
 	mth::float3 Leg::getPosition()
 	{
 		return m_position;
 	}
-
 	void Leg::MovePosition(mth::float3 delta)
 	{
 		setPosition(m_position + delta);
@@ -320,7 +305,6 @@ namespace quad
 	{
 		return m_body;
 	}
-
 	Leg& Quadruped::getLegRF()
 	{
 		return m_legs[LID_RF];
