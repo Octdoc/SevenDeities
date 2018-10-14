@@ -34,6 +34,18 @@ namespace mth
 	{
 		position.y -= d;
 	}
+	void Position::Move(float3 delta)
+	{
+		position += delta;
+	}
+	void Position::MoveInLookDirection(float d)
+	{
+		MoveInLookDirection({ 0.0f, 0.0f, d });
+	}
+	void Position::MoveInLookDirection(float3 delta)
+	{
+		position += GetRotationMatrix()*delta;
+	}
 	void Position::LookDown(float r)
 	{
 		rotation.x += r;

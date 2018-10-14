@@ -84,6 +84,10 @@ namespace mth
 	{
 		return float2(x / f, y / f);
 	}
+	float2 float2::operator-() const
+	{
+		return float2(-x, -y);
+	}
 	float2& float2::operator+=(const float2 v)
 	{
 		x += v.x;
@@ -255,6 +259,10 @@ namespace mth
 	float3 float3::operator/(const float f) const
 	{
 		return float3(x / f, y / f, z / f);
+	}
+	float3 float3::operator-() const
+	{
+		return float3(-x, -y, -z);
 	}
 	float3& float3::operator+=(const float3 v)
 	{
@@ -436,6 +444,10 @@ namespace mth
 	float4 float4::operator/(const float f) const
 	{
 		return float4(x / f, y / f, z / f, w / f);
+	}
+	float4 float4::operator-() const
+	{
+		return float4(-x, -y, -z, -w);
 	}
 	float4& float4::operator+=(const float4 v)
 	{
@@ -721,6 +733,10 @@ namespace mth
 	float2x2& float2x2::operator=(const float f)
 	{
 		return *this = float2x2(f);
+	}
+	float2x2 float2x2::operator-() const
+	{
+		return float2x2(-mat[0][0], -mat[0][1], -mat[1][0], -mat[1][1]);
 	}
 
 #pragma endregion
@@ -1029,6 +1045,13 @@ namespace mth
 	float3x3& float3x3::operator=(const float f)
 	{
 		return *this = float3x3(f);
+	}
+	float3x3 float3x3::operator-() const
+	{
+		return float3x3(
+			-mat[0][0], -mat[0][1], -mat[0][2],
+			-mat[1][0], -mat[1][1], -mat[1][2],
+			-mat[2][0], -mat[2][1], -mat[2][2]);
 	}
 
 #pragma endregion
@@ -1399,10 +1422,17 @@ namespace mth
 	{
 		return *this = *this / f;
 	}
-
 	float4x4& float4x4::operator=(const float f)
 	{
 		return *this = float4x4(f);
+	}
+	float4x4 float4x4::operator-() const
+	{
+		return float4x4(
+			-mat[0][0], -mat[0][1], -mat[0][2], -mat[0][3],
+			-mat[1][0], -mat[1][1], -mat[1][2], -mat[1][3],
+			-mat[2][0], -mat[2][1], -mat[2][2], -mat[2][3],
+			-mat[3][0], -mat[3][1], -mat[3][2], -mat[3][3]);
 	}
 
 #pragma endregion

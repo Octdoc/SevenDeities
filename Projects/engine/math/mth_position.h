@@ -20,6 +20,9 @@ namespace mth
 		void MoveLeft(float d);
 		void MoveUp(float d);
 		void MoveDown(float d);
+		void Move(float3 delta);
+		void MoveInLookDirection(float d);
+		void MoveInLookDirection(float3 delta);
 
 		void LookDown(float r);
 		void LookUp(float r);

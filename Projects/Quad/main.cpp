@@ -3,6 +3,7 @@
 using namespace octdoc;
 
 INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline, INT ncmd)
+//int main()
 {
 	try
 	{

@@ -2,6 +2,7 @@
 
 #include "quad_quad.h"
 #include "quad_movement.h"
+#include "quad_walkscript.h"
 
 namespace quad
 {
@@ -15,7 +16,8 @@ namespace quad
 		gfw::Entity::P m_plain;
 
 		Quadruped m_quad;
-		MovementWalk m_walk;
+		bool m_running;
+		WalkManager m_walk;
 
 		form::Label::P m_labels[3];
 

@@ -14,6 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "Projects\engine\e
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Console", "Projects\Console\Console.vcxproj", "{04B89B9A-234C-4B02-A693-421891F8A4A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A2EB2DF2-8D00-4AD5-A087-D6E2FFD9C197} = {A2EB2DF2-8D00-4AD5-A087-D6E2FFD9C197}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "Projects\DirectXTex\DirectXTex_Desktop_2015.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
 EndProject

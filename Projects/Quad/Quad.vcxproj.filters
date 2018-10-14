@@ -30,6 +30,9 @@
     <ClCompile Include="quad_movement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="quad_walkscript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quad_quad.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="quad_movement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="quad_walkscript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

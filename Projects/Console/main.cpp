@@ -7,6 +7,7 @@
 #include <mutex>
 #include <functional>
 #include <forward_list>
+#include <queue>
 #include <Windows.h>
 #include <windowsx.h>
 
@@ -215,10 +216,28 @@ void QuadFunction(mth::float3 in)
 	}
 }
 
+class V
+{
+public:
+	int x;
+	int y;
+
+public:
+	V() :x(0), y(0) {}
+	V(int x, int y) :x(x), y(y) {}
+	V operator-()
+	{
+		return V(-x, -y);
+	}
+};
+
 int wmain()
 {
 	//return start();
-	std::wcout << fmod(9.3, 4.5) << std::endl;
+	V v1(1, 2), v2;
+	std::wcout << v1.x << ' ' << v1.y << std::endl;
+	v2 = -v1;
+	std::wcout << v2.x << ' ' << v2.y << std::endl;
 
 	system("pause");
 	return 0;

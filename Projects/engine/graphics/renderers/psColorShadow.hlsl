@@ -40,7 +40,7 @@ float4 main(PixelInputType input) : SV_TARGET
 	projectTexCoord.x = input.lightViewPosition.x / input.lightViewPosition.w / 2.0f + 0.5f;
 	projectTexCoord.y = -input.lightViewPosition.y / input.lightViewPosition.w / 2.0f + 0.5f;
 
-	if ((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
+	if (1 || ((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y)))
 	{
 		depthValue = shadowMap.Sample(shadowSampler, projectTexCoord).r;
 
@@ -49,7 +49,7 @@ float4 main(PixelInputType input) : SV_TARGET
 
 		if (lightDepthValue < depthValue)
 		{
-			lightIntensity = saturate(dot(input.normal, input.lightPos));
+			lightIntensity = saturate(dot(input.normal, normalize(input.lightPos)));
 
 			if (lightIntensity > 0.0f)
 			{

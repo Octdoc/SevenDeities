@@ -44,6 +44,7 @@ namespace mth
 		float2 operator-(const float f) const;
 		float2 operator*(const float f) const;
 		float2 operator/(const float f) const;
+		float2 operator-() const;
 		float2& operator+=(const float2 v);
 		float2& operator-=(const float2 v);
 		float2& operator*=(const float2 v);
@@ -92,6 +93,7 @@ namespace mth
 		float3 operator-(const float f) const;
 		float3 operator*(const float f) const;
 		float3 operator/(const float f) const;
+		float3 operator-() const;
 		float3& operator+=(const float3 v);
 		float3& operator-=(const float3 v);
 		float3& operator*=(const float3 v);
@@ -140,6 +142,7 @@ namespace mth
 		float4 operator-(const float f) const;
 		float4 operator*(const float f) const;
 		float4 operator/(const float f) const;
+		float4 operator-() const;
 		float4& operator+=(const float4 v);
 		float4& operator-=(const float4 v);
 		float4& operator*=(const float4 v);
@@ -202,6 +205,7 @@ namespace mth
 		float2x2 operator/(const float f) const;
 		float2x2& operator/=(const float f);
 		float2x2& operator=(const float f);
+		float2x2 operator-() const;
 	};
 
 	class float3x3
@@ -259,6 +263,7 @@ namespace mth
 		float3x3 operator/(const float f) const;
 		float3x3& operator/=(const float f);
 		float3x3& operator=(const float f);
+		float3x3 operator-() const;
 	};
 
 	class float4x4
@@ -322,6 +327,7 @@ namespace mth
 		float4x4 operator/(const float f) const;
 		float4x4& operator/=(const float f);
 		float4x4& operator=(const float f);
+		float4x4 operator-() const;
 	};
 
 

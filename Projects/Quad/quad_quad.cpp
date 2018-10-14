@@ -44,9 +44,17 @@ namespace quad
 			return;
 		drt = sqrtf(discriminant);
 		sol = atan2f((a*d + b * drt), (b * d - a * drt));
+		if (m_a1 > mth::pi*0.5f && sol < 0.0f)
+			sol += mth::pi*2.0f;
+		else if (m_a1 < -mth::pi*0.5f && sol > 0.0f)
+			sol -= mth::pi*2.0f;
 		if (sol < m_a1 - mth::pi*0.5f || sol > m_a1 + mth::pi*0.5f)
 		{
 			sol = atan2f((a*d - b * drt), (b * d + a * drt));
+			if (m_a1 > mth::pi*0.5f && sol < 0.0f)
+				sol += mth::pi*2.0f;
+			else if (m_a1 < -mth::pi*0.5f && sol > 0.0f)
+				sol -= mth::pi*2.0f;
 			if (sol < m_a1 - mth::pi*0.5f || sol > m_a1 + mth::pi*0.5f)
 				return;
 		}
@@ -276,9 +284,7 @@ namespace quad
 
 	void Leg::MovePosition(mth::float3 delta)
 	{
-		m_position += delta;
-		InverseGeometry();
-		SetJointRotation();
+		setPosition(m_position + delta);
 	}
 
 #pragma endregion
@@ -290,14 +296,14 @@ namespace quad
 		m_body = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/body.omd"));
 		m_body->setColor(1.0f);
 		m_body->position.y = 0.5f;
-		m_legs[0].InitRF(device);
-		m_legs[0].Install(m_body);
-		m_legs[1].InitLF(device);
-		m_legs[1].Install(m_body);
-		m_legs[2].InitRB(device);
-		m_legs[2].Install(m_body);
-		m_legs[3].InitLB(device);
-		m_legs[3].Install(m_body);
+		m_legs[LID_RF].InitRF(device);
+		m_legs[LID_RF].Install(m_body);
+		m_legs[LID_LF].InitLF(device);
+		m_legs[LID_LF].Install(m_body);
+		m_legs[LID_RB].InitRB(device);
+		m_legs[LID_RB].Install(m_body);
+		m_legs[LID_LB].InitLB(device);
+		m_legs[LID_LB].Install(m_body);
 	}
 	gfw::Entity::P Quadruped::getEntity()
 	{
@@ -306,19 +312,19 @@ namespace quad
 
 	Leg& Quadruped::getLegRF()
 	{
-		return m_legs[0];
+		return m_legs[LID_RF];
 	}
 	Leg& Quadruped::getLegLF()
 	{
-		return m_legs[1];
+		return m_legs[LID_LF];
 	}
 	Leg& Quadruped::getLegRB()
 	{
-		return m_legs[2];
+		return m_legs[LID_RB];
 	}
 	Leg& Quadruped::getLegLB()
 	{
-		return m_legs[3];
+		return m_legs[LID_LB];
 	}
 	Leg& Quadruped::getLeg(UINT index)
 	{

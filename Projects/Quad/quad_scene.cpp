@@ -2,6 +2,9 @@
 
 #pragma comment(lib, "engine.lib")
 
+#define USE_SHADOW 0
+
+
 namespace quad
 {
 	Scene::P Scene::Create()
@@ -25,8 +28,11 @@ namespace quad
 		m_camera.Init(m_graphics->getWidth() / m_graphics->getHeight());
 		m_camera.position = { 2.0f, 4.0f, -4.0f };
 		m_camera.rotation = { 0.67f, -0.5f, 0.0f };
-		//m_renderer = gfw::ColorShadowRenderer::Create(m_graphics);
+#if USE_SHADOW
+		m_renderer = gfw::ColorShadowRenderer::Create(m_graphics);
+#else
 		m_renderer = gfw::ColorRenderer::Create(m_graphics);
+#endif
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 		m_graphics->setClearColor(0.5f, 0.75f, 0.96f);
 
@@ -38,77 +44,30 @@ namespace quad
 		m_renderer->AddEntity(m_quad.getEntity());
 
 		m_walk.Init(&m_quad);
+		m_running = true;
+		/*for (auto& l : m_quad.getLegs())
+			l.setJointStates({ 0.0f, 0.0f, 0.0f });
+		m_quad.getEntity()->position.y = 0.4f;*/
 	}
 	void Scene::Update(float deltaTime, float totalTime)
 	{
 		hcs::Input& input = octdoc::Program::Instance().Input();
 		m_controller.Update_FirstPersonMode_Fly(octdoc::Program::Instance().Input(), deltaTime);
 
-		float speed = 1.0f;
-		if (input.isPressed(VK_PRIOR))
-			m_quad.getEntity()->position.y += speed * deltaTime;
-		if (input.isPressed(VK_NEXT))
-			m_quad.getEntity()->position.y -= speed * deltaTime;
-		if (input.isPressed(VK_RIGHT))
-			m_quad.getEntity()->position.x += speed * deltaTime;
-		if (input.isPressed(VK_LEFT))
-			m_quad.getEntity()->position.x -= speed * deltaTime;
-		if (input.isPressed(VK_UP))
-			m_quad.getEntity()->position.z += speed * deltaTime;
-		if (input.isPressed(VK_DOWN))
-			m_quad.getEntity()->position.z -= speed * deltaTime;
-
-		UINT legid = 0;
-		deltaTime *= 0.3f;
-		if (input.isPressed('1'))
-		{
-			m_quad.getLegRF().MovePosition(mth::float3(deltaTime, 0.0f, 0.0f));
-			m_quad.getLegRB().MovePosition(mth::float3(deltaTime, 0.0f, 0.0f));
-			m_quad.getLegLF().MovePosition(mth::float3(-deltaTime, 0.0f, 0.0f));
-			m_quad.getLegLB().MovePosition(mth::float3(-deltaTime, 0.0f, 0.0f));
-		}
-		if (input.isPressed('3'))
-		{
-			m_quad.getLegRF().MovePosition(mth::float3( 0.0f, deltaTime,0.0f));
-			m_quad.getLegRB().MovePosition(mth::float3( 0.0f, deltaTime,0.0f));
-			m_quad.getLegLF().MovePosition(mth::float3( 0.0f, deltaTime,0.0f));
-			m_quad.getLegLB().MovePosition(mth::float3( 0.0f, deltaTime,0.0f));
-		}
-		if (input.isPressed('5'))
-		{
-			m_quad.getLegRF().MovePosition(mth::float3(0.0f, 0.0f, -deltaTime));
-			m_quad.getLegRB().MovePosition(mth::float3(0.0f, 0.0f, deltaTime));
-			m_quad.getLegLF().MovePosition(mth::float3(0.0f, 0.0f, -deltaTime));
-			m_quad.getLegLB().MovePosition(mth::float3(0.0f, 0.0f, deltaTime));
-		}
-		if (input.isPressed('2'))
-		{
-			m_quad.getLegRF().MovePosition(mth::float3(-deltaTime, 0.0f, 0.0f));
-			m_quad.getLegRB().MovePosition(mth::float3(-deltaTime, 0.0f, 0.0f));
-			m_quad.getLegLF().MovePosition(mth::float3(deltaTime, 0.0f, 0.0f));
-			m_quad.getLegLB().MovePosition(mth::float3(deltaTime, 0.0f, 0.0f));
-		}
-		if (input.isPressed('4'))
-		{
-			m_quad.getLegRF().MovePosition(mth::float3(0.0f, -deltaTime, 0.0f));
-			m_quad.getLegRB().MovePosition(mth::float3(0.0f, -deltaTime, 0.0f));
-			m_quad.getLegLF().MovePosition(mth::float3(0.0f, -deltaTime, 0.0f));
-			m_quad.getLegLB().MovePosition(mth::float3(0.0f, -deltaTime, 0.0f));
-		}
-		if (input.isPressed('6'))
-		{
-			m_quad.getLegRF().MovePosition(mth::float3(0.0f, 0.0f, deltaTime));
-			m_quad.getLegRB().MovePosition(mth::float3(0.0f, 0.0f, -deltaTime));
-			m_quad.getLegLF().MovePosition(mth::float3(0.0f, 0.0f, deltaTime));
-			m_quad.getLegLB().MovePosition(mth::float3(0.0f, 0.0f, -deltaTime));
-		}
-		m_walk.Update(deltaTime);
+		UINT legid = 3;
+		if (m_running)	m_walk.Update(deltaTime);
 		mth::float3 pos = m_quad.getLeg(legid).getPosition();
-		m_labels[0]->setText(std::to_wstring(pos.x).c_str());
+		/*m_labels[0]->setText(std::to_wstring(pos.x).c_str());
 		m_labels[1]->setText(std::to_wstring(pos.y).c_str());
-		m_labels[2]->setText(std::to_wstring(pos.z).c_str());
+		m_labels[2]->setText(std::to_wstring(pos.z).c_str());*/
+		m_labels[0]->setText(std::to_wstring(m_quad.getEntity()->position.x).c_str());
+		m_labels[1]->setText(std::to_wstring(m_quad.getEntity()->position.y).c_str());
+		m_labels[2]->setText(std::to_wstring(m_quad.getEntity()->position.z).c_str());
 
-		//m_quad.getLegRF().setPosition({ 0.9f, -0.15f, 1.2f });
+#if USE_SHADOW
+		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_quad.getEntity()->position + mth::float3(-0.3f, 6.0f, -0.4f);
+		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().rotation = { mth::pi*0.5f, 0.0f, 0.0f };
+#endif
 
 		m_renderer->Render(m_graphics, m_camera);
 	}
@@ -125,10 +84,21 @@ namespace quad
 			case  VK_ESCAPE:
 				PostQuitMessage(0);
 				break;
-				/*case 'L':
-					std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_camera.position;
-					std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().rotation = m_camera.rotation;
-					break;*/
+			case 'X':
+				m_quad.getLegRB().MovePosition({ -0.1f, 0.0f, 0.0f });
+				break;
+			case 'R':
+				m_walk.Init(&m_quad);
+				break;
+			case 'T':
+				m_running = !m_running;
+				break;
+#if USE_SHADOW
+			case 'L':
+				std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_camera.position;
+				std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().rotation = m_camera.rotation;
+				break;
+#endif
 			}
 		}
 	}

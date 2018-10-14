@@ -5,6 +5,14 @@
 
 namespace quad
 {
+	enum LegID
+	{
+		LID_RF = 0,
+		LID_LF = 1,
+		LID_RB = 2,
+		LID_LB = 3
+	};
+
 	class Leg
 	{
 		gfw::Entity::P m_shouder;
