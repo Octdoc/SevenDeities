@@ -29,19 +29,15 @@ namespace quad
 		m_valid[1] = false;
 	}
 
-	void Leg::InverseGeometry()
+	bool Leg::InverseBaseAngle()
 	{
 		float a, b, d, discriminant, drt, sol;
-		m_valid[0] = false;
-		m_valid[1] = false;
-
-		//first
 		a = m_oz - m_position.z;
 		b = m_position.x - m_ox;
 		d = m_o3x;
 		discriminant = a * a + b * b - d * d;
 		if (discriminant < 0.0f)
-			return;
+			return false;
 		drt = sqrtf(discriminant);
 		sol = atan2f((a*d + b * drt), (b * d - a * drt));
 		if (m_a1 > mth::pi*0.5f && sol < 0.0f)
@@ -56,18 +52,21 @@ namespace quad
 			else if (m_a1 < -mth::pi*0.5f && sol > 0.0f)
 				sol -= mth::pi*2.0f;
 			if (sol < m_a1 - mth::pi*0.5f || sol > m_a1 + mth::pi*0.5f)
-				return;
+				return false;
 		}
 		m_joints[0].x = sol;
 		m_joints[1].x = sol;
-
-		//second
+		return true;
+	}
+	bool Leg::InverseShoulderAngle()
+	{
+		float a, b, d, discriminant, drt;
 		a = m_oy - m_position.y;
-		b = (m_position.x - m_ox - cosf(sol)*m_o3x) / sinf(sol) - m_o1;
+		b = (m_position.x - m_ox - cosf(m_joints[0].x)*m_o3x) / sinf(m_joints[0].x) - m_o1;
 		d = (b*b + a * a + m_o2 * m_o2 - m_o3 * m_o3) / (2.0f*m_o2);
 		discriminant = a * a + b * b - d * d;
 		if (discriminant < 0.0f)
-			return;
+			return false;
 		drt = sqrtf(discriminant);
 		m_joints[0].y = atan2f((a*d + b * drt), (b * d - a * drt));
 		m_joints[1].y = atan2f((a*d - b * drt), (b * d + a * drt));
@@ -75,12 +74,15 @@ namespace quad
 		m_valid[1] = (m_joints[1].y >= m_a2 - mth::pi*0.5f &&  m_joints[1].y <= m_a2 + mth::pi*0.5f);
 
 		if (!m_valid[0] && !m_valid[1])
-			return;
-
-		//third
+			return false;
+		return true;
+	}
+	void Leg::InverseKneeAngle()
+	{
+		float l = (m_position.x - m_ox - cosf(m_joints[0].x)*m_o3x) / sinf(m_joints[0].x) - m_o1;
 		if (m_valid[0])
 		{
-			m_joints[0].z = atan2f(m_oy - m_position.y - sinf(m_joints[0].y)*m_o2, b - cosf(m_joints[0].y)*m_o2) - m_joints[0].y;
+			m_joints[0].z = atan2f(m_oy - m_position.y - sinf(m_joints[0].y)*m_o2, l - cosf(m_joints[0].y)*m_o2) - m_joints[0].y;
 			m_joints[0].x -= m_a1;
 			m_joints[0].y -= m_a2;
 			m_joints[0].z -= m_a3;
@@ -88,7 +90,7 @@ namespace quad
 		}
 		if (m_valid[1])
 		{
-			m_joints[1].z = atan2f(m_oy - m_position.y - sinf(m_joints[1].y)*m_o2, b - cosf(m_joints[1].y)*m_o2) - m_joints[1].y;
+			m_joints[1].z = atan2f(m_oy - m_position.y - sinf(m_joints[1].y)*m_o2, l - cosf(m_joints[1].y)*m_o2) - m_joints[1].y;
 			m_joints[1].x -= m_a1;
 			m_joints[1].y -= m_a2;
 			m_joints[1].z -= m_a3;
@@ -101,6 +103,15 @@ namespace quad
 			m_chosenJoint = 1;
 		else
 			m_chosenJoint = -1;
+	}
+	void Leg::InverseGeometry()
+	{
+		m_valid[0] = false;
+		m_valid[1] = false;
+
+		if (InverseBaseAngle())
+			if (InverseShoulderAngle())
+				InverseKneeAngle();
 	}
 
 	void Leg::InitRF(ID3D11Device *device)
@@ -131,7 +142,7 @@ namespace quad
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
 
-		setJointStates(0.0f);
+		setJointStates(0);
 	}
 	void Leg::InitLF(ID3D11Device *device)
 	{
@@ -161,7 +172,7 @@ namespace quad
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
 
-		setJointStates(0.0f);
+		setJointStates(0);
 	}
 	void Leg::InitRB(ID3D11Device *device)
 	{
@@ -191,7 +202,7 @@ namespace quad
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
 
-		setJointStates(0.0f);
+		setJointStates(0);
 	}
 	void Leg::InitLB(ID3D11Device *device)
 	{
@@ -221,7 +232,7 @@ namespace quad
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
 
-		setJointStates(0.0f);
+		setJointStates(0);
 	}
 	void Leg::Install(gfw::Entity::P body)
 	{

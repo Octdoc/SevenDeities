@@ -32,6 +32,10 @@ namespace quad
 	private:
 		void SetJointRotation();
 		void ForwardGeometry();
+
+		bool InverseBaseAngle();
+		bool InverseShoulderAngle();
+		void InverseKneeAngle();
 		void InverseGeometry();
 
 	public:

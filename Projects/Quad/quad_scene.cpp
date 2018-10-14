@@ -54,15 +54,12 @@ namespace quad
 		hcs::Input& input = octdoc::Program::Instance().Input();
 		m_controller.Update_FirstPersonMode_Fly(octdoc::Program::Instance().Input(), deltaTime);
 
-		UINT legid = 3;
 		if (m_running)	m_walk.Update(deltaTime);
-		mth::float3 pos = m_quad.getLeg(legid).getPosition();
-		/*m_labels[0]->setText(std::to_wstring(pos.x).c_str());
+		mth::float3 pos = m_quad.getLeg(LID_RF).getPosition();
+		pos = m_quad.getEntity()->position;
+		m_labels[0]->setText(std::to_wstring(pos.x).c_str());
 		m_labels[1]->setText(std::to_wstring(pos.y).c_str());
-		m_labels[2]->setText(std::to_wstring(pos.z).c_str());*/
-		m_labels[0]->setText(std::to_wstring(m_quad.getEntity()->position.x).c_str());
-		m_labels[1]->setText(std::to_wstring(m_quad.getEntity()->position.y).c_str());
-		m_labels[2]->setText(std::to_wstring(m_quad.getEntity()->position.z).c_str());
+		m_labels[2]->setText(std::to_wstring(pos.z).c_str());
 
 #if USE_SHADOW
 		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_quad.getEntity()->position + mth::float3(-0.3f, 6.0f, -0.4f);
@@ -83,9 +80,6 @@ namespace quad
 			{
 			case  VK_ESCAPE:
 				PostQuitMessage(0);
-				break;
-			case 'X':
-				m_quad.getLegRB().MovePosition({ -0.1f, 0.0f, 0.0f });
 				break;
 			case 'R':
 				m_walk.Init(&m_quad);
