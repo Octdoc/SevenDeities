@@ -157,36 +157,38 @@ namespace gfw
 
 	void ModelLoader::CreateFullScreenQuad()
 	{
-		CreateQuad({ -1.0f, -1.0f }, { 2.0f, 2.0f }, 1.0f, { 0.0f, 0.0f }, { 1.0f, 1.0f }, SIL_POSITION | SIL_TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
+		CreateQuad({ -1.0f, -1.0f }, { 2.0f, 2.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f }, SIL_POSITION | SIL_TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
+		Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 	}
 
 	void ModelLoader::CreateScreenQuad(mth::float2 pos, mth::float2 size)
 	{
-		CreateQuad(pos, size, 1.0f, { 0.0f, 0.0f }, { 1.0f, 1.0f }, SIL_POSITION | SIL_TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
+		CreateQuad(pos, size, { 0.0f, 0.0f }, { 1.0f, 1.0f }, SIL_POSITION | SIL_TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
+		Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 	}
 
-	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, float z, UINT shaderInputLayout)
+	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, UINT shaderInputLayout)
 	{
-		CreateQuad(pos, size, z, { 0.0f, 0.0f }, { 1.0f, 1.0f }, shaderInputLayout, 1.0f, 1.0f, 1.0f, 1.0f);
+		CreateQuad(pos, size, { 0.0f, 0.0f }, { 1.0f, 1.0f }, shaderInputLayout, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, float z, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout)
+	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout)
 	{
-		CreateQuad(pos, size, z, tpos, tsize, shaderInputLayout, 1.0f, 1.0f, 1.0f, 1.0f);
+		CreateQuad(pos, size, tpos, tsize, shaderInputLayout, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, float z, UINT shaderInputLayout, float r, float g, float b, float a)
+	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, UINT shaderInputLayout, float r, float g, float b, float a)
 	{
-		CreateQuad(pos, size, z, { 1.0f, 1.0f }, { 0.0f, 0.0f }, shaderInputLayout, r, g, b, a);
+		CreateQuad(pos, size, { 1.0f, 1.0f }, { 0.0f, 0.0f }, shaderInputLayout, r, g, b, a);
 	}
 
-	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, float z, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout, float r, float g, float b, float a)
+	void ModelLoader::CreateQuad(mth::float2 pos, mth::float2 size, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout, float r, float g, float b, float a)
 	{
 		VertexType vertices[] = {
-		{ {pos.x + size.x, pos.y, z}, { r, g, b, a }, { tpos.x + tsize.x, tpos.y + tsize.y }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f, 0.0f }, { -1.0f, 0.0f, 0.0f } },
-		{ {pos.x + size.x, pos.y + size.y, z}, {r, g, b, a}, { tpos.x + tsize.x, tpos.y }, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f} },
-		{ {pos.x, pos.y + size.y, z}, {r, g, b, a}, { tpos.x, tpos.y }, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f} },
-		{ {pos.x, pos.y, z}, {r, g, b, a}, { tpos.x, tpos.y + tsize.y }, { 0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f} }
+		{ {pos.x + size.x, 0.0f, pos.y}, { r, g, b, a }, { tpos.x + tsize.x, tpos.y + tsize.y }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
+		{ {pos.x + size.x, 0.0f, pos.y + size.y}, {r, g, b, a}, { tpos.x + tsize.x, tpos.y }, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+		{ {pos.x, 0.0f, pos.y + size.y}, {r, g, b, a}, { tpos.x, tpos.y }, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+		{ {pos.x, 0.0f, pos.y}, {r, g, b, a}, { tpos.x, tpos.y + tsize.y }, { 0.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} }
 		};
 		UINT indices[] = { 0, 2, 1, 0, 3, 2 };
 		Create(vertices, sizeof(vertices) / sizeof(vertices[0]), indices, sizeof(indices) / sizeof(indices[0]), shaderInputLayout);

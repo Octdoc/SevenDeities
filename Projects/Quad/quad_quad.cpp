@@ -300,6 +300,15 @@ namespace quad
 		m_legs[LID_RB].Install(m_body);
 		m_legs[LID_LB].InitLB(device);
 		m_legs[LID_LB].Install(m_body);
+		m_sensor.Init({ 0.0f, 0.75f, 0.34f }, { 0.0f, 0.0f ,0.0f }, m_body, 
+			[](float dist, float shade)->float {
+			if (dist < 1.0f)
+				return 1.0f;
+			if (dist > 8.0f)
+				return 0.0f;
+			return (-1.0f / 7.0f) + (8.0f / 7.0f) / dist;
+		});
+		m_body->AddSubpart(m_sensor.getEntity());
 	}
 	gfw::Entity::P Quadruped::getEntity()
 	{
@@ -328,6 +337,10 @@ namespace quad
 	std::array<Leg, 4>& Quadruped::getLegs()
 	{
 		return m_legs;
+	}
+	Sensor& Quadruped::getSensor()
+	{
+		return m_sensor;
 	}
 
 #pragma endregion

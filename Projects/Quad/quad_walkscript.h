@@ -38,6 +38,7 @@ namespace quad
 		void AddPathElementTurn(float angle);
 		void AddPathElementWalkStraight(float distance);
 		//void AddPathElement(mth::float2 relativePos, float relativeRot);
+		void Clear();
 		bool NextAction(QuadAction& action);
 		mth::float3 getLegRFStartPos();
 		mth::float3 getLegLFStartPos();

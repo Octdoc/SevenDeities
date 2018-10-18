@@ -179,12 +179,14 @@
     <ClCompile Include="quad_quad.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="quad_scene.cpp" />
+    <ClCompile Include="quad_sensor.cpp" />
     <ClCompile Include="quad_walkscript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quad_movement.h" />
     <ClInclude Include="quad_quad.h" />
     <ClInclude Include="quad_scene.h" />
+    <ClInclude Include="quad_sensor.h" />
     <ClInclude Include="quad_walkscript.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

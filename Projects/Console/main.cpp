@@ -231,13 +231,25 @@ public:
 	}
 };
 
+VOID CALLBACK TimerFunction(HWND h, UINT u, UINT_PTR p, DWORD d)
+{
+	static int c = 0;
+	std::cout << c++ << std::endl;
+}
+
 int wmain()
 {
-	//return start();
-	V v1(1, 2), v2;
-	std::wcout << v1.x << ' ' << v1.y << std::endl;
-	v2 = -v1;
-	std::wcout << v2.x << ' ' << v2.y << std::endl;
+	start();
+
+	mth::float2x2 H = 1.0f / sqrtf(2.0f)*mth::float2x2(1.0f, 1.0f, 1.0f, -1.0f);
+
+	std::wcout << H(0, 0) << '\t' << H(0, 1) << std::endl;
+	std::wcout << H(1, 0) << '\t' << H(1, 1) << std::endl;
+
+	H = H * H;
+
+	std::wcout << H(0, 0) << '\t' << H(0, 1) << std::endl;
+	std::wcout << H(1, 0) << '\t' << H(1, 1) << std::endl;
 
 	system("pause");
 	return 0;
@@ -312,6 +324,7 @@ int start()
 	hwnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, appName, L"Grapher", WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, GetModuleHandle(NULL), NULL);
 
+	SetTimer(hwnd, 0, 500, TimerFunction);
 	ShowWindow(hwnd, SW_SHOW);
 	UpdateWindow(hwnd);
 

@@ -50,10 +50,10 @@ namespace gfw
 		void CreateCube(mth::float3 position, mth::float3 size, UINT shaderInputLayout, float r, float g, float b, float a = 1.0f);
 		void CreateFullScreenQuad();
 		void CreateScreenQuad(mth::float2 pos, mth::float2 size);
-		void CreateQuad(mth::float2 pos, mth::float2 size, float z, UINT shaderInputLayout);
-		void CreateQuad(mth::float2 pos, mth::float2 size, float z, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout);
-		void CreateQuad(mth::float2 pos, mth::float2 size, float z, UINT shaderInputLayout, float r, float g, float b, float a = 1.0f);
-		void CreateQuad(mth::float2 pos, mth::float2 size, float z, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout, float r, float g, float b, float a = 1.0f);
+		void CreateQuad(mth::float2 pos, mth::float2 size, UINT shaderInputLayout);
+		void CreateQuad(mth::float2 pos, mth::float2 size, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout);
+		void CreateQuad(mth::float2 pos, mth::float2 size, UINT shaderInputLayout, float r, float g, float b, float a = 1.0f);
+		void CreateQuad(mth::float2 pos, mth::float2 size, mth::float2 tpos, mth::float2 tsize, UINT shaderInputLayout, float r, float g, float b, float a = 1.0f);
 
 		void FlipInsideOut();
 		void Transform(mth::float4x4 transform);

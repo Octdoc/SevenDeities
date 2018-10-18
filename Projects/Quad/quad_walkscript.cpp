@@ -102,6 +102,11 @@ namespace quad
 		}
 	}
 
+	void WalkScript::Clear()
+	{
+		m_script.clear();
+	}
+
 	/*void WalkScript::AddPathElement(mth::float2 relativePos, float relativeRot)
 	{
 		float distance = relativePos.Length();
@@ -180,6 +185,7 @@ namespace quad
 
 	void WalkManager::Init(Quadruped *quadruped)
 	{
+		m_script.Clear();
 		m_quad = quadruped;
 		m_time = 0.0f;
 		m_speed = 3.5f;

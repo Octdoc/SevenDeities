@@ -1,6 +1,6 @@
 #pragma once
 
-#include "octdoc.h"
+#include "quad_sensor.h"
 #include <array>
 
 namespace quad
@@ -63,6 +63,7 @@ namespace quad
 	{
 		gfw::Entity::P m_body;
 		std::array<Leg, 4> m_legs;
+		Sensor m_sensor;
 
 	public:
 		Quadruped() = default;
@@ -75,5 +76,6 @@ namespace quad
 		Leg& getLegLB();
 		Leg& getLeg(UINT index);
 		std::array<Leg, 4>& getLegs();
+		Sensor& getSensor();
 	};
 }

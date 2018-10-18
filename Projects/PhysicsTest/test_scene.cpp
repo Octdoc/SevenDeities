@@ -43,7 +43,8 @@ namespace test
 			normapmap));
 
 		gfw::ModelLoader rod;
-		rod.CreateQuad({ -0.002f, -0.002f }, { 0.004f, 0.004f }, 1.0f, gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
+		rod.CreateQuad({ -0.002f, -0.002f }, { 0.004f, 0.004f }, gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
+		rod.Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 		m_rod = gfw::Entity::Create(gfw::Model::Create(device, rod),
 			gfw::Texture::Create2D(device, L"Media/black.png"),
 			gfw::Texture::Create2D(device, L"Media/normal.png"));

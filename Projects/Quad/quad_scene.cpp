@@ -36,10 +36,14 @@ namespace quad
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 		m_graphics->setClearColor(0.5f, 0.75f, 0.96f);
 
-		m_plain = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/plain.omd"));
+		gfw::ModelLoader ml;
+		ml.LoadModel(L"Media/quad/map.omd");
+		m_plain = gfw::Entity::Create(gfw::Model::Create(device, ml));
 		m_plain->setColor({ 0.2f, 1.0f, 0.35f, 1.0f });
 		m_renderer->AddEntity(m_plain);
+		m_enviroment = pfw::Collider::Create(ml);
 
+		Sensor::LoadModel(device);
 		m_quad.Init(device);
 		m_renderer->AddEntity(m_quad.getEntity());
 
@@ -49,19 +53,32 @@ namespace quad
 	void Scene::Update(float deltaTime, float totalTime)
 	{
 		hcs::Input& input = octdoc::Program::Instance().Input();
-		m_controller.Update_FirstPersonMode_Fly(octdoc::Program::Instance().Input(), deltaTime);
+		m_controller.Update_FirstPersonMode_Fly(input, deltaTime);
 
 		if (m_running)	m_walk.Update(deltaTime);
 		mth::float3 pos = m_quad.getLeg(LID_RF).getPosition();
 		pos = m_quad.getEntity()->position;
+		pos.y = m_quad.getSensor().getMeasurement();
 		m_labels[0]->setText(std::to_wstring(pos.x).c_str());
 		m_labels[1]->setText(std::to_wstring(pos.y).c_str());
 		m_labels[2]->setText(std::to_wstring(pos.z).c_str());
+
+		if (input.isPressed(VK_UP))
+			m_quad.getEntity()->MoveForward(deltaTime*5.0f);
+		if (input.isPressed(VK_DOWN))
+			m_quad.getEntity()->MoveBackward(deltaTime*5.0f);
+		if (input.isPressed(VK_LEFT))
+			m_quad.getEntity()->TurnLeft(deltaTime*1.8f);
+		if (input.isPressed(VK_RIGHT))
+			m_quad.getEntity()->TurnRight(deltaTime*1.8f);
 
 #if USE_SHADOW
 		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_quad.getEntity()->position + mth::float3(-0.3f, 6.0f, -0.4f);
 		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().rotation = { mth::pi*0.5f, 0.0f, 0.0f };
 #endif
+		pfw::Collider::P env[1] = { m_enviroment };
+		float shades[1] = { 1.0f };
+		m_quad.getSensor().Update(env, shades, 1);
 
 		m_renderer->Render(m_graphics, m_camera);
 	}
