@@ -107,44 +107,31 @@ namespace quad
 		m_script.clear();
 	}
 
-	/*void WalkScript::AddPathElement(mth::float2 relativePos, float relativeRot)
+	void WalkScript::AddPathElementCircle(float circleR, float rotation)
 	{
-		float distance = relativePos.Length();
-		int count = (int)ceilf(distance / m_legStretchHalf);
-		for (int i = 0; i < count - 1; i++)
+		float rotabs = fabsf(rotation);
+		float rotpermove = m_legStretchHalf / circleR;
+		mth::float2x2 rotmat = mth::float2x2::Rotation(rotpermove);
+		QuadAction qa;
+		while (rotabs > 0.0f)
 		{
-			QuadAction qa;
-			if (m_lastLegMoved == LID_LB || m_lastLegMoved == LID_LF)
-			{
-				qa.legID = LID_RB;
-				qa.goalPos.x = m_legXPos;
-				qa.goalPos.y = -m_legZRetracted;
-				m_script.push_back(qa);
-				qa.legID = LID_RF;
-				qa.goalPos.x = m_legXPos;
-				qa.goalPos.y = m_legZRetracted + 2.0f*m_legStretchHalf;
-				m_script.push_back(qa);
-				m_lastLegMoved = LID_RF;
+			if (m_rightBalanced)
+			{				
+				m_rightBalanced = false;
 			}
 			else
 			{
-				qa.legID = LID_LB;
-				qa.goalPos.x = -m_legXPos;
-				qa.goalPos.y = -m_legZRetracted;
-				m_script.push_back(qa);
-				qa.legID = LID_LF;
-				qa.goalPos.x = -m_legXPos;
-				qa.goalPos.y = m_legZRetracted + 2.0f*m_legStretchHalf;
-				m_script.push_back(qa);
-				m_lastLegMoved = LID_LF;
+				m_rightBalanced = true;
 			}
-			qa.legID = -1;
-			qa.goalPos = relativePos / distance * m_legStretchHalf;
-			qa.rot = 0.0f;
-			m_script.push_back(qa);
-		}
+			qa.goalPos = rotmat * mth::float2(0.0f, m_legStretchHalf);
 
-	}*/
+			rotabs -= rotpermove;
+			if (rotation > 0.0f)
+				rotation -= rotpermove;
+			else
+				rotation += rotpermove;
+		}
+	}
 	bool WalkScript::NextAction(QuadAction& action)
 	{
 		if (m_script.empty())
@@ -191,6 +178,7 @@ namespace quad
 		m_speed = 3.5f;
 		m_running = false;
 		m_quad->getEntity()->position = { 0.0f, m_script.getBellyY(), 0.0f };
+		m_quad->getEntity()->rotation = { 0.0f, 0.0f, 0.0f };
 		m_quad->getLegRF().setPosition(m_script.getLegRFStartPos());
 		m_quad->getLegRB().setPosition(m_script.getLegRBStartPos());
 		m_quad->getLegLF().setPosition(m_script.getLegLFStartPos());
@@ -208,10 +196,10 @@ namespace quad
 	}
 	void WalkManager::MoveLeg()
 	{
-		mth::float3 pos = { m_prevPos.x + (m_action.goalPos.x - m_prevPos.x)*m_time,
-			0.0f, m_prevPos.y + (m_action.goalPos.y - m_prevPos.y)*m_time };
+		mth::float3 pos = { m_prevAction.goalPos.x + (m_action.goalPos.x - m_prevAction.goalPos.x)*m_time,
+			0.0f, m_prevAction.goalPos.y + (m_action.goalPos.y - m_prevAction.goalPos.y)*m_time };
 		pos.Normalize();
-		pos *= (1.0f - m_time)*m_prevPos.Length() + m_time * m_action.goalPos.Length();
+		pos *= (1.0f - m_time)*m_prevAction.goalPos.Length() + m_time * m_action.goalPos.Length();
 		pos.y = m_script.LegY(m_time);
 		m_quad->getLeg(m_action.legID).setPosition(pos);
 	}
@@ -222,8 +210,8 @@ namespace quad
 			if (m_action.legID >= 0)
 			{
 				mth::float3 prevPos = m_quad->getLeg(m_action.legID).getPosition();
-				m_prevPos.x = prevPos.x;
-				m_prevPos.y = prevPos.z;
+				m_prevAction.goalPos.x = prevPos.x;
+				m_prevAction.goalPos.y = prevPos.z;
 			}
 		}
 	}

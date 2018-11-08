@@ -26,7 +26,10 @@ namespace form
 	class Form :public FormContainer
 	{
 		SHARED_ONLY(Form);
+
 	protected:
+		static size_t m_autoIDdistributor;
+
 		Form::W m_self;
 		FormContainer::P m_parent;
 

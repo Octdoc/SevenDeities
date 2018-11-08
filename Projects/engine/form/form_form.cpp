@@ -2,6 +2,8 @@
 
 namespace form
 {
+	size_t Form::m_autoIDdistributor = 1;
+
 	Form::Form()
 	{
 		m_hwnd = nullptr;

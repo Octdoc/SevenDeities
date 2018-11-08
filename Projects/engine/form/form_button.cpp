@@ -2,10 +2,10 @@
 
 namespace form
 {
-	Button::Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h, HMENU id)
+	Button::Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 	{
 		m_windowName = text;
-		m_id = id;
+		m_id = (HMENU)m_autoIDdistributor++;
 		m_boundingbox.left = x;
 		m_boundingbox.top = y;
 		m_boundingbox.right = x + w;
@@ -14,7 +14,7 @@ namespace form
 	}
 	void Button::Initialize(const form::Window::P parent)
 	{
-		m_hwnd = CreateWindow(L"button", m_windowName.c_str(), WS_VISIBLE | WS_CHILD, getX(), getY(), getW(), getH(), parent->getHWND(), m_id, GetModuleHandle(NULL), NULL);
+		m_hwnd = CreateWindowEx(0, L"button", m_windowName.c_str(), WS_VISIBLE | WS_CHILD, getX(), getY(), getW(), getH(), parent->getHWND(), m_id, GetModuleHandle(NULL), NULL);
 	}
 	bool Button::IDMatch(HMENU id)
 	{
@@ -24,16 +24,16 @@ namespace form
 	{
 		return m_id;
 	}
-	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], HMENU id)
+	Button::P Button::Create(const form::Window::P parent, const WCHAR text[])
 	{
-		return std::make_shared<Button>(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, id);
+		return std::make_shared<Button>(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
 	}
-	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y, HMENU id)
+	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y)
 	{
-		return std::make_shared<Button>(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT, id);
+		return std::make_shared<Button>(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
 	}
-	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h, HMENU id)
+	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 	{
-		return std::make_shared<Button>(parent, text, x, y, w, h, id);
+		return std::make_shared<Button>(parent, text, x, y, w, h);
 	}
 }

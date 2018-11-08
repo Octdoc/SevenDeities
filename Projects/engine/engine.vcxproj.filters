@@ -170,9 +170,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="helpers\hcs_helpers.cpp">
-      <Filter>Source Files\helpers</Filter>
-    </ClCompile>
     <ClCompile Include="helpers\hcs_exception.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>

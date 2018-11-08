@@ -19,6 +19,7 @@ int wmain()
 	renderScreen->InitGraphics();
 	renderScreen->setScene(cvt::Converter::Create());
 	window->AddChild(renderScreen);
+	window->AddChild(form::Button::Create(window, L"btn", 900, 20, 100, 40));
 	Program::Instance().SubscribeMessageHandler(renderScreen->getScene());
 	Program::Instance().SubscribeAutoUpdater(renderScreen->getScene());
 	Program::Instance().RegisterWindow(window);

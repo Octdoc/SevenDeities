@@ -37,7 +37,7 @@ namespace quad
 		m_graphics->setClearColor(0.5f, 0.75f, 0.96f);
 
 		gfw::ModelLoader ml;
-		ml.LoadModel(L"Media/quad/map.omd");
+		ml.LoadModel(L"Media/quad/plain.omd");
 		m_plain = gfw::Entity::Create(gfw::Model::Create(device, ml));
 		m_plain->setColor({ 0.2f, 1.0f, 0.35f, 1.0f });
 		m_renderer->AddEntity(m_plain);
@@ -46,6 +46,7 @@ namespace quad
 		Sensor::LoadModel(device);
 		m_quad.Init(device);
 		m_renderer->AddEntity(m_quad.getEntity());
+		m_quad.getSensor().getEntity()->Hide();
 
 		m_walk.Init(&m_quad);
 		m_running = true;

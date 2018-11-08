@@ -37,7 +37,7 @@ namespace quad
 		WalkScript();
 		void AddPathElementTurn(float angle);
 		void AddPathElementWalkStraight(float distance);
-		//void AddPathElement(mth::float2 relativePos, float relativeRot);
+		void AddPathElementCircle(float circleR, float rotation);
 		void Clear();
 		bool NextAction(QuadAction& action);
 		mth::float3 getLegRFStartPos();
@@ -55,7 +55,7 @@ namespace quad
 		WalkScript m_script;
 		Quadruped *m_quad;
 		QuadAction m_action;
-		mth::float2 m_prevPos;
+		QuadAction m_prevAction;
 		bool m_running;
 
 	private:

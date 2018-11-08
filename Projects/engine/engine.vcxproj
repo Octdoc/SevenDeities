@@ -252,7 +252,6 @@
     <ClCompile Include="graphics\resources\gfw_shader.cpp" />
     <ClCompile Include="graphics\resources\gfw_texture.cpp" />
     <ClCompile Include="helpers\hcs_exception.cpp" />
-    <ClCompile Include="helpers\hcs_helpers.cpp" />
     <ClCompile Include="helpers\hcs_input.cpp" />
     <ClCompile Include="helpers\hcs_timer.cpp" />
     <ClCompile Include="math\mth_geometry.cpp" />
