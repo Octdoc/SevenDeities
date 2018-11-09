@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvt_converter.h" />
+    <ClInclude Include="cvt_menu.h" />
     <ClInclude Include="cvt_modelmanager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

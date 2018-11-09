@@ -3,6 +3,7 @@
 namespace form
 {
 	Label::Label(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		:Form(parent)
 	{
 		if (text)
 			m_windowName = text;
@@ -14,14 +15,17 @@ namespace form
 	}
 	Label::P Label::Create(const form::Window::P parent, const WCHAR* text)
 	{
-		return std::make_shared<Label>(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
+		return Create(parent, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, text);
 	}
 	Label::P Label::Create(const form::Window::P parent, int x, int y, const WCHAR* text)
 	{
-		return std::make_shared<Label>(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
+		return Create(parent, x, y, CW_USEDEFAULT, CW_USEDEFAULT, text);
 	}
 	Label::P Label::Create(const form::Window::P parent, int x, int y, int w, int h, const WCHAR* text)
 	{
-		return std::make_shared<Label>(parent, text, x, y, w, h);
+		Label::P label = std::make_shared<Label>(parent, text, x, y, w, h);
+		label->m_parent->AddChild(label);
+		label->m_self = label;
+		return label;
 	}
 }

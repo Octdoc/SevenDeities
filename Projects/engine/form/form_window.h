@@ -14,7 +14,6 @@ namespace form
 		bool fullscreen;
 		bool resizeable;
 		bool hasFrame;
-		HWND parentHandle;
 		std::wstring windowName;
 
 	public:
@@ -22,7 +21,7 @@ namespace form
 	};
 
 
-	class Scene :public hcs::MessageHandler, public hcs::AutoUpdater
+	class Scene
 	{
 		SHARED_ONLY(Scene);
 
@@ -34,6 +33,8 @@ namespace form
 	public:
 		void setWindow(Form::P window);
 		virtual void Start() = 0;
+		virtual void MessageHandler(hcs::Input& input) = 0;
+		virtual void Frame(float deltaTime) = 0;
 	};
 
 	class Window :public Form
@@ -48,33 +49,33 @@ namespace form
 		bool m_fullscreen;
 
 	private:
-		Window(WindowSettings& settings);
-		void InitializeWindow(WindowSettings& settings);
+		Window(WindowSettings& settings, FormContainer::P parent);
+		void InitializeWindow(WindowSettings& settings, HWND parentHandle);
 		static void RegisterWindowClass(const WCHAR className[]);
 		static void UnregisterWindowClass(const WCHAR className[]);
 
 		void FillDevModeSettings(DEVMODE& devMode);
 		void FillFullscreenBoundingBox(WindowSettings& settings);
 		void FillWindowedBoundingBox(WindowSettings& settings);
-		void CreateHWND(WindowSettings& settings);
+		void CreateHWND(WindowSettings& settings, HWND parentHandle);
 		void CreateFullscreenWindow(WindowSettings& settings);
-		void CreateOverlappedWindow(WindowSettings& settings);
-		void ShutdownWindow();
+		void CreateOverlappedWindow(WindowSettings& settings, HWND parentHandle);
 
 	public:
 		~Window();
-		virtual void Destroy() override;
-
-		static Window::P Create();
-		static Window::P Create(int width, int height);
-		static Window::P Create(const WCHAR wndname[], int width, int height);
-		static Window::P Create(WindowSettings& settings);
+		static Window::P Create(FormContainer::P parent = nullptr);
+		static Window::P Create(int width, int height, FormContainer::P parent = nullptr);
+		static Window::P Create(const WCHAR wndname[], int width, int height, FormContainer::P parent = nullptr);
+		static Window::P Create(WindowSettings& settings, FormContainer::P parent = nullptr);
 
 		bool isFullscreen();
 		void InitGraphics();
-		void InitGraphics(gfw::GraphicsSettings settings);
+		void InitGraphics(gfw::GraphicsSettings& settings);
 		gfw::Graphics::P getGraphics();
 		void setScene(Scene::P scene);
 		Scene::P getScene();
+		virtual void Close() override;
+		virtual void MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam) override;
+		virtual void Frame(float deltaTime) override;
 	};
 }

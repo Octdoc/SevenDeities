@@ -18,6 +18,7 @@ namespace form
 		FormContainer() = default;
 
 	public:
+		virtual std::shared_ptr<Form> ToForm() = 0;
 		virtual void AddChild(std::shared_ptr<Form> child) = 0;
 		virtual void RemoveChild(std::shared_ptr<Form> child) = 0;
 		virtual void RemoveAllChild() = 0;
@@ -41,7 +42,7 @@ namespace form
 		void ApplyWindowSize();
 
 	protected:
-		Form();
+		Form(FormContainer::P parent);
 
 	public:
 		virtual ~Form();
@@ -60,11 +61,15 @@ namespace form
 		void setText(const WCHAR text[]);
 		const std::wstring& getText();
 
+		virtual Form::P ToForm() override;
 		virtual void AddChild(Form::P child) override;
 		virtual void RemoveChild(Form::P child)  override;
 		virtual void RemoveAllChild()  override;
-		bool CloseWindow(HWND hwnd);
-		virtual void Destroy();
-		void setParent(FormContainer::P parent);
+
+		virtual void Close();
+		bool MessageHandlerCaller(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+		void FrameCaller(float deltaTime);
+		virtual void MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam);
+		virtual void Frame(float deltaTime);
 	};
 }

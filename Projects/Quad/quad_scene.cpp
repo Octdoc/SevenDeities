@@ -51,7 +51,7 @@ namespace quad
 		m_walk.Init(&m_quad);
 		m_running = true;
 	}
-	void Scene::Update(float deltaTime, float totalTime)
+	void Scene::Frame(float deltaTime)
 	{
 		hcs::Input& input = octdoc::Program::Instance().Input();
 		m_controller.Update_FirstPersonMode_Fly(input, deltaTime);
@@ -83,7 +83,7 @@ namespace quad
 
 		m_renderer->Render(m_graphics, m_camera);
 	}
-	void Scene::HandleMessage(hcs::Input& input)
+	void Scene::MessageHandler(hcs::Input& input)
 	{
 		if (input.getMSG().hwnd == m_window->getHWND())
 		{

@@ -11,10 +11,6 @@ int main()
 	test::Test_Scene::P scene = test::Test_Scene::Create();
 	window->InitGraphics();
 	window->setScene(scene);
-	Program::Instance().SubscribeMessageHandler(scene);
-	Program::Instance().SubscribeAutoUpdater(scene);
-
-	Program::Instance().RegisterWindow(window);
 	Program::Instance().Run(true);
 	return 0;
 }

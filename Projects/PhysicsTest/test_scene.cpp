@@ -70,7 +70,7 @@ namespace test
 		m_physicsArea->gravity = 0.0f;
 
 	}
-	void Test_Scene::Update(float deltaTime, float totalTime)
+	void Test_Scene::Frame(float deltaTime)
 	{
 		pfw::Collider::P obj;
 		float mindist = 1000.0f;
@@ -101,10 +101,10 @@ namespace test
 			}
 		}
 		if (obj)
-			SetWindowText(m_window->getHWND(), obj==m_phyMonkey ? L"Monkey" : L"Floor");
+			SetWindowText(m_window->getHWND(), obj == m_phyMonkey ? L"Monkey" : L"Floor");
 		else
 			SetWindowText(m_window->getHWND(), L"Nothing");
-		
+
 		m_controller.Update_FirstPersonMode_Fly(Program::Instance().Input(), (float)deltaTime);
 
 		m_phyPlayer->Control_FreeMove(Program::Instance().Input());
@@ -116,7 +116,7 @@ namespace test
 
 		m_renderer->Render(m_graphics, m_camera);
 	}
-	void Test_Scene::HandleMessage(hcs::Input& input)
+	void Test_Scene::MessageHandler(hcs::Input& input)
 	{
 		m_controller.HandleMouseMove(input);
 		if (input.getMSG().message == WM_KEYDOWN && input.getMSG().wParam == VK_ESCAPE)

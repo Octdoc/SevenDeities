@@ -25,7 +25,7 @@ namespace test
 		static Test_Scene::P Create();
 
 		virtual void Start() override;
-		virtual void Update(float deltaTime, float totalTime) override;
-		virtual void HandleMessage(hcs::Input& input) override;
+		virtual void Frame(float deltaTime) override;
+		virtual void MessageHandler(hcs::Input& input) override;
 	};
 }

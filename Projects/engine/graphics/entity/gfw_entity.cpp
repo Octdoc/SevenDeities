@@ -76,7 +76,7 @@ namespace gfw
 	}
 	UINT Entity::getSubpartCount()
 	{
-		return m_subparts.size();
+		return (UINT)m_subparts.size();
 	}
 	Entity::P Entity::getRelativeTo()
 	{

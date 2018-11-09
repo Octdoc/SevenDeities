@@ -9,6 +9,7 @@ namespace cvt
 	class Converter :public form::Scene
 	{
 		SHARED_ONLY(Converter);
+
 		gfw::Camera m_camera;
 		float m_camDistance;
 		gfw::Renderer::P m_renderer;
@@ -26,7 +27,7 @@ namespace cvt
 		static Converter::P Create();
 
 		virtual void Start() override;
-		virtual void Update(float deltaTime, float totalTime) override;
-		virtual void HandleMessage(hcs::Input& input) override;
+		virtual void Frame(float deltaTime) override;
+		virtual void MessageHandler(hcs::Input& input) override;
 	};
 }

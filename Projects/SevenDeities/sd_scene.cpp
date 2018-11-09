@@ -10,7 +10,7 @@ namespace car
 		ID3D11DeviceContext* deviceContext = m_graphics->getDeviceContext();
 
 		m_controller.setTarget(&m_camera);
-		m_camera.Init(m_graphics->getWidth()/m_graphics->getHeight());
+		m_camera.Init(m_graphics->getWidth() / m_graphics->getHeight());
 		m_camera.position = { 0.0f, 4.0f, -10.0f };
 
 		m_renderer = gfw::SimpleRenderer::Create(m_graphics);
@@ -37,17 +37,14 @@ namespace car
 	{
 		return std::make_shared<Scene>();
 	}
-	void Scene::Update(float deltaTime, float totalTime)
+	void Scene::Frame(float deltaTime)
 	{
 		m_controller.Update_FirstPersonMode_Fly(octdoc::Program::Instance().Input(), deltaTime);
 		m_renderer->Render(m_graphics, m_camera);
 	}
-	void Scene::HandleMessage(hcs::Input& input)
+	void Scene::MessageHandler(hcs::Input& input)
 	{
-		if (input.getMSG().hwnd == m_window->getHWND())
-		{
-			m_controller.HandleMouseMove(input);
-		}
+		m_controller.HandleMouseMove(input);
 		if (input.getMSG().message == WM_KEYDOWN && input.getMSG().wParam == VK_ESCAPE)
 			PostQuitMessage(0);
 	}

@@ -2,10 +2,11 @@
 
 namespace form
 {
-	CheckBox::CheckBox(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h, HMENU id)
+	CheckBox::CheckBox(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		:Form(parent)
 	{
 		m_windowName = text;
-		m_id = id;
+		m_id = (HMENU)m_autoIDdistributor++;
 		m_boundingbox.left = x;
 		m_boundingbox.top = y;
 		m_boundingbox.right = x + w;
@@ -28,16 +29,19 @@ namespace form
 	{
 		return false;
 	}
-	CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], HMENU id)
+	CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[])
 	{
-		return std::make_shared<CheckBox>(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, id);
+		return Create(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
 	}
-	CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], int x, int y, HMENU id)
+	CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], int x, int y)
 	{
-		return std::make_shared<CheckBox>(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT, id);
+		return Create(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
 	}
-	CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h, HMENU id)
+	CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 	{
-		return std::make_shared<CheckBox>(parent, text, x, y, w, h, id);
+		CheckBox::P checkBox = std::make_shared<CheckBox>(parent, text, x, y, w, h);
+		checkBox->m_parent->AddChild(checkBox);
+		checkBox->m_self = checkBox;
+		return checkBox;
 	}
 }

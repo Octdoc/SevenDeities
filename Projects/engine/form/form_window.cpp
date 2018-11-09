@@ -1,7 +1,5 @@
-#include "form_window.h"
+#include "octdoc.h"
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-void RemoveScene(form::Scene::P scene);
 
 namespace form
 {
@@ -13,7 +11,6 @@ namespace form
 		fullscreen(false),
 		resizeable(false),
 		hasFrame(true),
-		parentHandle(nullptr),
 		windowName(L"Octdoc") {}
 
 	std::map<std::wstring, size_t> Window::m_registeredClasses;
@@ -25,7 +22,7 @@ namespace form
 		{
 			WNDCLASSEX wc{};
 			wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-			wc.lpfnWndProc = WndProc;
+			wc.lpfnWndProc = octdoc::Program::WndProc;
 			wc.cbClsExtra = 0;
 			wc.cbWndExtra = 0;
 			wc.hInstance = GetModuleHandle(NULL);
@@ -86,14 +83,14 @@ namespace form
 		m_boundingbox.top += settings.y;
 		m_boundingbox.bottom += settings.y;
 	}
-	void Window::CreateHWND(WindowSettings& settings)
+	void Window::CreateHWND(WindowSettings& settings, HWND parentHandle)
 	{
-		if (m_fullscreen && settings.parentHandle == nullptr)
+		if (m_fullscreen && parentHandle == nullptr)
 			CreateFullscreenWindow(settings);
 		else
-			CreateOverlappedWindow(settings);
+			CreateOverlappedWindow(settings, parentHandle);
 
-		if (m_hwnd == NULL)
+		if (m_hwnd == nullptr)
 			throw hcs::Exception(L"Error", L"Could not create window");
 	}
 	void Window::CreateFullscreenWindow(WindowSettings& settings)
@@ -111,7 +108,7 @@ namespace form
 			, getX(), getY(), getW(), getH(),
 			NULL, NULL, GetModuleHandle(NULL), NULL);
 	}
-	void Window::CreateOverlappedWindow(WindowSettings& settings)
+	void Window::CreateOverlappedWindow(WindowSettings& settings, HWND parentHandle)
 	{
 		FillWindowedBoundingBox(settings);
 		DWORD exStyle = 0;
@@ -120,7 +117,7 @@ namespace form
 		{
 			exStyle = WS_EX_OVERLAPPEDWINDOW;
 			style = WS_OVERLAPPEDWINDOW;
-			if (settings.parentHandle)
+			if (parentHandle)
 				style |= WS_CHILD | WS_VISIBLE;
 			if (!settings.resizeable)
 				style &= (~(WS_THICKFRAME | WS_MAXIMIZEBOX));
@@ -128,72 +125,59 @@ namespace form
 		else
 		{
 			exStyle = WS_EX_APPWINDOW;
-			style = settings.parentHandle ? WS_CHILD | WS_VISIBLE : WS_POPUP;
+			style = parentHandle ? WS_CHILD | WS_VISIBLE : WS_POPUP;
 		}
 
 		m_hwnd = CreateWindowEx(exStyle, m_windowName.c_str(), m_windowName.c_str(), style,
 			getX(), getY(), getW(), getH(),
-			settings.parentHandle ? settings.parentHandle : NULL, NULL, GetModuleHandle(NULL), NULL);
+			parentHandle ? parentHandle : NULL, NULL, GetModuleHandle(NULL), NULL);
 		GetWindowRect(m_hwnd, &m_boundingbox);
 	}
-	void Window::InitializeWindow(WindowSettings& settings)
+	void Window::InitializeWindow(WindowSettings& settings, HWND parentHandle)
 	{
 		m_windowName = settings.windowName;
 		m_fullscreen = settings.fullscreen;
 		RegisterWindowClass(m_windowName.c_str());
-		CreateHWND(settings);
+		CreateHWND(settings, parentHandle);
 		ShowWindow(m_hwnd, SW_SHOW);
 	}
-	Window::Window(WindowSettings& settings)
+	Window::Window(WindowSettings& settings, FormContainer::P parent)
+		:Form(parent ? parent : octdoc::Program::InstancePtr())
 	{
-		InitializeWindow(settings);
+		InitializeWindow(settings, (parent ? parent->ToForm()->getHWND() : nullptr));
 	}
 	Window::~Window()
 	{
-		Destroy();
+		if (m_fullscreen)
+			ChangeDisplaySettings(NULL, 0);
+		UnregisterWindowClass(m_windowName.c_str());
 	}
-	void Window::Destroy()
-	{
-		Form::Destroy();
-		ShutdownWindow();
-	}
-	Window::P Window::Create()
+	Window::P Window::Create(FormContainer::P parent)
 	{
 		WindowSettings settings;
 		return Create(settings);
 	}
-	Window::P Window::Create(int width, int height)
+	Window::P Window::Create(int width, int height, FormContainer::P parent)
 	{
 		WindowSettings settings;
 		settings.width = width;
 		settings.height = height;
-		return Create(settings);
+		return Create(settings, parent);
 	}
-	Window::P Window::Create(const WCHAR wndname[], int width, int height)
+	Window::P Window::Create(const WCHAR wndname[], int width, int height, FormContainer::P parent)
 	{
 		WindowSettings settings;
 		settings.width = width;
 		settings.height = height;
 		settings.windowName = wndname;
-		return Create(settings);
+		return Create(settings, parent);
 	}
-	Window::P Window::Create(WindowSettings& settings)
+	Window::P Window::Create(WindowSettings& settings, FormContainer::P parent)
 	{
-		Window::P window = std::make_shared<Window>(settings);
+		Window::P window = std::make_shared<Window>(settings, parent);
+		window->m_parent->AddChild(window);
 		window->m_self = window;
 		return window;
-	}
-	void Window::ShutdownWindow()
-	{
-		if (m_fullscreen)
-			ChangeDisplaySettings(NULL, 0);
-		if (m_hwnd != NULL)
-		{
-			DestroyWindow(m_hwnd);
-			m_hwnd = NULL;
-		}
-		RemoveScene(m_scene);
-		UnregisterWindowClass(m_windowName.c_str());
 	}
 	bool Window::isFullscreen()
 	{
@@ -204,7 +188,7 @@ namespace form
 		gfw::GraphicsSettings settings;
 		InitGraphics(settings);
 	}
-	void Window::InitGraphics(gfw::GraphicsSettings settings)
+	void Window::InitGraphics(gfw::GraphicsSettings& settings)
 	{
 		if (settings.width < 0)
 			settings.width = getW();
@@ -216,13 +200,29 @@ namespace form
 	{
 		return m_scene;
 	}
+	void Window::Close()
+	{
+		Form::Close();
+		m_scene.reset();
+	}
+	void Window::MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam)
+	{
+		if (msg == WM_DESTROY)
+			Close();
+		if (m_scene)
+			m_scene->MessageHandler(octdoc::Program::Instance().Input());
+	}
+	void Window::Frame(float deltaTime)
+	{
+		if (m_scene)
+			m_scene->Frame(deltaTime);
+	}
 	gfw::Graphics::P Window::getGraphics()
 	{
 		return m_graphics;
 	}
 	void Window::setScene(Scene::P scene)
 	{
-		RemoveScene(m_scene);
 		m_scene = scene;
 		scene->setWindow(m_self.lock());
 		scene->Start();

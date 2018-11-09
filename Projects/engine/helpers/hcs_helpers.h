@@ -12,26 +12,4 @@
 
 namespace hcs
 {
-
-	class MessageHandler
-	{
-		SHARED_ONLY(MessageHandler);
-
-	protected:
-		MessageHandler() = default;
-
-	public:
-		virtual void HandleMessage(Input& input) = 0;
-	};
-
-	class AutoUpdater
-	{
-		SHARED_ONLY(AutoUpdater);
-
-	protected:
-		AutoUpdater() = default;
-
-	public:
-		virtual void Update(float deltaTime, float totalTime) = 0;
-	};
 }

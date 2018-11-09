@@ -35,5 +35,8 @@
     <ClInclude Include="cvt_modelmanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cvt_menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 namespace form
 {
 	Button::Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		:Form(parent)
 	{
 		m_windowName = text;
 		m_id = (HMENU)m_autoIDdistributor++;
@@ -26,14 +27,17 @@ namespace form
 	}
 	Button::P Button::Create(const form::Window::P parent, const WCHAR text[])
 	{
-		return std::make_shared<Button>(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
+		return Create(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
 	}
 	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y)
 	{
-		return std::make_shared<Button>(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
+		return Create(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
 	}
 	Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 	{
-		return std::make_shared<Button>(parent, text, x, y, w, h);
+		Button::P button = std::make_shared<Button>(parent, text, x, y, w, h);
+		button->m_parent->AddChild(button);
+		button->m_self = button;
+		return button;
 	}
 }

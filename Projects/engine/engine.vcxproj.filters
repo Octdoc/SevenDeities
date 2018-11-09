@@ -254,17 +254,17 @@
     <ClCompile Include="graphics\renderers\gfw_simpleshadowrenderer.cpp">
       <Filter>Source Files\graphics\renderers</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\renderers\gfw_colorshadowrenderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="form\form_label.cpp">
+      <Filter>Source Files\form</Filter>
     </ClCompile>
     <ClCompile Include="form\form_textbox.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\form</Filter>
     </ClCompile>
-    <ClCompile Include="form\form_label.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="graphics\renderers\gfw_colorshadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfw_shadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

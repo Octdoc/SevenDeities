@@ -105,12 +105,12 @@ namespace cvt
 		m_renderer = gfw::SimpleRenderer::Create(m_graphics);
 		m_renderer->AddEntity(m_entity = gfw::Entity::Create(gfw::Model::Create(device, L"Media/monkey.omd"),
 			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
-		m_graphics->setClearColor(0.8f, 0.3f, 0.9f);
+		m_graphics->setClearColor(0.5f, 0.3f, 0.2f);
 	}
-	void Converter::Update(float deltaTime, float totalTime)
+	void Converter::Frame(float deltaTime)
 	{
 	}
-	void Converter::HandleMessage(hcs::Input& input)
+	void Converter::MessageHandler(hcs::Input& input)
 	{
 		if (input.getMSG().hwnd == m_window->getHWND())
 		{
@@ -129,6 +129,10 @@ namespace cvt
 				InvalidateRect(m_window->getHWND(), NULL, FALSE);
 				return;
 			}
+		}
+		if (input.getMSG().message == WM_COMMAND)
+		{
+
 		}
 		if (input.getMSG().message == WM_KEYDOWN)
 		{

@@ -4,19 +4,13 @@ namespace form
 {
 	size_t Form::m_autoIDdistributor = 1;
 
-	Form::Form()
+	Form::P Form::ToForm()
 	{
-		m_hwnd = nullptr;
-		ClearStruct(m_boundingbox);
-	}
-	Form::~Form()
-	{
-		Destroy();
+		return m_self.lock();
 	}
 	void Form::AddChild(Form::P child)
 	{
 		m_children.push_front(child);
-		child->setParent(m_self.lock());
 	}
 	void Form::RemoveChild(Form::P child)
 	{
@@ -26,33 +20,43 @@ namespace form
 	{
 		m_children.clear();
 	}
-	bool Form::CloseWindow(HWND hwnd)
-	{
-		if (m_hwnd == hwnd)
-		{
-			Destroy();
-			return true;
-		}
-		for (auto child : m_children)
-			if (child->CloseWindow(hwnd))
-				return true;
-		return false;
-	}
-	void Form::Destroy()
-	{
-		auto child = m_children.begin();
-		while (child != m_children.end())
-		{
-			auto tmp = child++;
-			(*tmp)->Destroy();
-		}
-		if (!m_self.expired())
-			m_parent->RemoveChild(m_self.lock());
-	}
 	void Form::ApplyWindowSize()
 	{
 		MoveWindow(m_hwnd, getX(), getY(), getW(), getH(), FALSE);
 	}
+
+	Form::Form(FormContainer::P parent)
+		:m_parent(parent) {}
+	Form::~Form() 
+	{
+		DestroyWindow(m_hwnd);
+		m_hwnd = nullptr;
+		m_parent->RemoveChild(m_self.lock());
+	}
+	void Form::Close()
+	{
+		m_parent->RemoveChild(m_self.lock());
+	}
+	bool Form::MessageHandlerCaller(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+	{
+		if (m_hwnd == hwnd)
+		{
+			MessageHandler(msg, wparam, lparam);
+			return true;
+		}
+		for (auto c : m_children)
+			if (c->MessageHandlerCaller(hwnd, msg, wparam, lparam))
+				return true;
+		return false;
+	}
+	void Form::FrameCaller(float deltaTime)
+	{
+		Frame(deltaTime);
+		for (auto c : m_children)
+			c->FrameCaller(deltaTime);
+	}
+	void Form::MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam) {}
+	void Form::Frame(float deltaTime) {}
 
 #pragma region getter, setter
 
@@ -128,10 +132,6 @@ namespace form
 	HWND Form::getHWND()
 	{
 		return m_hwnd;
-	}
-	void Form::setParent(FormContainer::P parent)
-	{
-		m_parent = parent;
 	}
 
 #pragma endregion
