@@ -15,9 +15,9 @@ namespace quad
 
 	class Leg
 	{
-		gfw::Entity::P m_shouder;
-		gfw::Entity::P m_thigh;
-		gfw::Entity::P m_toe;
+		gfx::Entity::P m_shouder;
+		gfx::Entity::P m_thigh;
+		gfx::Entity::P m_toe;
 
 		float m_a1, m_a2, m_a3;
 		float m_ox, m_oy, m_oz;
@@ -45,7 +45,7 @@ namespace quad
 		void InitRB(ID3D11Device *device);
 		void InitLB(ID3D11Device *device);
 
-		void Install(gfw::Entity::P body);
+		void Install(gfx::Entity::P body);
 
 		void setJointStates(mth::float3 joints);
 		void setJointStates(int index);
@@ -61,7 +61,7 @@ namespace quad
 
 	class Quadruped
 	{
-		gfw::Entity::P m_body;
+		gfx::Entity::P m_body;
 		std::array<Leg, 4> m_legs;
 		Sensor m_sensor;
 
@@ -69,7 +69,7 @@ namespace quad
 		Quadruped() = default;
 		void Init(ID3D11Device* device);
 
-		gfw::Entity::P getEntity();
+		gfx::Entity::P getEntity();
 		Leg& getLegRF();
 		Leg& getLegLF();
 		Leg& getLegRB();

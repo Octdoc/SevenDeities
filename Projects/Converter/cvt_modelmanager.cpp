@@ -248,29 +248,29 @@ namespace cvt
 		m_normalmapNames.clear();
 	}
 
-	gfw::Entity::P ModelManager::CreateEntity(gfw::Graphics::P graphics)
+	gfx::Entity::P ModelManager::CreateEntity(gfx::Graphics::P graphics)
 	{
 		ID3D11Device* device = graphics->getDevice();
-		UINT shaderInputType = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
+		UINT shaderInputType = gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP;
 
-		std::vector<std::shared_ptr<gfw::Texture>> textures, normalmaps;
+		std::vector<std::shared_ptr<gfx::Texture>> textures, normalmaps;
 		textures.resize(m_textureNames.size());
 		normalmaps.resize(m_textureNames.size());
-		std::shared_ptr<gfw::Texture> white = gfw::Texture::Create2D(device, L"Media/white.png");
-		std::shared_ptr<gfw::Texture> normal = gfw::Texture::Create2D(device, L"Media/normal.png");
+		std::shared_ptr<gfx::Texture> white = gfx::Texture::Create2D(device, L"Media/white.png");
+		std::shared_ptr<gfx::Texture> normal = gfx::Texture::Create2D(device, L"Media/normal.png");
 		for (int i = 0; i < m_textureNames.size(); i++)
 		{
 			if (m_textureNames[i][0])
-				textures[i] = gfw::Texture::Create2D(device, (m_sourceFolder + m_textureNames[i]).c_str());
+				textures[i] = gfx::Texture::Create2D(device, (m_sourceFolder + m_textureNames[i]).c_str());
 			else
 				textures[i] = white;
 			if (m_normalmapNames[i][0])
-				normalmaps[i] = gfw::Texture::Create2D(device, (m_sourceFolder + m_normalmapNames[i]).c_str());
+				normalmaps[i] = gfx::Texture::Create2D(device, (m_sourceFolder + m_normalmapNames[i]).c_str());
 			else
 				normalmaps[i] = normal;
 		}
-		std::shared_ptr<gfw::Entity> entity = gfw::Entity::Create(
-			gfw::Model::Create(device, m_vertices.data(), (UINT)m_vertices.size(),
+		std::shared_ptr<gfx::Entity> entity = gfx::Entity::Create(
+			gfx::Model::Create(device, m_vertices.data(), (UINT)m_vertices.size(),
 				shaderInputType, m_indices.data(), (UINT)m_indices.size()),
 			textures.data(), normalmaps.data());
 		std::wcout << L"Entity created" << std::endl;
@@ -287,7 +287,7 @@ namespace cvt
 		std::wcout << L"Exporting file: " << filename << std::endl;
 
 		//header.shaderInputLayout = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
-		header.shaderInputLayout = gfw::SIL_POSITION | gfw::SIL_NORMAL;
+		header.shaderInputLayout = gfx::SIL_POSITION | gfx::SIL_NORMAL;
 		header.vertexCount = (UINT)m_vertices.size();
 		header.indexCount = (UINT)m_indices.size();
 
@@ -295,13 +295,13 @@ namespace cvt
 		outfile.write((char*)&header, sizeof(header));
 		for (UINT i = 0; i < m_vertices.size(); i++)
 		{
-			if (header.shaderInputLayout&gfw::SIL_POSITION)
+			if (header.shaderInputLayout&gfx::SIL_POSITION)
 				outfile.write((char*)&m_vertices[i].position, sizeof(m_vertices[i].position));
-			if (header.shaderInputLayout&gfw::SIL_TEXCOORD)
+			if (header.shaderInputLayout&gfx::SIL_TEXCOORD)
 				outfile.write((char*)&m_vertices[i].texcoord, sizeof(m_vertices[i].texcoord));
-			if (header.shaderInputLayout&gfw::SIL_NORMAL)
+			if (header.shaderInputLayout&gfx::SIL_NORMAL)
 				outfile.write((char*)&m_vertices[i].normal, sizeof(m_vertices[i].normal));
-			if (header.shaderInputLayout&gfw::SIL_NORMALMAP)
+			if (header.shaderInputLayout&gfx::SIL_NORMALMAP)
 			{
 				outfile.write((char*)&m_vertices[i].tangent, sizeof(m_vertices[i].tangent));
 				outfile.write((char*)&m_vertices[i].binormal, sizeof(m_vertices[i].binormal));

@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{bb01a0e2-fe0c-4096-b09b-67b6b7793da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\helpers">
+      <UniqueIdentifier>{e8afb5c4-05d7-40c7-9933-f45af07fa07f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\helpers">
+      <UniqueIdentifier>{1c2a6bdd-7292-40dd-9ced-352f312b9976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{20b71b3b-d784-4c1d-9d2d-43629f5d5a72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{69bf6a2c-5508-47f9-ba68-c90ecb615e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\resources">
+      <UniqueIdentifier>{285c6b26-1d34-466f-8f61-1ba80ed4cb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\resources">
+      <UniqueIdentifier>{79d87f1f-cd25-4974-9ec7-c40958dcfece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\entity">
+      <UniqueIdentifier>{09f73e7f-034b-4b65-9034-29ee42eb2946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\entity">
+      <UniqueIdentifier>{6144ce48-f50b-4b01-a50a-c4a53e908d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\renderers">
+      <UniqueIdentifier>{06c102c4-ac04-4b07-8261-9449afb3bc73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\physics">
+      <UniqueIdentifier>{fbd7585a-849b-4f7a-92f0-dde298e08320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physics">
+      <UniqueIdentifier>{606ff13c-6fdb-4255-baed-341ee1a63ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\form">
+      <UniqueIdentifier>{69be7739-983c-4453-a8ae-1da50c0320c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\form">
+      <UniqueIdentifier>{eb63c4c9-bfed-4cc9-aab6-629ee7d687b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{f899a11e-7e9c-4ca3-b987-22b9dfdbeca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{3af813ad-80a8-4a52-b5d6-b55cdda0b501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\renderers">
+      <UniqueIdentifier>{58962662-0496-4196-92dd-7202c5362982}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="octdoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_helpers.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_exception.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\hcs_input.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\DDSTextureLoader.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_button.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_window.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_form.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_checkbox.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mth_geometry.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mth_position.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mth_linalg.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_textbox.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="form\form_label.h">
+      <Filter>Header Files\form</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfx_camera.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfx_controller.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfx_entity.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfx_light.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\entity\gfx_skydome.h">
+      <Filter>Header Files\graphics\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfx_colorrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfx_colorshadowrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfx_renderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfx_shadowrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfx_simplerenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderers\gfx_simpleshadowrenderer.h">
+      <Filter>Header Files\graphics\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfx_model.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfx_modelloader.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfx_resource.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfx_shader.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\resources\gfx_texture.h">
+      <Filter>Header Files\graphics\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\gfx_graphics.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\physx_boundingvolume.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\physx_collider.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="helpers\hcs_exception.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\hcs_input.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\DDSTextureLoader.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_button.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_window.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_form.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="octdoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_checkbox.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="math\mth_position.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\mth_geometry.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\mth_linalg.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_label.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="form\form_textbox.cpp">
+      <Filter>Source Files\form</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfx_camera.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfx_controller.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfx_entity.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfx_light.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\entity\gfx_skydome.cpp">
+      <Filter>Source Files\graphics\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfx_colorrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfx_colorshadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfx_renderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfx_shadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfx_simplerenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderers\gfx_simpleshadowrenderer.cpp">
+      <Filter>Source Files\graphics\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfx_model.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfx_modelloader.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfx_shader.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\resources\gfx_texture.cpp">
+      <Filter>Source Files\graphics\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\gfx_graphics.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\physx_boundingvolume.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\physx_collider.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\vsSky.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psSky.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsSimple.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psSimple.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psDepth.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psShadowCube.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsDepth.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\psColor.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsColor.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\psColorShadowCube.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\psColorShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="graphics\renderers\vsColorShadow.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

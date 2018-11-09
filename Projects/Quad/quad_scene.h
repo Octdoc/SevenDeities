@@ -10,11 +10,11 @@ namespace quad
 	{
 		SHARED_ONLY(Scene);
 
-		gfw::Controller m_controller;
-		gfw::Camera m_camera;
-		gfw::Renderer::P m_renderer;
-		gfw::Entity::P m_plain;
-		pfw::Collider::P m_enviroment;
+		gfx::Controller m_controller;
+		gfx::Camera m_camera;
+		gfx::Renderer::P m_renderer;
+		gfx::Entity::P m_plain;
+		physx::Collider::P m_enviroment;
 
 		Quadruped m_quad;
 		bool m_running;

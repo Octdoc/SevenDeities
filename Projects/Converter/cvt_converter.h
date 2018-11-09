@@ -10,10 +10,10 @@ namespace cvt
 	{
 		SHARED_ONLY(Converter);
 
-		gfw::Camera m_camera;
+		gfx::Camera m_camera;
 		float m_camDistance;
-		gfw::Renderer::P m_renderer;
-		gfw::Entity::P m_entity;
+		gfx::Renderer::P m_renderer;
+		gfx::Entity::P m_entity;
 
 		ModelManager m_modelManager;
 

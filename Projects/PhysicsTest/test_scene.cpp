@@ -1,8 +1,6 @@
 #include "test_scene.h"
 #include <iostream>
 
-#pragma comment(lib, "engine.lib")
-
 using namespace octdoc;
 
 namespace test
@@ -22,57 +20,57 @@ namespace test
 		m_camera.position = { 0.0f, 4.0f, -10.0f };
 
 		//m_renderer = gfw::SimpleRenderer::Create(m_graphics);
-		m_renderer = gfw::SimpleShadowRenderer::Create(m_graphics);
+		m_renderer = gfx::SimpleShadowRenderer::Create(m_graphics);
 
-		m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
+		m_renderer->SetSky(gfx::SkyDome::Create(device, L"Media/skymap.dds"));
 
-		auto normapmap = gfw::Texture::Create2D(device, L"Media/normal.png");
+		auto normapmap = gfx::Texture::Create2D(device, L"Media/normal.png");
 
-		auto monkey = gfw::Entity::Create(
-			gfw::Model::Create(device, L"Media/smooth_monkey.omd"),
-			gfw::Texture::Create2D(device, L"Media/white.png"),
+		auto monkey = gfx::Entity::Create(
+			gfx::Model::Create(device, L"Media/smooth_monkey.omd"),
+			gfx::Texture::Create2D(device, L"Media/white.png"),
 			normapmap);
 		monkey->position.y = 2.0f;
 		m_renderer->AddEntity(monkey);
 
-		gfw::ModelLoader floor;
+		gfx::ModelLoader floor;
 		floor.LoadModel(L"Media/plain.omd");
-		m_renderer->AddEntity(gfw::Entity::Create(
-			gfw::Model::Create(device, floor),
-			gfw::Texture::Create2D(device, L"Media/green.png"),
+		m_renderer->AddEntity(gfx::Entity::Create(
+			gfx::Model::Create(device, floor),
+			gfx::Texture::Create2D(device, L"Media/green.png"),
 			normapmap));
 
-		gfw::ModelLoader rod;
-		rod.CreateQuad({ -0.002f, -0.002f }, { 0.004f, 0.004f }, gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
+		gfx::ModelLoader rod;
+		rod.CreateQuad({ -0.002f, -0.002f }, { 0.004f, 0.004f }, gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP);
 		rod.Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
-		m_rod = gfw::Entity::Create(gfw::Model::Create(device, rod),
-			gfw::Texture::Create2D(device, L"Media/black.png"),
-			gfw::Texture::Create2D(device, L"Media/normal.png"));
+		m_rod = gfx::Entity::Create(gfx::Model::Create(device, rod),
+			gfx::Texture::Create2D(device, L"Media/black.png"),
+			gfx::Texture::Create2D(device, L"Media/normal.png"));
 		m_renderer->AddEntity(m_rod);
 
-		m_gfxPlayer = gfw::Entity::Create(gfw::Model::Create(device, L"Media/sphere.omd"),
-			gfw::Texture::Create2D(device, L"Media/red.png"),
+		m_gfxPlayer = gfx::Entity::Create(gfx::Model::Create(device, L"Media/sphere.omd"),
+			gfx::Texture::Create2D(device, L"Media/red.png"),
 			normapmap);
 		m_renderer->AddEntity(m_gfxPlayer);
 
-		m_physicsArea = pfw::CollisionArea::Create();
+		m_physicsArea = physx::CollisionArea::Create();
 
-		m_phyPlayer = pfw::Player::Create();
+		m_phyPlayer = physx::Player::Create();
 		m_phyPlayer->position = { -2.0f, 1.5f, -3.0f };
 		m_phyPlayer->scale = { 0.35f, 0.9f, 0.35f };
 		m_gfxPlayer->scale = { 0.35f, 0.9f, 0.35f };
 		m_physicsArea->setPlayer(m_phyPlayer);
 
-		gfw::ModelLoader monkeyHB;
+		gfx::ModelLoader monkeyHB;
 		monkeyHB.LoadModel(L"Media/monkey.omd");
-		m_physicsArea->AddCollider(m_phyMonkey = pfw::Collider::Create(monkeyHB, mth::float3(0.0f, 2.0f, 0.0f)));
-		m_physicsArea->AddCollider(m_phyFloor = pfw::Collider::Create(floor));
+		m_physicsArea->AddCollider(m_phyMonkey = physx::Collider::Create(monkeyHB, mth::float3(0.0f, 2.0f, 0.0f)));
+		m_physicsArea->AddCollider(m_phyFloor = physx::Collider::Create(floor));
 		m_physicsArea->gravity = 0.0f;
 
 	}
 	void Test_Scene::Frame(float deltaTime)
 	{
-		pfw::Collider::P obj;
+		physx::Collider::P obj;
 		float mindist = 1000.0f;
 		for (mth::Triangle t : m_phyMonkey->getMesh())
 		{

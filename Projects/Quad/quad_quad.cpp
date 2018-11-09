@@ -121,17 +121,17 @@ namespace quad
 		m_a2 = 0.0f;
 		m_a3 = mth::pi*0.25f;
 
-		m_shouder = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/shoulderRF.omd"));
+		m_shouder = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/shoulderRF.omd"));
 		m_shouder->position = { m_ox, m_oy, m_oz };
 		m_shouder->setColor(1.0f);
 		m_shouder->rotation.y = m_a1;
 
-		m_thigh = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/thighRF.omd"));
+		m_thigh = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/thighRF.omd"));
 		m_thigh->position = { 0.0f, 0.0f, m_o1 };
 		m_thigh->setColor(1.0f);
 		m_thigh->rotation.x = m_a2;
 
-		m_toe = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/toeRF.omd"));
+		m_toe = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/toeRF.omd"));
 		m_toe->position = { m_o3x, 0.0f, m_o2 };
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
@@ -151,17 +151,17 @@ namespace quad
 		m_a2 = 0.0f;
 		m_a3 = mth::pi*0.25f;
 
-		m_shouder = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/shoulderLF.omd"));
+		m_shouder = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/shoulderLF.omd"));
 		m_shouder->position = { m_ox, m_oy, m_oz };
 		m_shouder->setColor(1.0f);
 		m_shouder->rotation.y = m_a1;
 
-		m_thigh = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/thighLF.omd"));
+		m_thigh = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/thighLF.omd"));
 		m_thigh->position = { 0.0f, 0.0f, m_o1 };
 		m_thigh->setColor(1.0f);
 		m_thigh->rotation.x = m_a2;
 
-		m_toe = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/toeLF.omd"));
+		m_toe = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/toeLF.omd"));
 		m_toe->position = { m_o3x, 0.0f, m_o2 };
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
@@ -181,17 +181,17 @@ namespace quad
 		m_a2 = 0.0f;
 		m_a3 = mth::pi*0.25f;
 
-		m_shouder = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/shoulderLF.omd"));
+		m_shouder = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/shoulderLF.omd"));
 		m_shouder->position = { m_ox, m_oy, m_oz };
 		m_shouder->setColor(1.0f);
 		m_shouder->rotation.y = m_a1;
 
-		m_thigh = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/thighLF.omd"));
+		m_thigh = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/thighLF.omd"));
 		m_thigh->position = { 0.0f, 0.0f, m_o1 };
 		m_thigh->setColor(1.0f);
 		m_thigh->rotation.x = m_a2;
 
-		m_toe = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/toeLF.omd"));
+		m_toe = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/toeLF.omd"));
 		m_toe->position = { m_o3x, 0.0f, m_o2 };
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
@@ -211,24 +211,24 @@ namespace quad
 		m_a2 = 0.0f;
 		m_a3 = mth::pi*0.25f;
 
-		m_shouder = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/shoulderRF.omd"));
+		m_shouder = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/shoulderRF.omd"));
 		m_shouder->position = { m_ox, m_oy, m_oz };
 		m_shouder->setColor(1.0f);
 		m_shouder->rotation.y = m_a1;
 
-		m_thigh = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/thighRF.omd"));
+		m_thigh = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/thighRF.omd"));
 		m_thigh->position = { 0.0f, 0.0f, m_o1 };
 		m_thigh->setColor(1.0f);
 		m_thigh->rotation.x = m_a2;
 
-		m_toe = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/toeRF.omd"));
+		m_toe = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/toeRF.omd"));
 		m_toe->position = { m_o3x, 0.0f, m_o2 };
 		m_toe->setColor(1.0f);
 		m_toe->rotation.x = m_a3;
 
 		setJointStates(0);
 	}
-	void Leg::Install(gfw::Entity::P body)
+	void Leg::Install(gfx::Entity::P body)
 	{
 		body->AddSubpart(m_shouder);
 		m_shouder->AddSubpart(m_thigh);
@@ -289,7 +289,7 @@ namespace quad
 
 	void Quadruped::Init(ID3D11Device* device)
 	{
-		m_body = gfw::Entity::Create(gfw::Model::Create(device, L"Media/quad/body.omd"));
+		m_body = gfx::Entity::Create(gfx::Model::Create(device, L"Media/quad/body.omd"));
 		m_body->setColor(1.0f);
 		m_body->position.y = 0.5f;
 		m_legs[LID_RF].InitRF(device);
@@ -310,7 +310,7 @@ namespace quad
 		});
 		m_body->AddSubpart(m_sensor.getEntity());
 	}
-	gfw::Entity::P Quadruped::getEntity()
+	gfx::Entity::P Quadruped::getEntity()
 	{
 		return m_body;
 	}

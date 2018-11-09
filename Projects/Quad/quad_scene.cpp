@@ -1,7 +1,5 @@
 #include "quad_scene.h"
 
-#pragma comment(lib, "engine.lib")
-
 #define USE_SHADOW 0
 
 
@@ -31,17 +29,17 @@ namespace quad
 #if USE_SHADOW
 		m_renderer = gfw::ColorShadowRenderer::Create(m_graphics);
 #else
-		m_renderer = gfw::ColorRenderer::Create(m_graphics);
+		m_renderer = gfx::ColorRenderer::Create(m_graphics);
 #endif
 		//m_renderer->SetSky(gfw::SkyDome::Create(device, L"Media/skymap.dds"));
 		m_graphics->setClearColor(0.5f, 0.75f, 0.96f);
 
-		gfw::ModelLoader ml;
+		gfx::ModelLoader ml;
 		ml.LoadModel(L"Media/quad/plain.omd");
-		m_plain = gfw::Entity::Create(gfw::Model::Create(device, ml));
+		m_plain = gfx::Entity::Create(gfx::Model::Create(device, ml));
 		m_plain->setColor({ 0.2f, 1.0f, 0.35f, 1.0f });
 		m_renderer->AddEntity(m_plain);
-		m_enviroment = pfw::Collider::Create(ml);
+		m_enviroment = physx::Collider::Create(ml);
 
 		Sensor::LoadModel(device);
 		m_quad.Init(device);
@@ -77,7 +75,7 @@ namespace quad
 		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().position = m_quad.getEntity()->position + mth::float3(-0.3f, 6.0f, -0.4f);
 		std::dynamic_pointer_cast<gfw::ShadowRenderer>(m_renderer)->getLight().rotation = { mth::pi*0.5f, 0.0f, 0.0f };
 #endif
-		pfw::Collider::P env[1] = { m_enviroment };
+		physx::Collider::P env[1] = { m_enviroment };
 		float shades[1] = { 1.0f };
 		m_quad.getSensor().Update(env, shades, 1);
 

@@ -5,6 +5,8 @@
 #include "assimp/postprocess.h"
 #include "octdoc.h"
 
+using namespace octdoc;
+
 namespace cvt
 {
 	struct Vertex
@@ -48,7 +50,7 @@ namespace cvt
 		bool LoadModelData(const WCHAR* filename);
 		void Clear();
 
-		gfw::Entity::P CreateEntity(gfw::Graphics::P graphics);
+		gfx::Entity::P CreateEntity(gfx::Graphics::P graphics);
 
 		void Export(UINT shaderInputLayout);
 	};

@@ -1,7 +1,6 @@
 #include "cvt_converter.h"
 #include <windowsx.h>
 
-#pragma comment(lib, "engine.lib")
 #pragma comment(lib, "assimp.lib")
 
 namespace cvt
@@ -102,9 +101,9 @@ namespace cvt
 
 		DragAcceptFiles(m_window->getHWND(), true);
 
-		m_renderer = gfw::SimpleRenderer::Create(m_graphics);
-		m_renderer->AddEntity(m_entity = gfw::Entity::Create(gfw::Model::Create(device, L"Media/monkey.omd"),
-			gfw::Texture::Create2D(device, L"Media/white.png"), gfw::Texture::Create2D(device, L"Media/normal.png")));
+		m_renderer = gfx::SimpleRenderer::Create(m_graphics);
+		m_renderer->AddEntity(m_entity = gfx::Entity::Create(gfx::Model::Create(device, L"Media/monkey.omd"),
+			gfx::Texture::Create2D(device, L"Media/white.png"), gfx::Texture::Create2D(device, L"Media/normal.png")));
 		m_graphics->setClearColor(0.5f, 0.3f, 0.2f);
 	}
 	void Converter::Frame(float deltaTime)
@@ -142,7 +141,7 @@ namespace cvt
 				PostQuitMessage(0);
 					return;
 			case 'E':
-				m_modelManager.Export(gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP);
+				m_modelManager.Export(gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP);
 					return;
 			}
 		}

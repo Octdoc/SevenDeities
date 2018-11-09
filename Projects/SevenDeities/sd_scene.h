@@ -2,15 +2,17 @@
 
 #include "octdoc.h"
 
+using namespace octdoc;
+
 namespace car
 {
 	class Scene :public form::Scene
 	{
 		SHARED_ONLY(Scene);
 
-		gfw::Controller m_controller;
-		gfw::Camera m_camera;
-		gfw::Renderer::P m_renderer;
+		gfx::Controller m_controller;
+		gfx::Camera m_camera;
+		gfx::Renderer::P m_renderer;
 
 	private:
 		Scene() = default;

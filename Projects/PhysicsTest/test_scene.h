@@ -2,21 +2,23 @@
 
 #include "octdoc.h"
 
+using namespace octdoc;
+
 namespace test
 {
 	class Test_Scene :public form::Scene
 	{
 		SHARED_ONLY(Test_Scene);
-		gfw::Controller m_controller;
-		gfw::Camera m_camera;
-		gfw::Renderer::P m_renderer;
-		gfw::Entity::P m_rod;
+		gfx::Controller m_controller;
+		gfx::Camera m_camera;
+		gfx::Renderer::P m_renderer;
+		gfx::Entity::P m_rod;
 
-		pfw::Collider::P m_phyFloor;
-		pfw::Collider::P m_phyMonkey;
-		gfw::Entity::P m_gfxPlayer;
-		pfw::Player::P m_phyPlayer;
-		pfw::CollisionArea::P m_physicsArea;
+		physx::Collider::P m_phyFloor;
+		physx::Collider::P m_phyMonkey;
+		gfx::Entity::P m_gfxPlayer;
+		physx::Player::P m_phyPlayer;
+		physx::CollisionArea::P m_physicsArea;
 
 	private:
 		Test_Scene() = default;

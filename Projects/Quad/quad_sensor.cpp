@@ -2,19 +2,19 @@
 
 namespace quad
 {
-	gfw::Model::P Sensor::m_model;
+	gfx::Model::P Sensor::m_model;
 
 	void Sensor::LoadModel(ID3D11Device* device)
 	{
-		m_model = gfw::Model::Create(device, L"Media/quad/sensor.omd");
+		m_model = gfx::Model::Create(device, L"Media/quad/sensor.omd");
 	}
-	void Sensor::Init(mth::float3 position, mth::float3 rotation, gfw::Entity::P host)
+	void Sensor::Init(mth::float3 position, mth::float3 rotation, gfx::Entity::P host)
 	{
 		Init(position, rotation, host, [](float dist, float shade)->float {return shade / dist; });
 	}
-	void Sensor::Init(mth::float3 position, mth::float3 rotation, gfw::Entity::P host, std::function<float(float dist, float shade)> equation)
+	void Sensor::Init(mth::float3 position, mth::float3 rotation, gfx::Entity::P host, std::function<float(float dist, float shade)> equation)
 	{
-		m_entity = gfw::Entity::Create(m_model);
+		m_entity = gfx::Entity::Create(m_model);
 		m_entity->position = position;
 		m_entity->rotation = rotation;
 		m_entity->setRelativeTo(host);
@@ -22,12 +22,12 @@ namespace quad
 		m_equation = equation;
 	}
 
-	void Sensor::AddToRenderer(gfw::Renderer::P renderer)
+	void Sensor::AddToRenderer(gfx::Renderer::P renderer)
 	{
 		renderer->AddEntity(m_entity);
 	}
 
-	void Sensor::Update(pfw::Collider::P enviroment[], float shades[], UINT count)
+	void Sensor::Update(physx::Collider::P enviroment[], float shades[], UINT count)
 	{
 		float mindist = 1000.0f;
 		float materialBrightness = 0.0f;
@@ -59,7 +59,7 @@ namespace quad
 	{
 		return m_measurement;
 	}
-	gfw::Entity::P Sensor::getEntity()
+	gfx::Entity::P Sensor::getEntity()
 	{
 		return m_entity;
 	}
