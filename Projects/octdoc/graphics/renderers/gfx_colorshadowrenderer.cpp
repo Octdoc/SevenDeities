@@ -41,7 +41,7 @@ namespace octdoc
 
 			CreateDepthRenderingResources(device, shadowmapSize, cubicShadowMap);
 
-			m_vertexShader = VertexShader::Create(device, L"Shaders/vsColorShadow.cso", SIL_POSITION | SIL_NORMAL);
+			m_vertexShader = VertexShader::Create(device, L"Shaders/vsColorShadow.cso", (UINT)ShaderInputLayoutType::POSITION | (UINT)ShaderInputLayoutType::NORMAL);
 			m_pixelShader = PixelShader::Create(device, m_cubicShadowMap ? L"Shaders/psColorShadowCube.cso" : L"Shaders/psColorShadow.cso");
 			m_vsMatrixBuffer = CBuffer::Create(device, sizeof(mth::float4x4) * 3);
 			m_vsLightBuffer = CBuffer::Create(device, sizeof(float) * 4);

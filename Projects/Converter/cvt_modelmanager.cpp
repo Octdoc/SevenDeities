@@ -1,6 +1,5 @@
 #include "cvt_modelmanager.h"
 #include <fstream>
-#include <iostream>
 
 namespace cvt
 {
@@ -61,11 +60,11 @@ namespace cvt
 		textureNames.resize(scene->mNumMaterials);
 		normalmapNames.resize(scene->mNumMaterials);
 
-		for (unsigned int m = 0; m < scene->mNumMeshes; m++)
+		for (UINT m = 0; m < scene->mNumMeshes; m++)
 			vertexCount += scene->mMeshes[m]->mNumVertices;
 		m_vertices.resize(vertexCount);
 
-		for (unsigned int m = 0; m < scene->mNumMaterials; m++)
+		for (UINT m = 0; m < scene->mNumMaterials; m++)
 		{
 			if (scene->mMaterials[m]->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 			{
@@ -85,7 +84,8 @@ namespace cvt
 		}
 
 		UINT counter = 0;
-		for (unsigned int m = 0; m < scene->mNumMeshes; m++)
+		m_shaderInputType = 0;
+		for (UINT m = 0; m < scene->mNumMeshes; m++)
 		{
 			mesh = scene->mMeshes[m];
 			group = &groups[m];
@@ -96,6 +96,7 @@ namespace cvt
 					m_vertices[counter].position.x = mesh->mVertices[v].x;
 					m_vertices[counter].position.y = mesh->mVertices[v].y;
 					m_vertices[counter].position.z = -mesh->mVertices[v].z;
+					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::POSITION;
 				}
 				else
 				{
@@ -109,6 +110,7 @@ namespace cvt
 					m_vertices[counter].color.y = mesh->mColors[0]->g;
 					m_vertices[counter].color.z = mesh->mColors[0]->b;
 					m_vertices[counter].color.w = mesh->mColors[0]->a;
+					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::COLOR;
 				}
 				else
 				{
@@ -121,6 +123,7 @@ namespace cvt
 				{
 					m_vertices[counter].texcoord.x = mesh->mTextureCoords[0][v].x;
 					m_vertices[counter].texcoord.y = 1.0f - mesh->mTextureCoords[0][v].y;
+					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::TEXCOORD;
 				}
 				else
 				{
@@ -132,6 +135,7 @@ namespace cvt
 					m_vertices[counter].normal.x = mesh->mNormals[v].x;
 					m_vertices[counter].normal.y = mesh->mNormals[v].y;
 					m_vertices[counter].normal.z = -mesh->mNormals[v].z;
+					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMAL;
 				}
 				else
 				{
@@ -147,6 +151,7 @@ namespace cvt
 					m_vertices[counter].binormal.x = -mesh->mBitangents[v].x;
 					m_vertices[counter].binormal.y = -mesh->mBitangents[v].y;
 					m_vertices[counter].binormal.z = mesh->mBitangents[v].z;
+					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMALMAP;
 				}
 				else
 				{
@@ -222,18 +227,16 @@ namespace cvt
 			aiProcess_SortByPType);
 		if (scene == NULL)
 		{
-			std::cout << "Import failed" << std::endl;
-			std::cout << importer.GetErrorString() << std::endl;
-			return false;
+			auto error = importer.GetErrorString();
+			std::wstring errormsg;
+			for (int i = 0; error[i]; i++)
+				errormsg += (WCHAR)error[i];
+			throw hcs::Exception(L"Import failed", errormsg.c_str());
 		}
 
 		StoreData(scene);
 		m_sourceFile = GetFileNameWithoutExtension(filename);
 		m_sourceFolder = GetFolderName(filename);
-		std::wcout << L"Model loaded" << std::endl
-			<< L"Vertex count: " << m_vertices.size() << std::endl
-			<< L"Index count: " << m_indices.size() << std::endl
-			<< L"Group count: " << m_indexGroupSizes.size() << std::endl;
 		return true;
 	}
 
@@ -248,10 +251,22 @@ namespace cvt
 		m_normalmapNames.clear();
 	}
 
+	UINT ModelManager::getShaderInputType()
+	{
+		return m_shaderInputType;
+	}
+
+	std::wstring ModelManager::getOutFilename()
+	{
+		return m_sourceFolder + m_sourceFile + L".omd";
+	}
+
 	gfx::Entity::P ModelManager::CreateEntity(gfx::Graphics::P graphics)
 	{
 		ID3D11Device* device = graphics->getDevice();
-		UINT shaderInputType = gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP;
+		UINT shaderInputType =
+			(UINT)gfx::ShaderInputLayoutType::POSITION | (UINT)gfx::ShaderInputLayoutType::TEXCOORD |
+			(UINT)gfx::ShaderInputLayoutType::NORMAL | (UINT)gfx::ShaderInputLayoutType::NORMALMAP;
 
 		std::vector<std::shared_ptr<gfx::Texture>> textures, normalmaps;
 		textures.resize(m_textureNames.size());
@@ -273,35 +288,29 @@ namespace cvt
 			gfx::Model::Create(device, m_vertices.data(), (UINT)m_vertices.size(),
 				shaderInputType, m_indices.data(), (UINT)m_indices.size()),
 			textures.data(), normalmaps.data());
-		std::wcout << L"Entity created" << std::endl;
 		return entity;
 	}
 
-	void ModelManager::Export(UINT shaderInputLayout)
+	void ModelManager::Export(const WCHAR *filename, UINT shaderInputLayout)
 	{
 		std::ofstream outfile;
 		OMD_Header header;
-		std::wstring filename;
 
-		filename = m_sourceFolder + m_sourceFile + L".omd";
-		std::wcout << L"Exporting file: " << filename << std::endl;
-
-		//header.shaderInputLayout = gfw::SIL_POSITION | gfw::SIL_TEXCOORD | gfw::SIL_NORMAL | gfw::SIL_NORMALMAP;
-		header.shaderInputLayout = gfx::SIL_POSITION | gfx::SIL_NORMAL;
+		header.shaderInputLayout = shaderInputLayout;
 		header.vertexCount = (UINT)m_vertices.size();
 		header.indexCount = (UINT)m_indices.size();
 
-		outfile.open(filename, std::ios::out | std::ios::binary);
+		outfile.open(filename ? filename : m_sourceFolder + m_sourceFile + L".omd", std::ios::out | std::ios::binary);
 		outfile.write((char*)&header, sizeof(header));
 		for (UINT i = 0; i < m_vertices.size(); i++)
 		{
-			if (header.shaderInputLayout&gfx::SIL_POSITION)
+			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::POSITION)
 				outfile.write((char*)&m_vertices[i].position, sizeof(m_vertices[i].position));
-			if (header.shaderInputLayout&gfx::SIL_TEXCOORD)
+			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::TEXCOORD)
 				outfile.write((char*)&m_vertices[i].texcoord, sizeof(m_vertices[i].texcoord));
-			if (header.shaderInputLayout&gfx::SIL_NORMAL)
+			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMAL)
 				outfile.write((char*)&m_vertices[i].normal, sizeof(m_vertices[i].normal));
-			if (header.shaderInputLayout&gfx::SIL_NORMALMAP)
+			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMALMAP)
 			{
 				outfile.write((char*)&m_vertices[i].tangent, sizeof(m_vertices[i].tangent));
 				outfile.write((char*)&m_vertices[i].binormal, sizeof(m_vertices[i].binormal));
@@ -310,8 +319,6 @@ namespace cvt
 		outfile.write((char*)m_indices.data(), m_indices.size() * sizeof(UINT));
 
 		outfile.close();
-
-		std::wcout << L"File exported" << std::endl;
 	}
 
 }

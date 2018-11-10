@@ -9,7 +9,7 @@ namespace octdoc
 	{
 		class ShadowRenderer :public Renderer
 		{
-			SHARED_ONLY(ShadowRenderer);
+			SHARED_ONLY(ShadowRenderer)
 
 		protected:
 			ShadowRenderer() = default;

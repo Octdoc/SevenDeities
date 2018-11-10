@@ -30,8 +30,8 @@ float4 main(PixelInputType input) : SV_TARGET
 	intensity = ambient + (1 - ambient)*intensity;
 	textureColor.xyz *= lightColor.xyz*intensity;
 
-	float fog = 1.0f / length(input.pos - lightPosition);
-	textureColor.xyz *= (fog * 0.5f + 0.5f);
+	/*float fog = 1.0f / length(input.pos - lightPosition);
+	textureColor.xyz *= (fog * 0.5f + 0.5f);*/
 
 	return textureColor;
 }

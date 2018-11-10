@@ -6,19 +6,16 @@ namespace octdoc
 	Program::P Program::m_instance;
 
 	Program::Program() :m_autoUpdate(false), m_input() {}
-	void Program::MessageHandler()
+	void Program::MessageDispatcher()
 	{
 		TranslateMessage(&m_input.getMSG());
 		DispatchMessage(&m_input.getMSG());
 		m_input.HandleMessage();
-		for (auto c : m_children)
-			if (c->MessageHandlerCaller(m_input.getMSG().hwnd, m_input.getMSG().message, m_input.getMSG().wParam, m_input.getMSG().lParam))
-				return;
 	}
-	void Program::CloseWindow(HWND hwnd)
+	void Program::MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
 		for (auto c : m_children)
-			if (c->MessageHandlerCaller(hwnd, WM_DESTROY, (WPARAM)0, (LPARAM)0))
+			if (c->MessageHandlerCaller(hwnd, msg, wparam, lparam))
 				return;
 	}
 	void Program::Frame(float deltaTime)
@@ -28,8 +25,7 @@ namespace octdoc
 	}
 	LRESULT Program::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
-		if (msg == WM_DESTROY)
-			m_instance->CloseWindow(hwnd);
+		m_instance->MessageHandler(hwnd, msg, wparam, lparam);
 		return DefWindowProc(hwnd, msg, wparam, lparam);
 	}
 	void Program::RegisterWindow(form::Window::P window)
@@ -72,7 +68,7 @@ namespace octdoc
 			if (m_autoUpdate)
 			{
 				if (PeekMessage(&m_input.getMSG(), NULL, 0, 0, PM_REMOVE))
-					MessageHandler();
+					MessageDispatcher();
 				else
 				{
 					auto currentTime = std::chrono::steady_clock::now();
@@ -83,7 +79,7 @@ namespace octdoc
 			else
 			{
 				if (GetMessage(&m_input.getMSG(), NULL, 0, 0))
-					MessageHandler();
+					MessageDispatcher();
 			}
 		}
 	}

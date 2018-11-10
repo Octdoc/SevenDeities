@@ -7,17 +7,8 @@ namespace octdoc
 		Button::Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 			:Form(parent)
 		{
-			m_windowName = text;
 			m_id = (HMENU)m_autoIDdistributor++;
-			m_boundingbox.left = x;
-			m_boundingbox.top = y;
-			m_boundingbox.right = x + w;
-			m_boundingbox.bottom = y + h;
-			Initialize(parent);
-		}
-		void Button::Initialize(const form::Window::P parent)
-		{
-			m_hwnd = CreateWindowEx(0, L"button", m_windowName.c_str(), WS_VISIBLE | WS_CHILD, getX(), getY(), getW(), getH(), parent->getHWND(), m_id, GetModuleHandle(NULL), NULL);
+			m_hwnd = CreateWindow(L"button", text, WS_VISIBLE | WS_CHILD, x, y, w, h, parent->getHWND(), m_id, GetModuleHandle(NULL), NULL);
 		}
 		bool Button::IDMatch(HMENU id)
 		{

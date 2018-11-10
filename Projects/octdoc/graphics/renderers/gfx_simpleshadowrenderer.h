@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class SimpleShadowRenderer :public ShadowRenderer
 		{
-			SHARED_ONLY(SimpleShadowRenderer);
+			SHARED_ONLY(SimpleShadowRenderer)
 
 			SamplerState::P m_ssWrap;
 

@@ -11,7 +11,7 @@ namespace octdoc
 
 		class FormContainer
 		{
-			SHARED_ONLY(FormContainer);
+			SHARED_ONLY(FormContainer)
 
 		protected:
 			std::forward_list<std::shared_ptr<Form>> m_children;
@@ -28,7 +28,7 @@ namespace octdoc
 
 		class Form :public FormContainer
 		{
-			SHARED_ONLY(Form);
+			SHARED_ONLY(Form)
 
 		protected:
 			static size_t m_autoIDdistributor;
@@ -37,11 +37,9 @@ namespace octdoc
 			FormContainer::P m_parent;
 
 			HWND m_hwnd;
-			RECT m_boundingbox;
-			std::wstring m_windowName;
 
 		private:
-			void ApplyWindowSize();
+			void ApplyWindowSize(RECT rect);
 
 		protected:
 			Form(FormContainer::P parent);
@@ -61,7 +59,7 @@ namespace octdoc
 			int getH();
 			void setRect(int x, int y, int w, int h);
 			void setText(const WCHAR text[]);
-			const std::wstring& getText();
+			const std::wstring getText();
 
 			virtual Form::P ToForm() override;
 			virtual void AddChild(Form::P child) override;

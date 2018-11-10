@@ -27,7 +27,7 @@ namespace octdoc
 
 		class Graphics
 		{
-			SHARED_ONLY(Graphics);
+			SHARED_ONLY(Graphics)
 
 			bool m_vsync;
 			bool m_fullscreen;

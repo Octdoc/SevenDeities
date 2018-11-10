@@ -54,7 +54,7 @@ namespace octdoc
 		void ShadowRenderer::CreateDepthRenderingResources(ID3D11Device *device, UINT shadowmapSize, bool cubicShadowMap)
 		{
 			m_cubicShadowMap = cubicShadowMap;
-			m_vsDepth = VertexShader::Create(device, L"Shaders/vsDepth.cso", SIL_POSITION);
+			m_vsDepth = VertexShader::Create(device, L"Shaders/vsDepth.cso", (UINT)ShaderInputLayoutType::POSITION);
 			m_psDepth = PixelShader::Create(device, L"Shaders/psDepth.cso");
 			m_shadowTexture = RenderTarget::Create(device, shadowmapSize, shadowmapSize, m_cubicShadowMap);
 			m_depthMatrixBuffer = CBuffer::Create(device, sizeof(mth::float4x4) * 2);

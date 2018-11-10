@@ -60,29 +60,33 @@ namespace octdoc
 			devMode.dmBitsPerPel = 32;
 			devMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 		}
-		void Window::FillFullscreenBoundingBox(WindowSettings& settings)
+		RECT Window::FillFullscreenBoundingBox(WindowSettings& settings)
 		{
-			m_boundingbox.left = 0;
-			m_boundingbox.top = 0;
-			m_boundingbox.right = settings.width;
-			m_boundingbox.bottom = settings.height;
+			RECT rect;
+			rect.left = 0;
+			rect.top = 0;
+			rect.right = settings.width;
+			rect.bottom = settings.height;
+			return rect;
 		}
-		void Window::FillWindowedBoundingBox(WindowSettings& settings)
+		RECT Window::FillWindowedBoundingBox(WindowSettings& settings)
 		{
+			RECT rect;
 			if (settings.x < 0)
 				settings.x = (GetSystemMetrics(SM_CXSCREEN) - settings.width) / 2;
 			if (settings.y < 0)
 				settings.y = (GetSystemMetrics(SM_CYSCREEN) - settings.height) / 2;
-			m_boundingbox.left = 0;
-			m_boundingbox.top = 0;
-			m_boundingbox.right = settings.width;
-			m_boundingbox.bottom = settings.height;
+			rect.left = 0;
+			rect.top = 0;
+			rect.right = settings.width;
+			rect.bottom = settings.height;
 			if (settings.hasFrame)
-				AdjustWindowRectEx(&m_boundingbox, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
-			m_boundingbox.left += settings.x;
-			m_boundingbox.right += settings.x;
-			m_boundingbox.top += settings.y;
-			m_boundingbox.bottom += settings.y;
+				AdjustWindowRectEx(&rect, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
+			rect.left += settings.x;
+			rect.right += settings.x;
+			rect.top += settings.y;
+			rect.bottom += settings.y;
+			return rect;
 		}
 		void Window::CreateHWND(WindowSettings& settings, HWND parentHandle)
 		{
@@ -96,7 +100,7 @@ namespace octdoc
 		}
 		void Window::CreateFullscreenWindow(WindowSettings& settings)
 		{
-			FillFullscreenBoundingBox(settings);
+			RECT rect = FillFullscreenBoundingBox(settings);
 
 			DEVMODE dmScreenSettings;
 			FillDevModeSettings(dmScreenSettings);
@@ -106,12 +110,12 @@ namespace octdoc
 				WS_EX_APPWINDOW
 				, m_windowName.c_str(), m_windowName.c_str(),
 				WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP
-				, getX(), getY(), getW(), getH(),
+				, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
 				NULL, NULL, GetModuleHandle(NULL), NULL);
 		}
 		void Window::CreateOverlappedWindow(WindowSettings& settings, HWND parentHandle)
 		{
-			FillWindowedBoundingBox(settings);
+			RECT rect = FillWindowedBoundingBox(settings);
 			DWORD exStyle = 0;
 			DWORD style = 0;
 			if (settings.hasFrame)
@@ -130,9 +134,8 @@ namespace octdoc
 			}
 
 			m_hwnd = CreateWindowEx(exStyle, m_windowName.c_str(), m_windowName.c_str(), style,
-				getX(), getY(), getW(), getH(),
+				rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
 				parentHandle ? parentHandle : NULL, NULL, GetModuleHandle(NULL), NULL);
-			GetWindowRect(m_hwnd, &m_boundingbox);
 		}
 		void Window::InitializeWindow(WindowSettings& settings, HWND parentHandle)
 		{

@@ -10,7 +10,7 @@ namespace octdoc
 	{
 		class Renderer
 		{
-			SHARED_ONLY(Renderer);
+			SHARED_ONLY(Renderer)
 
 		protected:
 			Renderer() = default;

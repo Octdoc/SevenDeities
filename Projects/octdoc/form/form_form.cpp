@@ -22,9 +22,9 @@ namespace octdoc
 		{
 			m_children.clear();
 		}
-		void Form::ApplyWindowSize()
+		void Form::ApplyWindowSize(RECT rect)
 		{
-			MoveWindow(m_hwnd, getX(), getY(), getW(), getH(), FALSE);
+			MoveWindow(m_hwnd, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, FALSE);
 		}
 
 		Form::Form(FormContainer::P parent)
@@ -64,72 +64,95 @@ namespace octdoc
 
 		void Form::setPosition(int x, int y)
 		{
-			m_boundingbox.right += x - m_boundingbox.left;
-			m_boundingbox.left = x;
-			m_boundingbox.bottom += y - m_boundingbox.top;
-			m_boundingbox.top = y;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.right += x - rect.left;
+			rect.left = x;
+			rect.bottom += y - rect.top;
+			rect.top = y;
+			ApplyWindowSize(rect);
 		}
 		void Form::setX(int x)
 		{
-			m_boundingbox.right += x - m_boundingbox.left;
-			m_boundingbox.left = x;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.right += x - rect.left;
+			rect.left = x;
+			ApplyWindowSize(rect);
 		}
 		void Form::setY(int y)
 		{
-			m_boundingbox.bottom += y - m_boundingbox.top;
-			m_boundingbox.top = y;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.bottom += y - rect.top;
+			rect.top = y;
+			ApplyWindowSize(rect);
 		}
 		int Form::getX()
 		{
-			return m_boundingbox.left;
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			return rect.left;
 		}
 		int Form::getY()
 		{
-			return m_boundingbox.top;
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			return rect.top;
 		}
 		void Form::setSize(int w, int h)
 		{
-			m_boundingbox.right = m_boundingbox.left + w;
-			m_boundingbox.bottom = m_boundingbox.top + h;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.right = rect.left + w;
+			rect.bottom = rect.top + h;
+			ApplyWindowSize(rect);
 		}
 		void Form::setW(int w)
 		{
-			m_boundingbox.right = m_boundingbox.left + w;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.right = rect.left + w;
+			ApplyWindowSize(rect);
 		}
 		void Form::setH(int h)
 		{
-			m_boundingbox.bottom = m_boundingbox.top + h;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.bottom = rect.top + h;
+			ApplyWindowSize(rect);
 		}
 		int Form::getW()
 		{
-			return m_boundingbox.right - m_boundingbox.left;
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			return rect.right - rect.left;
 		}
 		int Form::getH()
 		{
-			return m_boundingbox.bottom - m_boundingbox.top;
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			return rect.bottom - rect.top;
 		}
 		void Form::setRect(int x, int y, int w, int h)
 		{
-			m_boundingbox.right = x + w;
-			m_boundingbox.left = x;
-			m_boundingbox.bottom = y + w;
-			m_boundingbox.top = y;
-			ApplyWindowSize();
+			RECT rect;
+			GetWindowRect(m_hwnd, &rect);
+			rect.right = x + w;
+			rect.left = x;
+			rect.bottom = y + w;
+			rect.top = y;
+			ApplyWindowSize(rect);
 		}
 		void Form::setText(const WCHAR text[])
 		{
-			m_windowName = text;
 			SetWindowText(m_hwnd, text);
 		}
-		const std::wstring& Form::getText()
+		const std::wstring Form::getText()
 		{
-			return m_windowName;
+			WCHAR text[256];
+			GetWindowText(m_hwnd, text, 256);
+			return text;
 		}
 		HWND Form::getHWND()
 		{

@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class TextBox :public Form
 		{
-			SHARED_ONLY(TextBox);
+			SHARED_ONLY(TextBox)
 
 		private:
 			TextBox(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h);

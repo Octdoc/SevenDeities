@@ -1,6 +1,6 @@
 #include "sd_scene.h"
 
-namespace car
+namespace sd
 {
 	void Scene::Start()
 	{
@@ -16,7 +16,9 @@ namespace car
 		m_renderer->SetSky(gfx::SkyDome::Create(device, L"Media/skymap.dds"));
 
 		gfx::ModelLoader ml;
-		ml.CreateQuad({ 1.0f, 1.0f }, { 2.0f, 2.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f }, gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP);
+		ml.CreateQuad({ 1.0f, 1.0f }, { 2.0f, 2.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f },
+			(UINT)gfx::ShaderInputLayoutType::POSITION | (UINT)gfx::ShaderInputLayoutType::TEXCOORD |
+			(UINT)gfx::ShaderInputLayoutType::NORMAL | (UINT)gfx::ShaderInputLayoutType::NORMALMAP);
 		//ml.Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 		auto monkey = gfx::Entity::Create(
 			//gfw::Model::Create(device, L"Media/smooth_monkey.omd"),

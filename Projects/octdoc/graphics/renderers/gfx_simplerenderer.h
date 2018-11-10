@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class SimpleRenderer :public Renderer
 		{
-			SHARED_ONLY(SimpleRenderer);
+			SHARED_ONLY(SimpleRenderer)
 
 			float m_ambient;
 			gfx::CBuffer::P m_psLightBuffer;

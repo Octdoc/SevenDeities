@@ -21,21 +21,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cvt_converter.cpp">
+    <ClCompile Include="cvt_modelmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cvt_modelmanager.cpp">
+    <ClCompile Include="cvt_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cvt_gfxscreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cvt_converter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cvt_modelmanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cvt_menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cvt_gfxscreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

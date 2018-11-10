@@ -25,12 +25,14 @@ namespace octdoc
 
 		class Scene
 		{
-			SHARED_ONLY(Scene);
+			SHARED_ONLY(Scene)
+
+		protected:
+			Form::P m_window;
+			gfx::Graphics::P m_graphics;
 
 		protected:
 			Scene() = default;
-			Form::P m_window;
-			gfx::Graphics::P m_graphics;
 
 		public:
 			void setWindow(Form::P window);
@@ -41,7 +43,7 @@ namespace octdoc
 
 		class Window :public Form
 		{
-			SHARED_ONLY(Window);
+			SHARED_ONLY(Window)
 
 			static std::map<std::wstring, size_t> m_registeredClasses;
 
@@ -49,19 +51,22 @@ namespace octdoc
 			gfx::Graphics::P m_graphics;
 			Scene::P m_scene;
 			bool m_fullscreen;
+			std::wstring m_windowName;
 
 		private:
-			Window(WindowSettings& settings, FormContainer::P parent);
 			void InitializeWindow(WindowSettings& settings, HWND parentHandle);
 			static void RegisterWindowClass(const WCHAR className[]);
 			static void UnregisterWindowClass(const WCHAR className[]);
 
 			void FillDevModeSettings(DEVMODE& devMode);
-			void FillFullscreenBoundingBox(WindowSettings& settings);
-			void FillWindowedBoundingBox(WindowSettings& settings);
+			RECT FillFullscreenBoundingBox(WindowSettings& settings);
+			RECT FillWindowedBoundingBox(WindowSettings& settings);
 			void CreateHWND(WindowSettings& settings, HWND parentHandle);
 			void CreateFullscreenWindow(WindowSettings& settings);
 			void CreateOverlappedWindow(WindowSettings& settings, HWND parentHandle);
+
+		protected:
+			Window(WindowSettings& settings, FormContainer::P parent);
 
 		public:
 			~Window();

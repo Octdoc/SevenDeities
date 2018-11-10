@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class Model
 		{
-			SHARED_ONLY(Model);
+			SHARED_ONLY(Model)
 
 		protected:
 			AutoReleasePtr<ID3D11Buffer> m_vertexBuffer;

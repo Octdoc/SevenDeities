@@ -9,7 +9,7 @@ namespace quad
 {
 	class Sensor
 	{
-		SHARED_TOO(Sensor);
+		SHARED_TOO(Sensor)
 
 		static gfx::Model::P m_model;
 

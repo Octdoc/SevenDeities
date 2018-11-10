@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class Label :public Form
 		{
-			SHARED_ONLY(Label);
+			SHARED_ONLY(Label)
 
 		private:
 			Label(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h);

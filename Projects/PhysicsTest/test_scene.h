@@ -8,7 +8,8 @@ namespace test
 {
 	class Test_Scene :public form::Scene
 	{
-		SHARED_ONLY(Test_Scene);
+		SHARED_ONLY(Test_Scene)
+
 		gfx::Controller m_controller;
 		gfx::Camera m_camera;
 		gfx::Renderer::P m_renderer;

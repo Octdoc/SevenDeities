@@ -42,6 +42,7 @@ namespace cvt
 		std::vector<UINT> m_indexGroupSizes;
 		std::vector<std::wstring> m_textureNames;
 		std::vector<std::wstring> m_normalmapNames;
+		UINT m_shaderInputType;
 
 	private:
 		void StoreData(const aiScene* scene);
@@ -50,8 +51,10 @@ namespace cvt
 		bool LoadModelData(const WCHAR* filename);
 		void Clear();
 
+		UINT getShaderInputType();
+		std::wstring getOutFilename();
 		gfx::Entity::P CreateEntity(gfx::Graphics::P graphics);
 
-		void Export(UINT shaderInputLayout);
+		void Export(const WCHAR *filename, UINT shaderInputLayout);
 	};
 }

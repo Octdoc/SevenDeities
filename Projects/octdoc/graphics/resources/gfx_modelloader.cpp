@@ -15,31 +15,31 @@ namespace octdoc
 			m_indices.resize(indexCount);
 			for (UINT v = 0; v < vertexCount; v++)
 			{
-				if (m_shaderInputLayout & SIL_POSITION)
+				if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::POSITION)
 				{
 					m_vertices[counter++] = vertices[v].position.x;
 					m_vertices[counter++] = vertices[v].position.y;
 					m_vertices[counter++] = vertices[v].position.z;
 				}
-				if (m_shaderInputLayout & SIL_COLOR)
+				if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::COLOR)
 				{
 					m_vertices[counter++] = vertices[v].color.x;
 					m_vertices[counter++] = vertices[v].color.y;
 					m_vertices[counter++] = vertices[v].color.z;
 					m_vertices[counter++] = vertices[v].color.w;
 				}
-				if (m_shaderInputLayout & (SIL_TEXCOORD | SIL_NORMALMAP))
+				if (m_shaderInputLayout & ((UINT)ShaderInputLayoutType::TEXCOORD | (UINT)ShaderInputLayoutType::NORMALMAP))
 				{
 					m_vertices[counter++] = vertices[v].texcoord.x;
 					m_vertices[counter++] = vertices[v].texcoord.y;
 				}
-				if (m_shaderInputLayout & SIL_NORMAL)
+				if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::NORMAL)
 				{
 					m_vertices[counter++] = vertices[v].normal.x;
 					m_vertices[counter++] = vertices[v].normal.y;
 					m_vertices[counter++] = vertices[v].normal.z;
 				}
-				if (m_shaderInputLayout & SIL_NORMALMAP)
+				if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::NORMALMAP)
 				{
 					m_vertices[counter++] = vertices[v].tangent.x;
 					m_vertices[counter++] = vertices[v].tangent.y;
@@ -159,13 +159,13 @@ namespace octdoc
 
 		void ModelLoader::CreateFullScreenQuad()
 		{
-			CreateQuad({ -1.0f, -1.0f }, { 2.0f, 2.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f }, SIL_POSITION | SIL_TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
+			CreateQuad({ -1.0f, -1.0f }, { 2.0f, 2.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f }, (UINT)ShaderInputLayoutType::POSITION | (UINT)ShaderInputLayoutType::TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
 			Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 		}
 
 		void ModelLoader::CreateScreenQuad(mth::float2 pos, mth::float2 size)
 		{
-			CreateQuad(pos, size, { 0.0f, 0.0f }, { 1.0f, 1.0f }, SIL_POSITION | SIL_TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
+			CreateQuad(pos, size, { 0.0f, 0.0f }, { 1.0f, 1.0f }, (UINT)ShaderInputLayoutType::POSITION | (UINT)ShaderInputLayoutType::TEXCOORD, 1.0f, 1.0f, 1.0f, 1.0f);
 			Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 		}
 
@@ -205,7 +205,7 @@ namespace octdoc
 				m_indices[i + 2] = tmp;
 			}
 			UINT vertexSize = getVertexSizeInFloats();
-			if (m_shaderInputLayout & SIL_NORMAL)
+			if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::NORMAL)
 			{
 				UINT offset = NormalOffset(m_shaderInputLayout);
 				for (UINT i = 0; i < getVertexCount(); i++)
@@ -215,7 +215,7 @@ namespace octdoc
 					m_vertices[i*vertexSize + offset + 2] *= -1.0f;
 				}
 			}
-			if (m_shaderInputLayout & SIL_NORMALMAP)
+			if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::NORMALMAP)
 			{
 				UINT offset1 = TangentOffset(m_shaderInputLayout);
 				UINT offset2 = BinormalOffset(m_shaderInputLayout);
@@ -235,7 +235,7 @@ namespace octdoc
 		{
 			UINT vertexSize = getVertexSizeInFloats();
 			mth::float4 v;
-			if (m_shaderInputLayout & SIL_POSITION)
+			if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::POSITION)
 			{
 				UINT offset = PositionOffset(m_shaderInputLayout);
 				for (UINT i = 0; i < getVertexCount(); i++)
@@ -250,7 +250,7 @@ namespace octdoc
 					m_vertices[i*vertexSize + offset + 2] = v.z;
 				}
 			}
-			if (m_shaderInputLayout & SIL_NORMAL)
+			if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::NORMAL)
 			{
 				UINT offset = NormalOffset(m_shaderInputLayout);
 				for (UINT i = 0; i < getVertexCount(); i++)
@@ -265,7 +265,7 @@ namespace octdoc
 					m_vertices[i*vertexSize + offset + 2] = v.z;
 				}
 			}
-			if (m_shaderInputLayout & SIL_NORMALMAP)
+			if (m_shaderInputLayout & (UINT)ShaderInputLayoutType::NORMALMAP)
 			{
 				UINT offset1 = TangentOffset(m_shaderInputLayout);
 				UINT offset2 = BinormalOffset(m_shaderInputLayout);

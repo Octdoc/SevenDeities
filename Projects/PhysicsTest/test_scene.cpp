@@ -41,7 +41,9 @@ namespace test
 			normapmap));
 
 		gfx::ModelLoader rod;
-		rod.CreateQuad({ -0.002f, -0.002f }, { 0.004f, 0.004f }, gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP);
+		rod.CreateQuad({ -0.002f, -0.002f }, { 0.004f, 0.004f },
+			(UINT)gfx::ShaderInputLayoutType::POSITION | (UINT)gfx::ShaderInputLayoutType::TEXCOORD |
+			(UINT)gfx::ShaderInputLayoutType::NORMAL | (UINT)gfx::ShaderInputLayoutType::NORMALMAP);
 		rod.Transform(mth::float4x4::Translation(0.0f, 0.0f, 1.0f)*mth::float4x4::RotationX(-mth::pi*0.5f));
 		m_rod = gfx::Entity::Create(gfx::Model::Create(device, rod),
 			gfx::Texture::Create2D(device, L"Media/black.png"),

@@ -8,13 +8,11 @@ namespace octdoc
 	{
 		class Button :public Form
 		{
-			SHARED_ONLY(Button);
+			SHARED_ONLY(Button)
 			HMENU m_id;
 
 		private:
 			Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h);
-
-			void Initialize(const form::Window::P parent);
 
 		public:
 			static Button::P Create(const form::Window::P parent, const WCHAR text[]);

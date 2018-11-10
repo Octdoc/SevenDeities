@@ -8,9 +8,9 @@ namespace octdoc
 	{
 		class CBuffer
 		{
-			SHARED_ONLY(CBuffer);
+			SHARED_ONLY(CBuffer)
 
-			AutoReleasePtr<ID3D11Buffer> m_buffer;
+				AutoReleasePtr<ID3D11Buffer> m_buffer;
 			UINT m_bufferSize;
 
 		private:
@@ -29,13 +29,13 @@ namespace octdoc
 
 		ID3DBlob* LoadShaderCode(const WCHAR* filename);
 
-		enum ShaderInputLayoutType
+		enum class ShaderInputLayoutType :UINT
 		{
-			SIL_POSITION = 0x1,
-			SIL_COLOR = 0x2,
-			SIL_TEXCOORD = 0x4,
-			SIL_NORMAL = 0x8,
-			SIL_NORMALMAP = 0x10
+			POSITION = 0x1,
+			COLOR = 0x2,
+			TEXCOORD = 0x4,
+			NORMAL = 0x8,
+			NORMALMAP = 0x10
 		};
 
 		UINT VertexSizeInBytes(UINT shaderInputLayoutType);
@@ -49,8 +49,8 @@ namespace octdoc
 
 		class VertexShader
 		{
-			SHARED_ONLY(VertexShader);
-			AutoReleasePtr<ID3D11VertexShader> m_shader;
+			SHARED_ONLY(VertexShader)
+				AutoReleasePtr<ID3D11VertexShader> m_shader;
 			AutoReleasePtr<ID3D11InputLayout> m_inputLayout;
 			UINT m_inputLayoutType;
 
@@ -72,8 +72,8 @@ namespace octdoc
 
 		class PixelShader
 		{
-			SHARED_ONLY(PixelShader);
-			AutoReleasePtr<ID3D11PixelShader> m_shader;
+			SHARED_ONLY(PixelShader)
+				AutoReleasePtr<ID3D11PixelShader> m_shader;
 
 		private:
 			PixelShader(ID3D11Device* device, const WCHAR* shaderFileName);

@@ -11,7 +11,8 @@ namespace octdoc
 	{
 		class SkyDome
 		{
-			SHARED_ONLY(SkyDome);
+			SHARED_ONLY(SkyDome)
+
 			Model::P m_model;
 			VertexShader::P m_vertexShader;
 			PixelShader::P m_pixelShader;

@@ -8,7 +8,7 @@ namespace quad
 {
 	class Scene :public form::Scene
 	{
-		SHARED_ONLY(Scene);
+		SHARED_ONLY(Scene)
 
 		gfx::Controller m_controller;
 		gfx::Camera m_camera;

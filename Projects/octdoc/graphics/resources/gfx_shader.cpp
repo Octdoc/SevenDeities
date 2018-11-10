@@ -86,15 +86,15 @@ namespace octdoc
 		UINT VertexSizeInFloats(UINT shaderInputLayoutType)
 		{
 			UINT size = 0;
-			if (shaderInputLayoutType & SIL_POSITION)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				size += 3;
-			if (shaderInputLayoutType & SIL_COLOR)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::COLOR)
 				size += 4;
-			if (shaderInputLayoutType & (SIL_TEXCOORD | SIL_NORMALMAP))
+			if (shaderInputLayoutType & ((UINT)ShaderInputLayoutType::TEXCOORD | (UINT)ShaderInputLayoutType::NORMALMAP))
 				size += 2;
-			if (shaderInputLayoutType & SIL_NORMAL)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::NORMAL)
 				size += 3;
-			if (shaderInputLayoutType & SIL_NORMALMAP)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::NORMALMAP)
 				size += 3 + 3;
 			return size;
 		}
@@ -108,7 +108,7 @@ namespace octdoc
 		UINT ColorOffset(UINT shaderInputLayoutType)
 		{
 			UINT offset = 0;
-			if (shaderInputLayoutType & SIL_POSITION)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				offset += 3;
 			return offset;
 		}
@@ -116,9 +116,9 @@ namespace octdoc
 		UINT TexcoordOffset(UINT shaderInputLayoutType)
 		{
 			UINT offset = 0;
-			if (shaderInputLayoutType & SIL_POSITION)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				offset += 3;
-			if (shaderInputLayoutType & SIL_COLOR)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::COLOR)
 				offset += 4;
 			return offset;
 		}
@@ -126,11 +126,11 @@ namespace octdoc
 		UINT NormalOffset(UINT shaderInputLayoutType)
 		{
 			UINT offset = 0;
-			if (shaderInputLayoutType & SIL_POSITION)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				offset += 3;
-			if (shaderInputLayoutType & SIL_COLOR)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::COLOR)
 				offset += 4;
-			if (shaderInputLayoutType & (SIL_TEXCOORD | SIL_NORMALMAP))
+			if (shaderInputLayoutType & ((UINT)ShaderInputLayoutType::TEXCOORD | (UINT)ShaderInputLayoutType::NORMALMAP))
 				offset += 2;
 			return offset;
 		}
@@ -138,13 +138,13 @@ namespace octdoc
 		UINT TangentOffset(UINT shaderInputLayoutType)
 		{
 			UINT offset = 0;
-			if (shaderInputLayoutType & SIL_POSITION)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				offset += 3;
-			if (shaderInputLayoutType & SIL_COLOR)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::COLOR)
 				offset += 4;
-			if (shaderInputLayoutType & (SIL_TEXCOORD | SIL_NORMALMAP))
+			if (shaderInputLayoutType & ((UINT)ShaderInputLayoutType::TEXCOORD | (UINT)ShaderInputLayoutType::NORMALMAP))
 				offset += 2;
-			if (shaderInputLayoutType & SIL_NORMAL)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::NORMAL)
 				offset += 3;
 			return offset;
 		}
@@ -152,15 +152,15 @@ namespace octdoc
 		UINT BinormalOffset(UINT shaderInputLayoutType)
 		{
 			UINT offset = 0;
-			if (shaderInputLayoutType & SIL_POSITION)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				offset += 3;
-			if (shaderInputLayoutType & SIL_COLOR)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::COLOR)
 				offset += 4;
-			if (shaderInputLayoutType & (SIL_TEXCOORD | SIL_NORMALMAP))
+			if (shaderInputLayoutType & ((UINT)ShaderInputLayoutType::TEXCOORD | (UINT)ShaderInputLayoutType::NORMALMAP))
 				offset += 2;
-			if (shaderInputLayoutType & SIL_NORMAL)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::NORMAL)
 				offset += 3;
-			if (shaderInputLayoutType & SIL_NORMALMAP)
+			if (shaderInputLayoutType & (UINT)ShaderInputLayoutType::NORMALMAP)
 				offset += 3;
 			return offset;
 		}
@@ -172,15 +172,15 @@ namespace octdoc
 		int VertexShader::FillInputLayoutDesc(D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[])
 		{
 			int counter = 0;
-			if (m_inputLayoutType & SIL_POSITION)
+			if (m_inputLayoutType & (UINT)ShaderInputLayoutType::POSITION)
 				inputLayoutDesc[counter++] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-			if (m_inputLayoutType & SIL_COLOR)
+			if (m_inputLayoutType & (UINT)ShaderInputLayoutType::COLOR)
 				inputLayoutDesc[counter++] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-			if (m_inputLayoutType & (SIL_TEXCOORD | SIL_NORMALMAP))
+			if (m_inputLayoutType & ((UINT)ShaderInputLayoutType::TEXCOORD | (UINT)ShaderInputLayoutType::NORMALMAP))
 				inputLayoutDesc[counter++] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-			if (m_inputLayoutType & SIL_NORMAL)
+			if (m_inputLayoutType & (UINT)ShaderInputLayoutType::NORMAL)
 				inputLayoutDesc[counter++] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-			if (m_inputLayoutType & SIL_NORMALMAP)
+			if (m_inputLayoutType & (UINT)ShaderInputLayoutType::NORMALMAP)
 			{
 				inputLayoutDesc[counter++] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 				inputLayoutDesc[counter++] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };

@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class ColorRenderer :public Renderer
 		{
-			SHARED_ONLY(ColorRenderer);
+			SHARED_ONLY(ColorRenderer)
 
 			float m_ambient;
 			gfx::CBuffer::P m_psLightBuffer;

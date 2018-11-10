@@ -19,7 +19,8 @@ namespace octdoc
 {
 	class Program :public form::FormContainer
 	{
-		SHARED_ONLY(Program);
+		SHARED_ONLY(Program)
+
 		static Program::P m_instance;
 
 		hcs::Input m_input;
@@ -27,8 +28,8 @@ namespace octdoc
 
 	private:
 		Program();
-		void MessageHandler();
-		void CloseWindow(HWND hwnd);
+		void MessageDispatcher();
+		void MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 		void Frame(float deltaTime);
 
 	public:

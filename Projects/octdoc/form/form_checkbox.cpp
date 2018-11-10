@@ -7,17 +7,8 @@ namespace octdoc
 		CheckBox::CheckBox(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 			:Form(parent)
 		{
-			m_windowName = text;
 			m_id = (HMENU)m_autoIDdistributor++;
-			m_boundingbox.left = x;
-			m_boundingbox.top = y;
-			m_boundingbox.right = x + w;
-			m_boundingbox.bottom = y + h;
-			Initialize(parent);
-		}
-		void CheckBox::Initialize(const form::Window::P parent)
-		{
-			m_hwnd = CreateWindow(L"button", m_windowName.c_str(), WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX, getX(), getY(), getW(), getH(), parent->getHWND(), m_id, GetModuleHandle(NULL), NULL);
+			m_hwnd = CreateWindow(L"button",text, WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX, x, y, w, h, parent->getHWND(), m_id, GetModuleHandle(NULL), NULL);
 		}
 		bool CheckBox::IDMatch(HMENU id)
 		{
@@ -29,7 +20,11 @@ namespace octdoc
 		}
 		bool CheckBox::isChecked()
 		{
-			return false;
+			return SendMessage(m_hwnd, BM_GETCHECK, (WPARAM)0, (LPARAM)0) == BST_CHECKED;
+		}
+		void CheckBox::setCheck(bool check)
+		{
+			PostMessage(m_hwnd, BM_SETCHECK, check ? BST_CHECKED : BST_UNCHECKED, LPARAM(0));
 		}
 		CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[])
 		{

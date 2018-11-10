@@ -7,7 +7,7 @@ namespace octdoc
 	{
 		class SamplerState
 		{
-			SHARED_ONLY(SamplerState);
+			SHARED_ONLY(SamplerState)
 			AutoReleasePtr<ID3D11SamplerState> m_sampler;
 
 		private:
@@ -26,7 +26,7 @@ namespace octdoc
 
 		class Texture
 		{
-			SHARED_ONLY(Texture);
+			SHARED_ONLY(Texture)
 
 		protected:
 			AutoReleasePtr<ID3D11Texture2D> m_texture;
@@ -59,7 +59,7 @@ namespace octdoc
 
 		class RenderTarget :public Texture
 		{
-			SHARED_ONLY(RenderTarget);
+			SHARED_ONLY(RenderTarget)
 
 			AutoReleasePtr<ID3D11RenderTargetView> m_renderTargetViews[6];
 			AutoReleasePtr<ID3D11Texture2D> m_depthBuffer;

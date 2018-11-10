@@ -8,7 +8,7 @@ namespace octdoc
 	{
 		class ColorShadowRenderer :public ShadowRenderer
 		{
-			SHARED_ONLY(ColorShadowRenderer);
+			SHARED_ONLY(ColorShadowRenderer)
 
 			gfx::CBuffer::P m_psColorBuffer;
 

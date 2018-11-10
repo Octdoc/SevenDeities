@@ -16,7 +16,7 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR cmdline
 	settings.hasFrame = true;
 	form::Window::P child = form::Window::Create(settings, window);
 	child->InitGraphics();
-	child->setScene(car::Scene::Create());
+	child->setScene(sd::Scene::Create());
 	window.reset();
 	child.reset();
 	Program::Instance().Run(true);

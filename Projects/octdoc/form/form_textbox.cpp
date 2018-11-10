@@ -7,13 +7,7 @@ namespace octdoc
 		TextBox::TextBox(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 			:Form(parent)
 		{
-			if (text)
-				m_windowName = text;
-			m_boundingbox.left = x;
-			m_boundingbox.top = y;
-			m_boundingbox.right = x + w;
-			m_boundingbox.bottom = y + h;
-			m_hwnd = CreateWindow(L"edit", m_windowName.c_str(), WS_VISIBLE | WS_CHILD, getX(), getY(), getW(), getH(), parent->getHWND(), NULL, GetModuleHandle(NULL), NULL);
+			m_hwnd = CreateWindow(L"edit", text, WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL, x, y, w, h, parent->getHWND(), NULL, GetModuleHandle(NULL), NULL);
 		}
 		TextBox::P TextBox::Create(const form::Window::P parent, const WCHAR* text)
 		{

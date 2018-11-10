@@ -12,7 +12,8 @@ namespace octdoc
 
 		class Entity :public mth::Position
 		{
-			SHARED_ONLY(Entity);
+			SHARED_ONLY(Entity)
+
 			Model::P m_model;
 			mth::float4 m_color;
 			std::vector<Texture::P> m_textures;

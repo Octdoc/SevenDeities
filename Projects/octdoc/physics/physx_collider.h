@@ -19,7 +19,8 @@ namespace octdoc
 
 		class Player :public mth::Position
 		{
-			SHARED_ONLY(Player);
+			SHARED_ONLY(Player)
+
 		protected:
 			BV_AABB m_boundingBox;
 			bool canJump;
@@ -43,7 +44,8 @@ namespace octdoc
 
 		class Collider :public mth::Position
 		{
-			SHARED_ONLY(Collider);
+			SHARED_ONLY(Collider)
+
 			BV_AABB m_boundingBox;
 			std::vector<mth::Triangle> m_mesh;
 
@@ -62,7 +64,8 @@ namespace octdoc
 
 		class CollisionArea
 		{
-			SHARED_ONLY(CollisionArea);
+			SHARED_ONLY(CollisionArea)
+
 			Player::P m_player;
 			std::vector<Collider::P> m_colliders;
 

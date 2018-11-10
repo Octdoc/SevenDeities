@@ -8,7 +8,9 @@ namespace octdoc
 		{
 			ID3D11Device* device = graphics->getDevice();
 			m_ambient = 0.5f;
-			m_vertexShader = gfx::VertexShader::Create(device, L"Shaders/vsSimple.cso", gfx::SIL_POSITION | gfx::SIL_TEXCOORD | gfx::SIL_NORMAL | gfx::SIL_NORMALMAP);
+			m_vertexShader = gfx::VertexShader::Create(device, L"Shaders/vsSimple.cso", 
+				(UINT)gfx::ShaderInputLayoutType::POSITION | (UINT)gfx::ShaderInputLayoutType::TEXCOORD |
+				(UINT)gfx::ShaderInputLayoutType::NORMAL | (UINT)gfx::ShaderInputLayoutType::NORMALMAP);
 			m_pixelShader = gfx::PixelShader::Create(device, L"Shaders/psSimple.cso");
 			m_vsMatrixBuffer = gfx::CBuffer::Create(device, sizeof(mth::float4x4) * 2);
 			m_psLightBuffer = gfx::CBuffer::Create(device, sizeof(float) * 8);
