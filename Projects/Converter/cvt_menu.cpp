@@ -15,6 +15,8 @@ namespace cvt
 		m_cbNormalmap = form::CheckBox::Create(window, L"Normalmap", width - 190, 95, 100, 20);
 		m_btnExport = form::Button::Create(window, L"Export", width - 80, 75, 70, 40);
 
+		m_lstTextureNames = form::ListBox::Create(window, width - 190, 120, 180, 180);
+
 		m_btnExit = form::Button::Create(window, L"Exit", width - 190, 310, 180, 30);
 
 		m_renderScreen = GfxScreen::Create(window);
@@ -30,7 +32,6 @@ namespace cvt
 			shaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMAL;
 		if (m_cbNormalmap->isChecked())
 			shaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMALMAP;
-		//UpdateShaderInput(5);
 		m_renderScreen->ExportModel(m_tbFilename->getText().c_str(), shaderInputType);
 	}
 	Menu::P Menu::Create()
@@ -64,12 +65,15 @@ namespace cvt
 			break;
 		}
 	}
-	void Menu::UpdateModelInfo(LPCWSTR filename, UINT shaderInputType)
+	void Menu::UpdateModelInfo(LPCWSTR filename, UINT shaderInputType, ModelManager& modelManager)
 	{
 		m_tbFilename->setText(filename);
 		m_cbPosition->setCheck(shaderInputType & (UINT)gfx::ShaderInputLayoutType::POSITION);
 		m_cbTexture->setCheck(shaderInputType & (UINT)gfx::ShaderInputLayoutType::TEXCOORD);
 		m_cbNormal->setCheck(shaderInputType & (UINT)gfx::ShaderInputLayoutType::NORMAL);
 		m_cbNormalmap->setCheck(shaderInputType & (UINT)gfx::ShaderInputLayoutType::NORMALMAP);
+		m_lstTextureNames->Clear();
+		for (UINT i = 0; i < modelManager.getModelPartCount(); i++)
+			m_lstTextureNames->AddString(modelManager.getTextureName(i).c_str());
 	}
 }

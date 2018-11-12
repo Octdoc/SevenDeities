@@ -154,6 +154,14 @@ namespace octdoc
 			GetWindowText(m_hwnd, text, 256);
 			return text;
 		}
+		void Form::Enable()
+		{
+			EnableWindow(m_hwnd, TRUE);
+		}
+		void Form::Disable()
+		{
+			EnableWindow(m_hwnd, FALSE);
+		}
 		HWND Form::getHWND()
 		{
 			return m_hwnd;

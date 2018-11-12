@@ -199,6 +199,7 @@
     <ClInclude Include="form\form_checkbox.h" />
     <ClInclude Include="form\form_form.h" />
     <ClInclude Include="form\form_label.h" />
+    <ClInclude Include="form\form_listbox.h" />
     <ClInclude Include="form\form_textbox.h" />
     <ClInclude Include="form\form_window.h" />
     <ClInclude Include="graphics\entity\gfx_camera.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="form\form_checkbox.cpp" />
     <ClCompile Include="form\form_form.cpp" />
     <ClCompile Include="form\form_label.cpp" />
+    <ClCompile Include="form\form_listbox.cpp" />
     <ClCompile Include="form\form_textbox.cpp" />
     <ClCompile Include="form\form_window.cpp" />
     <ClCompile Include="graphics\entity\gfx_camera.cpp" />

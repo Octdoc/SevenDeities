@@ -12,6 +12,7 @@
 #include "form/form_label.h"
 #include "form/form_button.h"
 #include "form/form_checkbox.h"
+#include "form/form_listbox.h"
 #include <forward_list>
 #include <chrono>
 

@@ -18,8 +18,6 @@ namespace octdoc
 			UINT m_shaderInputLayout;
 			UINT m_vertexCount;
 			UINT m_indexCount;
-			std::vector<UINT> m_indexGroupSizes;
-			std::vector<UINT> m_indexGroupStarts;
 
 		private:
 			Model(ID3D11Device* device, const WCHAR* filename);
@@ -41,16 +39,11 @@ namespace octdoc
 			static Model::P Create(ID3D11Device* device, ModelLoader& modelLoader);
 			static Model::P Create(ID3D11Device* device, void* vertices, UINT vertexCount, UINT shaderInputLayout, UINT* indices, UINT indexCount);
 
-			UINT getIndexGroupCount();
 			UINT getVertexCount();
 			UINT getIndexCount();
 			UINT getShaderInputLayout();
 
 			void Render(ID3D11DeviceContext* deviceContext);
-			void RenderPart(ID3D11DeviceContext* deviceContext, UINT index);
-
-			void SetBuffersToRender(ID3D11DeviceContext* deviceContext);
-			void RenderPart_DrawCallOnly(ID3D11DeviceContext* deviceContext, UINT index);
 		};
 	}
 }

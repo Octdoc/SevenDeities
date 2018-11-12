@@ -4,7 +4,7 @@ namespace octdoc
 {
 	namespace form
 	{
-		CheckBox::CheckBox(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		CheckBox::CheckBox(const Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 			:Form(parent)
 		{
 			m_id = (HMENU)m_autoIDdistributor++;
@@ -26,15 +26,15 @@ namespace octdoc
 		{
 			PostMessage(m_hwnd, BM_SETCHECK, check ? BST_CHECKED : BST_UNCHECKED, LPARAM(0));
 		}
-		CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[])
+		CheckBox::P CheckBox::Create(const Window::P parent, const WCHAR text[])
 		{
 			return Create(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
 		}
-		CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], int x, int y)
+		CheckBox::P CheckBox::Create(const Window::P parent, const WCHAR text[], int x, int y)
 		{
 			return Create(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
 		}
-		CheckBox::P CheckBox::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		CheckBox::P CheckBox::Create(const Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 		{
 			CheckBox::P checkBox = std::make_shared<CheckBox>(parent, text, x, y, w, h);
 			checkBox->m_parent->AddChild(checkBox);

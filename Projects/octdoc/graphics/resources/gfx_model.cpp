@@ -102,15 +102,8 @@ namespace octdoc
 
 		void Model::CreateModel(ID3D11Device* device, void* vertices, UINT vertexCount, UINT shaderInputLayout, UINT* indices, UINT indexCount)
 		{
-			m_indexGroupStarts.push_back(0);
-			m_indexGroupSizes.push_back(indexCount);
 			CreateVertexBuffer(device, vertices, vertexCount, shaderInputLayout);
 			CreateIndexBuffer(device, indices, indexCount);
-		}
-
-		UINT Model::getIndexGroupCount()
-		{
-			return (UINT)m_indexGroupSizes.size();
 		}
 
 		UINT Model::getVertexCount()
@@ -130,25 +123,12 @@ namespace octdoc
 
 		void Model::Render(ID3D11DeviceContext* deviceContext)
 		{
-			SetBuffersToRender(deviceContext);
-			deviceContext->DrawIndexed(m_indexCount, 0, 0);
-		}
-		void Model::RenderPart(ID3D11DeviceContext* deviceContext, UINT index)
-		{
-			SetBuffersToRender(deviceContext);
-			deviceContext->DrawIndexed(m_indexGroupSizes[index], m_indexGroupSizes[index], 0);
-		}
-		void Model::SetBuffersToRender(ID3D11DeviceContext* deviceContext)
-		{
 			UINT stride = m_vertexSizeInBytes;
 			UINT offset = 0;
 
 			deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 			deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-		}
-		void Model::RenderPart_DrawCallOnly(ID3D11DeviceContext* deviceContext, UINT index)
-		{
-			deviceContext->DrawIndexed(m_indexGroupSizes[index], m_indexGroupStarts[index], 0);
+			deviceContext->DrawIndexed(m_indexCount, 0, 0);
 		}
 	}
 }

@@ -16,6 +16,8 @@ namespace cvt
 		form::CheckBox::P m_cbNormalmap;
 		form::Button::P m_btnExport;
 
+		form::ListBox::P m_lstTextureNames;
+
 		form::Button::P m_btnExit;
 
 	private:
@@ -27,6 +29,6 @@ namespace cvt
 		static Menu::P Create();
 
 		virtual void MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam) override;
-		void UpdateModelInfo(LPCWSTR filename, UINT shaderInputType);
+		void UpdateModelInfo(LPCWSTR filename, UINT shaderInputType, ModelManager& modelManager);
 	};
 }

@@ -11,12 +11,12 @@ namespace octdoc
 			SHARED_ONLY(Label)
 
 		private:
-			Label(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h);
+			Label(const Window::P parent, const WCHAR text[], int x, int y, int w, int h);
 
 		public:
-			static Label::P Create(const form::Window::P parent, const WCHAR *text = nullptr);
-			static Label::P Create(const form::Window::P parent, int x, int y, const WCHAR *text = nullptr);
-			static Label::P Create(const form::Window::P parent, int x, int y, int w, int h, const WCHAR *text = nullptr);
+			static Label::P Create(const Window::P parent, const WCHAR *text = nullptr);
+			static Label::P Create(const Window::P parent, int x, int y, const WCHAR *text = nullptr);
+			static Label::P Create(const Window::P parent, int x, int y, int w, int h, const WCHAR *text = nullptr);
 		};
 	}
 }

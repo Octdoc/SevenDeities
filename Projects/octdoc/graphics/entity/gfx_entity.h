@@ -14,8 +14,8 @@ namespace octdoc
 		{
 			SHARED_ONLY(Entity)
 
-			Model::P m_model;
 			mth::float4 m_color;
+			std::vector<Model::P> m_models;
 			std::vector<Texture::P> m_textures;
 			std::vector<Texture::P> m_normalmaps;
 			bool m_shown;
@@ -23,23 +23,16 @@ namespace octdoc
 			Entity::P m_relativeTo;
 
 		private:
-			Entity(Model::P model);
-			Entity(Model::P model, Texture::P texture);
-			Entity(Model::P model, Texture::P texture, Texture::P normalmap);
-			Entity(Model::P model, Texture::P textures[]);
-			Entity(Model::P model, Texture::P textures[], Texture::P normalmaps[]);
-			void CreateEntity(Model::P model);
-			void CreateEntity(Model::P model, Texture::P texture);
-			void CreateEntity(Model::P model, Texture::P texture, Texture::P normalmap);
-			void CreateEntity(Model::P model, Texture::P texture[]);
-			void CreateEntity(Model::P model, Texture::P texture[], Texture::P normalmap[]);
+			Entity(Model::P *models, Texture::P *textures, Texture::P *normalmaps, UINT count);
+			void CreateEntity(Model::P *models, Texture::P *textures, Texture::P *normalmaps, UINT count);
 
 		public:
 			static Entity::P Create(Model::P model);
 			static Entity::P Create(Model::P model, Texture::P texture);
 			static Entity::P Create(Model::P model, Texture::P texture, Texture::P normalmap);
-			static Entity::P Create(Model::P model, Texture::P textures[]);
-			static Entity::P Create(Model::P model, Texture::P textures[], Texture::P normalmaps[]);
+			static Entity::P Create(Model::P *models, UINT count);
+			static Entity::P Create(Model::P *models, Texture::P *textures, UINT count);
+			static Entity::P Create(Model::P *models, Texture::P *textures, Texture::P *normalmaps, UINT count);
 			void Clear();
 
 			void Hide();
@@ -50,9 +43,12 @@ namespace octdoc
 				CBuffer::P vsMatrixBuffer, CBuffer::P psColorBuffer = nullptr);
 			void RenderModel(ID3D11DeviceContext* deviceContext);
 
-			Model::P getModel();
 			void setColor(mth::float4 color);
 			mth::float4 getColor();
+			Model::P getModel(UINT index);
+			Texture::P getTexture(UINT index);
+			Texture::P getNormalmap(UINT index);
+			std::vector<Model::P>& getModels();
 			std::vector<Texture::P>& getTextures();
 			std::vector<Texture::P>& getNormalmaps();
 			void AddSubpart(Entity::P entity);

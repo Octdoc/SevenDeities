@@ -4,39 +4,18 @@ namespace octdoc
 {
 	namespace gfx
 	{
-		void Entity::CreateEntity(Model::P model)
+		void Entity::CreateEntity(Model::P *models, Texture::P *textures, Texture::P *normalmaps, UINT count)
 		{
-			m_model = model;
-		}
-		void Entity::CreateEntity(Model::P model, Texture::P texture)
-		{
-			m_model = model;
-			m_textures.push_back(texture);
-		}
-		void Entity::CreateEntity(Model::P model, Texture::P texture, Texture::P normalmap)
-		{
-			m_model = model;
-			m_textures.push_back(texture);
-			m_normalmaps.push_back(normalmap);
-		}
-		void Entity::CreateEntity(Model::P model, Texture::P textures[])
-		{
-			m_model = model;
-			for (UINT i = 0; i < model->getIndexGroupCount(); i++)
-				m_textures.push_back(textures[i]);
-		}
-		void Entity::CreateEntity(Model::P model, Texture::P textures[], Texture::P normalmaps[])
-		{
-			m_model = model;
-			for (UINT i = 0; i < model->getIndexGroupCount(); i++)
+			for (UINT i = 0; i < count; i++)
 			{
-				m_textures.push_back(textures[i]);
-				m_normalmaps.push_back(normalmaps[i]);
+				m_models.push_back(models[i]);
+				m_textures.push_back(textures ? textures[i] : nullptr);
+				m_normalmaps.push_back(normalmaps ? normalmaps[i] : nullptr);
 			}
 		}
 		void Entity::Clear()
 		{
-			m_model.reset();
+			m_models.clear();
 			m_textures.clear();
 			m_normalmaps.clear();
 		}
@@ -48,9 +27,21 @@ namespace octdoc
 		{
 			m_shown = true;
 		}
-		Model::P Entity::getModel()
+		Model::P Entity::getModel(UINT index)
 		{
-			return m_model;
+			return m_models[index];
+		}
+		Texture::P Entity::getTexture(UINT index)
+		{
+			return m_textures[index];
+		}
+		Texture::P Entity::getNormalmap(UINT index)
+		{
+			return m_normalmaps[index];
+		}
+		std::vector<Model::P>& Entity::getModels()
+		{
+			return m_models;
 		}
 		void Entity::setColor(mth::float4 color)
 		{
@@ -109,61 +100,49 @@ namespace octdoc
 		{
 			if (m_shown)
 			{
-				m_model->SetBuffersToRender(deviceContext);
-				for (UINT i = 0; i < m_model->getIndexGroupCount(); i++)
+				for (UINT i = 0; i < m_models.size(); i++)
 				{
-					if (m_textures.size() > i)
+					if (m_textures[i])
 						m_textures[i]->SetTextureToRender(deviceContext, 0);
-					if (m_normalmaps.size() > i)
+					if (m_normalmaps[i])
 						m_normalmaps[i]->SetTextureToRender(deviceContext, 1);
-					m_model->RenderPart_DrawCallOnly(deviceContext, i);
+					m_models[i]->Render(deviceContext);
 				}
 			}
 		}
 		void Entity::RenderModel(ID3D11DeviceContext* deviceContext)
 		{
 			if (m_shown)
-				m_model->Render(deviceContext);
+				for (auto& m : m_models)
+					m->Render(deviceContext);
 		}
-		Entity::Entity(Model::P model) : m_shown(true)
+		Entity::Entity(Model::P *models, Texture::P *textures, Texture::P *normalmaps, UINT count) : m_shown(true)
 		{
-			CreateEntity(model);
-		}
-		Entity::Entity(Model::P model, Texture::P texture) : m_shown(true)
-		{
-			CreateEntity(model, texture);
-		}
-		Entity::Entity(Model::P model, Texture::P texture, Texture::P normalmap) : m_shown(true)
-		{
-			CreateEntity(model, texture, normalmap);
-		}
-		Entity::Entity(Model::P model, Texture::P textures[]) : m_shown(true)
-		{
-			CreateEntity(model, textures);
-		}
-		Entity::Entity(Model::P model, Texture::P textures[], Texture::P normalmaps[]) : m_shown(true)
-		{
-			CreateEntity(model, textures, normalmaps);
+			CreateEntity(models, textures, normalmaps, count);
 		}
 		Entity::P Entity::Create(Model::P model)
 		{
-			return std::make_shared<Entity>(model);
+			return std::make_shared<Entity>(&model, nullptr, nullptr, 1);
 		}
 		Entity::P Entity::Create(Model::P model, Texture::P texture)
 		{
-			return std::make_shared<Entity>(model, texture);
+			return std::make_shared<Entity>(&model, &texture, nullptr, 1);
 		}
 		Entity::P Entity::Create(Model::P model, Texture::P texture, Texture::P normalmap)
 		{
-			return std::make_shared<Entity>(model, texture, normalmap);
+			return std::make_shared<Entity>(&model, &texture, &normalmap, 1);
 		}
-		Entity::P Entity::Create(Model::P model, Texture::P textures[])
+		Entity::P Entity::Create(Model::P *models, UINT count)
 		{
-			return std::make_shared<Entity>(model, textures);
+			return std::make_shared<Entity>(models, nullptr, nullptr, count);
 		}
-		Entity::P Entity::Create(Model::P model, Texture::P textures[], Texture::P normalmaps[])
+		Entity::P Entity::Create(Model::P *models, Texture::P *textures, UINT count)
 		{
-			return std::make_shared<Entity>(model, textures, normalmaps);
+			return std::make_shared<Entity>(models, textures, nullptr, count);
+		}
+		Entity::P Entity::Create(Model::P *models, Texture::P *textures, Texture::P *normalmaps, UINT count)
+		{
+			return std::make_shared<Entity>(models, textures, normalmaps, count);
 		}
 	}
 }

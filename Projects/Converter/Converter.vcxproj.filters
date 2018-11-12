@@ -30,6 +30,9 @@
     <ClCompile Include="cvt_gfxscreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cvt_cvtrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvt_modelmanager.h">
@@ -41,5 +44,16 @@
     <ClInclude Include="cvt_gfxscreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cvt_cvtrenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\psConverter.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vsConverter.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

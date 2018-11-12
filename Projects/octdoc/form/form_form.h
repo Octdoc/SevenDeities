@@ -60,6 +60,8 @@ namespace octdoc
 			void setRect(int x, int y, int w, int h);
 			void setText(const WCHAR text[]);
 			const std::wstring getText();
+			void Enable();
+			void Disable();
 
 			virtual Form::P ToForm() override;
 			virtual void AddChild(Form::P child) override;

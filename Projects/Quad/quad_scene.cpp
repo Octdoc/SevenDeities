@@ -54,7 +54,12 @@ namespace quad
 		hcs::Input& input = octdoc::Program::Instance().Input();
 		m_controller.Update_FirstPersonMode_Fly(input, deltaTime);
 
-		if (m_running)	m_walk.Update(deltaTime);
+		if (m_running)	
+			m_walk.Update(deltaTime);
+		else
+			for (auto& l : m_quad.getLegs())
+				l.setJointStates(mth::float3(0.0f, 0.0f, 0.0f));
+		
 		mth::float3 pos = m_quad.getLeg(LID_RF).getPosition();
 		pos = m_quad.getEntity()->position;
 		pos.y = m_quad.getSensor().getMeasurement();

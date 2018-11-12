@@ -4,7 +4,7 @@ namespace octdoc
 {
 	namespace form
 	{
-		Button::Button(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		Button::Button(const Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 			:Form(parent)
 		{
 			m_id = (HMENU)m_autoIDdistributor++;
@@ -18,15 +18,15 @@ namespace octdoc
 		{
 			return m_id;
 		}
-		Button::P Button::Create(const form::Window::P parent, const WCHAR text[])
+		Button::P Button::Create(const Window::P parent, const WCHAR text[])
 		{
 			return Create(parent, text, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
 		}
-		Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y)
+		Button::P Button::Create(const Window::P parent, const WCHAR text[], int x, int y)
 		{
 			return Create(parent, text, x, y, CW_USEDEFAULT, CW_USEDEFAULT);
 		}
-		Button::P Button::Create(const form::Window::P parent, const WCHAR text[], int x, int y, int w, int h)
+		Button::P Button::Create(const Window::P parent, const WCHAR text[], int x, int y, int w, int h)
 		{
 			Button::P button = std::make_shared<Button>(parent, text, x, y, w, h);
 			button->m_parent->AddChild(button);

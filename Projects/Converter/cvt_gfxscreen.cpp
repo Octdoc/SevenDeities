@@ -1,4 +1,5 @@
 #include "cvt_menu.h"
+#include "cvt_cvtrenderer.h"
 #include <windowsx.h>
 
 #pragma comment(lib, "assimp.lib")
@@ -32,7 +33,8 @@ namespace cvt
 				m_entity = m_modelManager.CreateEntity(m_graphics);
 				m_renderer->AddEntity(m_entity);
 				Render();
-				std::dynamic_pointer_cast<Menu>(m_parent)->UpdateModelInfo(m_modelManager.getOutFilename().c_str(), m_modelManager.getShaderInputType());
+				std::dynamic_pointer_cast<Menu>(m_parent)->UpdateModelInfo(
+					m_modelManager.getOutFilename().c_str(), m_modelManager.getShaderInputType(), m_modelManager);
 			}
 		}
 		catch (hcs::Exception& e)
@@ -118,9 +120,9 @@ namespace cvt
 
 		DragAcceptFiles(m_hwnd, TRUE);
 
-		m_renderer = gfx::SimpleRenderer::Create(m_graphics);
-		m_renderer->AddEntity(m_entity = gfx::Entity::Create(gfx::Model::Create(device, L"Media/monkey.omd"), gfx::Texture::Create2D(device, L"Media/white.png"), gfx::Texture::Create2D(device, L"Media/normal.png")));
+		m_renderer = CVTRenderer::Create(m_graphics);
 		m_graphics->setClearColor(0.5f, 0.3f, 0.2f);
+		LoadModel(L"Media/car.obj");
 	}
 	void GfxScreen::MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam)
 	{

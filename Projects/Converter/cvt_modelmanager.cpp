@@ -44,28 +44,25 @@ namespace cvt
 			folder += filename[i];
 		return folder;
 	}
-
-	void ModelManager::StoreData(const aiScene* scene)
+	std::wstring GetExtension(std::wstring fullPath)
 	{
-		UINT vertexCount = 0, indexCount = 0, offset = 0;
-		std::vector<std::wstring> textureNames, normalmapNames;
-		std::vector<Group> groups;
-		aiMesh* mesh;
-		Group* group;
-		aiString path;
+		std::wstring extension;
+		size_t minindex = fullPath.find_last_of('.');
+		size_t maxindex = fullPath.length();
+		if (minindex < 0)
+			return extension;
+		for (size_t i = minindex; i < maxindex; i++)
+			extension += fullPath[i];
+		return extension;
+	}
 
-		textureNames.clear();
-		normalmapNames.clear();
-		groups.resize(scene->mNumMeshes);
-		textureNames.resize(scene->mNumMaterials);
-		normalmapNames.resize(scene->mNumMaterials);
-
-		for (UINT m = 0; m < scene->mNumMeshes; m++)
-			vertexCount += scene->mMeshes[m]->mNumVertices;
-		m_vertices.resize(vertexCount);
-
+	void ModelManager::StoreData(const aiScene *scene)
+	{
+		std::vector<std::wstring> textureNames(scene->mNumMaterials);
+		std::vector<std::wstring> normalmapNames(scene->mNumMaterials);
 		for (UINT m = 0; m < scene->mNumMaterials; m++)
 		{
+			aiString path;
 			if (scene->mMaterials[m]->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 			{
 				std::string fileName = path.data;
@@ -83,158 +80,132 @@ namespace cvt
 				normalmapNames[m] = std::wstring();
 		}
 
-		UINT counter = 0;
-		m_shaderInputType = 0;
+		m_model.resize(scene->mNumMeshes);
 		for (UINT m = 0; m < scene->mNumMeshes; m++)
 		{
-			mesh = scene->mMeshes[m];
-			group = &groups[m];
+			auto mesh = scene->mMeshes[m];
+			auto& model = m_model[m];
+			model.vertices.resize(mesh->mNumVertices);
 			for (UINT v = 0; v < mesh->mNumVertices; v++)
 			{
+				auto& vertex = model.vertices[v];
 				if (mesh->HasPositions())
 				{
-					m_vertices[counter].position.x = mesh->mVertices[v].x;
-					m_vertices[counter].position.y = mesh->mVertices[v].y;
-					m_vertices[counter].position.z = -mesh->mVertices[v].z;
-					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::POSITION;
+					vertex.position.x = mesh->mVertices[v].x;
+					vertex.position.y = mesh->mVertices[v].y;
+					vertex.position.z = -mesh->mVertices[v].z;
+					m_srcShaderInputType |= (UINT)gfx::ShaderInputLayoutType::POSITION;
 				}
 				else
 				{
-					m_vertices[counter].position.x = 0.0f;
-					m_vertices[counter].position.y = 0.0f;
-					m_vertices[counter].position.z = 0.0f;
+					vertex.position.x = 0.0f;
+					vertex.position.y = 0.0f;
+					vertex.position.z = 0.0f;
 				}
-				/*if (mesh->HasVertexColors(0))
+				if (mesh->HasVertexColors(0))
 				{
-					m_vertices[counter].color.x = mesh->mColors[0]->r;
-					m_vertices[counter].color.y = mesh->mColors[0]->g;
-					m_vertices[counter].color.z = mesh->mColors[0]->b;
-					m_vertices[counter].color.w = mesh->mColors[0]->a;
-					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::COLOR;
+					vertex.color.x = mesh->mColors[0][v].r;
+					vertex.color.y = mesh->mColors[0][v].g;
+					vertex.color.z = mesh->mColors[0][v].b;
+					vertex.color.w = mesh->mColors[0][v].a;
+					//m_srcShaderInputType |= (UINT)gfx::ShaderInputLayoutType::COLOR;
 				}
 				else
 				{
-					m_vertices[counter].color.x = 1.0f;
-					m_vertices[counter].color.y = 1.0f;
-					m_vertices[counter].color.z = 1.0f;
-					m_vertices[counter].color.w = 1.0f;
-				}*/
+					vertex.color.x = 1.0f;
+					vertex.color.y = 1.0f;
+					vertex.color.z = 1.0f;
+					vertex.color.w = 1.0f;
+				}
 				if (mesh->HasTextureCoords(0))
 				{
-					m_vertices[counter].texcoord.x = mesh->mTextureCoords[0][v].x;
-					m_vertices[counter].texcoord.y = 1.0f - mesh->mTextureCoords[0][v].y;
-					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::TEXCOORD;
+					vertex.texcoord.x = mesh->mTextureCoords[0][v].x;
+					vertex.texcoord.y = 1.0f - mesh->mTextureCoords[0][v].y;
+					m_srcShaderInputType |= (UINT)gfx::ShaderInputLayoutType::TEXCOORD;
 				}
 				else
 				{
-					m_vertices[counter].texcoord.x = 0.0f;
-					m_vertices[counter].texcoord.y = 0.0f;
+					vertex.texcoord.x = 0.0f;
+					vertex.texcoord.y = 0.0f;
 				}
 				if (mesh->HasNormals())
 				{
-					m_vertices[counter].normal.x = mesh->mNormals[v].x;
-					m_vertices[counter].normal.y = mesh->mNormals[v].y;
-					m_vertices[counter].normal.z = -mesh->mNormals[v].z;
-					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMAL;
+					vertex.normal.x = mesh->mNormals[v].x;
+					vertex.normal.y = mesh->mNormals[v].y;
+					vertex.normal.z = -mesh->mNormals[v].z;
+					m_srcShaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMAL;
 				}
 				else
 				{
-					m_vertices[counter].normal.x = 0.0f;
-					m_vertices[counter].normal.y = 1.0f;
-					m_vertices[counter].normal.z = 0.0f;
+					vertex.normal.x = 0.0f;
+					vertex.normal.y = 1.0f;
+					vertex.normal.z = 0.0f;
 				}
 				if (mesh->HasTangentsAndBitangents())
 				{
-					m_vertices[counter].tangent.x = mesh->mTangents[v].x;
-					m_vertices[counter].tangent.y = mesh->mTangents[v].y;
-					m_vertices[counter].tangent.z = -mesh->mTangents[v].z;
-					m_vertices[counter].binormal.x = -mesh->mBitangents[v].x;
-					m_vertices[counter].binormal.y = -mesh->mBitangents[v].y;
-					m_vertices[counter].binormal.z = mesh->mBitangents[v].z;
-					m_shaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMALMAP;
+					vertex.tangent.x = mesh->mTangents[v].x;
+					vertex.tangent.y = mesh->mTangents[v].y;
+					vertex.tangent.z = -mesh->mTangents[v].z;
+					vertex.binormal.x = -mesh->mBitangents[v].x;
+					vertex.binormal.y = -mesh->mBitangents[v].y;
+					vertex.binormal.z = mesh->mBitangents[v].z;
+					m_srcShaderInputType |= (UINT)gfx::ShaderInputLayoutType::NORMALMAP;
 				}
 				else
 				{
-					m_vertices[counter].tangent.x = 1.0f;
-					m_vertices[counter].tangent.y = 0.0f;
-					m_vertices[counter].tangent.z = 0.0f;
-					m_vertices[counter].binormal.x = 0.0f;
-					m_vertices[counter].binormal.y = 0.0f;
-					m_vertices[counter].binormal.z = 1.0f;
+					vertex.tangent.x = 1.0f;
+					vertex.tangent.y = 0.0f;
+					vertex.tangent.z = 0.0f;
+					vertex.binormal.x = 0.0f;
+					vertex.binormal.y = 0.0f;
+					vertex.binormal.z = 1.0f;
 				}
-				counter++;
 			}
 			for (UINT f = 0; f < mesh->mNumFaces; f++)
 			{
 				for (UINT i = 2; i < mesh->mFaces[f].mNumIndices; i++)
 				{
-					group->indices.push_back(mesh->mFaces[f].mIndices[0] + offset);
-					group->indices.push_back(mesh->mFaces[f].mIndices[i] + offset);
-					group->indices.push_back(mesh->mFaces[f].mIndices[i - 1] + offset);
+					model.indices.push_back(mesh->mFaces[f].mIndices[0]);
+					model.indices.push_back(mesh->mFaces[f].mIndices[i]);
+					model.indices.push_back(mesh->mFaces[f].mIndices[i - 1]);
 				}
 			}
-			group->textureName = textureNames[mesh->mMaterialIndex];
-			group->normalmapName = normalmapNames[mesh->mMaterialIndex];
-			indexCount += (UINT)group->indices.size();
-			offset += mesh->mNumVertices;
+			model.textureName = textureNames[mesh->mMaterialIndex];
+			model.normalmapName = normalmapNames[mesh->mMaterialIndex];
 		}
+	}
 
-		bool duplicate;
-		for (int g = 0; g < groups.size(); g++)
-		{
-			group = &groups[g];
-			duplicate = false;
-			for (int i = 0; i < m_textureNames.size(); i++)
-				if (m_textureNames[i] == group->textureName &&
-					m_normalmapNames[i] == group->normalmapName)
-				{
-					duplicate = true;
-					break;
-				}
-			if (!duplicate)
-			{
-				m_textureNames.push_back(group->textureName);
-				m_normalmapNames.push_back(group->normalmapName);
-			}
-		}
-
-		m_indices.reserve(indexCount);
-		m_indexGroupSizes.resize(m_textureNames.size());
-		for (int i = 0; i < m_indexGroupSizes.size(); i++)
-		{
-			m_indexGroupSizes[i] = 0;
-			for (int g = 0; g < groups.size(); g++)
-			{
-				group = &groups[g];
-				if (m_textureNames[i] == group->textureName &&
-					m_normalmapNames[i] == group->normalmapName)
-				{
-					m_indexGroupSizes[i] += (UINT)group->indices.size();
-					m_indices.insert(m_indices.end(), group->indices.begin(), group->indices.end());
-				}
-			}
-		}
+	bool ModelManager::LoadOMD(const WCHAR * filename)
+	{
+		return false;
 	}
 
 	bool ModelManager::LoadModelData(const WCHAR* filename)
 	{
 		Clear();
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(WSTR2ASTR(filename).c_str(),
-			aiProcess_CalcTangentSpace |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_Triangulate |
-			aiProcess_SortByPType);
-		if (scene == NULL)
+		if (GetExtension(filename) == L".omd")
 		{
-			auto error = importer.GetErrorString();
-			std::wstring errormsg;
-			for (int i = 0; error[i]; i++)
-				errormsg += (WCHAR)error[i];
-			throw hcs::Exception(L"Import failed", errormsg.c_str());
+			if (!LoadOMD(filename))
+				return false;
 		}
-
-		StoreData(scene);
+		else
+		{
+			Assimp::Importer importer;
+			const aiScene* scene = importer.ReadFile(WSTR2ASTR(filename).c_str(),
+				aiProcess_CalcTangentSpace |
+				aiProcess_JoinIdenticalVertices |
+				aiProcess_Triangulate |
+				aiProcess_SortByPType);
+			if (scene == NULL)
+			{
+				auto error = importer.GetErrorString();
+				std::wstring errormsg;
+				for (int i = 0; error[i]; i++)
+					errormsg += (WCHAR)error[i];
+				throw hcs::Exception(L"Import failed", errormsg.c_str());
+			}
+			StoreData(scene);
+		}
 		m_sourceFile = GetFileNameWithoutExtension(filename);
 		m_sourceFolder = GetFolderName(filename);
 		return true;
@@ -244,16 +215,18 @@ namespace cvt
 	{
 		m_sourceFolder.clear();
 		m_sourceFile.clear();
-		m_vertices.clear();
-		m_indices.clear();
-		m_indexGroupSizes.clear();
-		m_textureNames.clear();
-		m_normalmapNames.clear();
+		m_model.clear();
+		m_srcShaderInputType = 0;
+	}
+
+	UINT ModelManager::getModelPartCount()
+	{
+		return (UINT)m_model.size();
 	}
 
 	UINT ModelManager::getShaderInputType()
 	{
-		return m_shaderInputType;
+		return m_srcShaderInputType;
 	}
 
 	std::wstring ModelManager::getOutFilename()
@@ -265,58 +238,77 @@ namespace cvt
 	{
 		ID3D11Device* device = graphics->getDevice();
 		UINT shaderInputType =
-			(UINT)gfx::ShaderInputLayoutType::POSITION | (UINT)gfx::ShaderInputLayoutType::TEXCOORD |
-			(UINT)gfx::ShaderInputLayoutType::NORMAL | (UINT)gfx::ShaderInputLayoutType::NORMALMAP;
+			(UINT)gfx::ShaderInputLayoutType::POSITION |
+			(UINT)gfx::ShaderInputLayoutType::COLOR |
+			(UINT)gfx::ShaderInputLayoutType::TEXCOORD |
+			(UINT)gfx::ShaderInputLayoutType::NORMAL |
+			(UINT)gfx::ShaderInputLayoutType::NORMALMAP;
 
-		std::vector<std::shared_ptr<gfx::Texture>> textures, normalmaps;
-		textures.resize(m_textureNames.size());
-		normalmaps.resize(m_textureNames.size());
-		std::shared_ptr<gfx::Texture> white = gfx::Texture::Create2D(device, L"Media/white.png");
-		std::shared_ptr<gfx::Texture> normal = gfx::Texture::Create2D(device, L"Media/normal.png");
-		for (int i = 0; i < m_textureNames.size(); i++)
+		std::vector<gfx::Model::P> models;
+		std::vector<gfx::Texture::P> textures, normalmaps;
+		models.resize(m_model.size());
+		textures.resize(m_model.size());
+		normalmaps.resize(m_model.size());
+		gfx::Texture::P white = gfx::Texture::Create2D(device, L"Media/white.png");
+		gfx::Texture::P normal = gfx::Texture::Create2D(device, L"Media/normal.png");
+		for (int i = 0; i < m_model.size(); i++)
 		{
-			if (m_textureNames[i][0])
-				textures[i] = gfx::Texture::Create2D(device, (m_sourceFolder + m_textureNames[i]).c_str());
+			models[i] = gfx::Model::Create(device, m_model[i].vertices.data(), (UINT)m_model[i].vertices.size(),
+				shaderInputType, m_model[i].indices.data(), (UINT)m_model[i].indices.size());
+			if (m_model[i].textureName[0])
+				textures[i] = gfx::Texture::Create2D(device, (m_sourceFolder + m_model[i].textureName).c_str());
 			else
 				textures[i] = white;
-			if (m_normalmapNames[i][0])
-				normalmaps[i] = gfx::Texture::Create2D(device, (m_sourceFolder + m_normalmapNames[i]).c_str());
+			if (m_model[i].normalmapName[0])
+				normalmaps[i] = gfx::Texture::Create2D(device, (m_sourceFolder + m_model[i].normalmapName).c_str());
 			else
 				normalmaps[i] = normal;
 		}
-		std::shared_ptr<gfx::Entity> entity = gfx::Entity::Create(
-			gfx::Model::Create(device, m_vertices.data(), (UINT)m_vertices.size(),
-				shaderInputType, m_indices.data(), (UINT)m_indices.size()),
-			textures.data(), normalmaps.data());
-		return entity;
+		return gfx::Entity::Create(models.data(), textures.data(),normalmaps.data(), (UINT)m_model.size());
+	}
+
+	std::wstring& ModelManager::getTextureName(UINT index)
+	{
+		return m_model[index].textureName;
+	}
+
+	std::wstring& ModelManager::getNormalmapeName(UINT index)
+	{
+		return m_model[index].normalmapName;
 	}
 
 	void ModelManager::Export(const WCHAR *filename, UINT shaderInputLayout)
 	{
 		std::ofstream outfile;
 		OMD_Header header;
+		OMD_ModelData mdlData;
 
 		header.shaderInputLayout = shaderInputLayout;
-		header.vertexCount = (UINT)m_vertices.size();
-		header.indexCount = (UINT)m_indices.size();
+		header.modelCount = (UINT)m_model.size();
 
-		outfile.open(filename ? filename : m_sourceFolder + m_sourceFile + L".omd", std::ios::out | std::ios::binary);
+		outfile.open(filename ? filename : getOutFilename(), std::ios::out | std::ios::binary);
 		outfile.write((char*)&header, sizeof(header));
-		for (UINT i = 0; i < m_vertices.size(); i++)
+		for (auto& m : m_model)
 		{
-			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::POSITION)
-				outfile.write((char*)&m_vertices[i].position, sizeof(m_vertices[i].position));
-			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::TEXCOORD)
-				outfile.write((char*)&m_vertices[i].texcoord, sizeof(m_vertices[i].texcoord));
-			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMAL)
-				outfile.write((char*)&m_vertices[i].normal, sizeof(m_vertices[i].normal));
-			if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMALMAP)
+			mdlData.vertexCount = (UINT)m.vertices.size();
+			mdlData.indexCount = (UINT)m.indices.size();
+			outfile.write((char*)&mdlData, sizeof(mdlData));
+			for (auto& v : m.vertices)
 			{
-				outfile.write((char*)&m_vertices[i].tangent, sizeof(m_vertices[i].tangent));
-				outfile.write((char*)&m_vertices[i].binormal, sizeof(m_vertices[i].binormal));
+				if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::POSITION)
+					outfile.write((char*)&v.position, sizeof(v.position));
+				if (header.shaderInputLayout & ((UINT)gfx::ShaderInputLayoutType::TEXCOORD | (UINT)gfx::ShaderInputLayoutType::NORMALMAP))
+					outfile.write((char*)&v.texcoord, sizeof(v.texcoord));
+				if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMAL)
+					outfile.write((char*)&v.normal, sizeof(v.normal));
+				if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMALMAP)
+				{
+					outfile.write((char*)&v.tangent, sizeof(v.tangent));
+					outfile.write((char*)&v.binormal, sizeof(v.binormal));
+				}
 			}
+			outfile.write((char*)m.indices.data(), m.indices.size() * sizeof(UINT));
 		}
-		outfile.write((char*)m_indices.data(), m_indices.size() * sizeof(UINT));
 
 		outfile.close();
 	}
