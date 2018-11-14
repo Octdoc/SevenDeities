@@ -175,9 +175,44 @@ namespace cvt
 		}
 	}
 
-	bool ModelManager::LoadOMD(const WCHAR * filename)
+	bool ModelManager::LoadOMD(const WCHAR *filename)
 	{
-		return false;
+		std::ifstream infile;
+		OMD_Header header;
+		OMD_ModelData mdlData;
+
+		infile.open(filename, std::ios::in | std::ios::binary);
+		infile.read((char*)&header, sizeof(header));
+		m_srcShaderInputType = header.shaderInputLayout;
+		m_model.resize(header.modelCount);
+		for (auto& m : m_model)
+		{
+			infile.read((char*)&mdlData, sizeof(mdlData));
+			m.vertices.resize(mdlData.vertexCount);
+			m.indices.resize(mdlData.indexCount);
+			m.textureName.resize(mdlData.textureNameLen);
+			m.normalmapName.resize(mdlData.normalmapNameLen);
+			for (auto& v : m.vertices)
+			{
+				if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::POSITION)
+					infile.read((char*)&v.position, sizeof(v.position));
+				if (header.shaderInputLayout & ((UINT)gfx::ShaderInputLayoutType::TEXCOORD | (UINT)gfx::ShaderInputLayoutType::NORMALMAP))
+					infile.read((char*)&v.texcoord, sizeof(v.texcoord));
+				if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMAL)
+					infile.read((char*)&v.normal, sizeof(v.normal));
+				if (header.shaderInputLayout & (UINT)gfx::ShaderInputLayoutType::NORMALMAP)
+				{
+					infile.read((char*)&v.tangent, sizeof(v.tangent));
+					infile.read((char*)&v.binormal, sizeof(v.binormal));
+				}
+			}
+			infile.read((char*)m.indices.data(), m.indices.size() * sizeof(UINT));
+			infile.read((char*)m.textureName.data(), m.textureName.length() * sizeof(WCHAR));
+			infile.read((char*)m.normalmapName.data(), m.normalmapName.length() * sizeof(WCHAR));
+		}
+
+		infile.close();
+		return true;
 	}
 
 	bool ModelManager::LoadModelData(const WCHAR* filename)
@@ -292,6 +327,8 @@ namespace cvt
 		{
 			mdlData.vertexCount = (UINT)m.vertices.size();
 			mdlData.indexCount = (UINT)m.indices.size();
+			mdlData.textureNameLen = (UINT)m.textureName.length();
+			mdlData.normalmapNameLen = (UINT)m.normalmapName.length();
 			outfile.write((char*)&mdlData, sizeof(mdlData));
 			for (auto& v : m.vertices)
 			{
@@ -308,6 +345,8 @@ namespace cvt
 				}
 			}
 			outfile.write((char*)m.indices.data(), m.indices.size() * sizeof(UINT));
+			outfile.write((char*)m.textureName.data(), m.textureName.length() * sizeof(WCHAR));
+			outfile.write((char*)m.normalmapName.data(), m.normalmapName.length() * sizeof(WCHAR));
 		}
 
 		outfile.close();

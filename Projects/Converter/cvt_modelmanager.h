@@ -34,6 +34,8 @@ namespace cvt
 	{
 		UINT vertexCount;
 		UINT indexCount;
+		UINT textureNameLen;
+		UINT normalmapNameLen;
 	};
 
 	struct ModelPart

@@ -43,6 +43,13 @@ namespace cvt
 		}
 	}
 
+	void GfxScreen::ClearModel()
+	{
+		m_renderer->ClearEntities();
+		m_entity.reset();
+		Render();
+	}
+
 	bool GfxScreen::HandleCamera(UINT msg, WPARAM wparam, LPARAM lparam)
 	{
 		static int prevx = 0, prevy = 0;

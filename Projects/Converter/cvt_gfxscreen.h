@@ -26,6 +26,7 @@ namespace cvt
 
 		virtual void MessageHandler(UINT msg, WPARAM wparam, LPARAM lparam) override;
 		void LoadModel(const WCHAR* filename);
+		void ClearModel();
 		void Render();
 
 		void ExportModel(const WCHAR *filename, UINT shaderInputLayout);

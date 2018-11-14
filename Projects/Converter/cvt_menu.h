@@ -15,6 +15,7 @@ namespace cvt
 		form::CheckBox::P m_cbNormal;
 		form::CheckBox::P m_cbNormalmap;
 		form::Button::P m_btnExport;
+		form::Button::P m_btnClear;
 
 		form::ListBox::P m_lstTextureNames;
 
@@ -24,6 +25,7 @@ namespace cvt
 		Menu(form::WindowSettings& settings);
 		void Init(int width, int height);
 		void ExportButtonAction();
+		void ClearButtonAction();
 
 	public:
 		static Menu::P Create();
